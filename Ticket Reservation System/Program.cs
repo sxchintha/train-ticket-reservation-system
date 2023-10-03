@@ -1,6 +1,31 @@
+using Ticket_Reservation_System.Models;
+using Ticket_Reservation_System.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Configure the database settings from the configuration file.
+builder.Services.Configure<TrainDatabaseSetting>(
+    builder.Configuration.GetSection("TicketDatabase"));
+
+builder.Services.Configure<BookingDatabaseSetting>(
+    builder.Configuration.GetSection("BookingDatabase"));
+
+// Add the TrainService as a singleton to the service container.
+builder.Services.AddSingleton<TrainService>();
+builder.Services.AddControllers();
+
+builder.Services.AddSingleton<BookingService>();
+builder.Services.AddControllers();
+
+// Set up CORS (Cross-Origin Resource Sharing) to allow requests from any origin, method, and header.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -16,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Apply the CORS policy named "AllowAll".
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

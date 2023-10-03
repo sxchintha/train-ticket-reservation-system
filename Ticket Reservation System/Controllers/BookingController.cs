@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
-using Ticket_Reservation_System.Services;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Ticket_Reservation_System.Models;
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using Ticket_Reservation_System.Services;
 
 namespace Ticket_Reservation_System.Controllers
 {
@@ -19,21 +14,21 @@ namespace Ticket_Reservation_System.Controllers
         {
             _bookingService = bookingService;
         }
-        
-        //POST: api/Booking
+
+        // POST: api/Bookings
         [HttpPost]
-        public async Task<ActionResult<Booking>> CreateBooking(Booking booking);
-        try
-
+        public async Task<ActionResult<Booking>> CreateBooking(Booking Booking)
         {
-            await _bookingService.CreateAsync(booking);
-            return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
+            try
+            {
+                await _bookingService.CreateAsync(Booking);
+                return CreatedAtAction(nameof(GetBookingById), new { id = Booking.Id }, Booking);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
-        catch (Exception e)
-        {
-            return BadRequest(new {error = e.Message});
-        }
-
 
         // PUT: api/Bookings/{id}
         [HttpPut("{id}")]
@@ -48,89 +43,89 @@ namespace Ticket_Reservation_System.Controllers
                 }
                 return Ok(Booking);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(new { error = e.Message });
+                return BadRequest(new { error = ex.Message });
             }
         }
 
-                // PATCH: api/Bookings/cancel/{id}
-                [HttpPatch("cancel/{id}")]
-                public async Task<ActionResult<Booking>> CancelBooking(string id)
+        // PATCH: api/Bookings/cancel/{id}
+        [HttpPatch("cancel/{id}")]
+        public async Task<ActionResult<Booking>> CancelBooking(string id)
+        {
+            try
+            {
+                var Booking = await _bookingService.CancelBookingAsync(id);
+                if (Booking == null)
                 {
-                    try
-                    {
-                        var Booking = await _bookingService.CancelBookingAsync(id);
-                        if (Booking == null)
-                        {
-                            return NotFound();
-                        }
-                        return Ok(Booking);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        return BadRequest(new { error = ex.Message });
-                    }
-                    catch (Exception)
-                    {
-                        return BadRequest(new { error = "An error occurred while cancelling the Booking." });
-                    }
+                    return NotFound();
+                }
+                return Ok(Booking);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { error = "An error occurred while cancelling the Booking." });
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
+        {
+            try
+            {
+                var Bookings = await _bookingService.GetAllBookingsAsync();
+                return Ok(Bookings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Booking>> GetBookingById(string id)
+        {
+            try
+            {
+                var Booking = await _bookingService.GetBookingByIdAsync(id);
+                if (Booking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(Booking);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteBookingById(string id)
+        {
+            try
+            {
+                var Booking = await _bookingService.GetBookingByIdAsync(id);
+                if (Booking == null)
+                {
+                    return NotFound();
                 }
 
-                // GET: api/Bookings
-                [HttpGet]
-                public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
-                {
-                    try
-                    {
-                        var Bookings = await _bookingService.GetAllBookingsAsync();
-                        return Ok(Bookings);
-                    }
-                    catch (Exception ex)
-                    {
-                        return StatusCode(500, new { error = ex.Message });
-                    }
-                }
+                await _bookingService.DeleteBookingAsync(id);
 
-                // GET: api/Bookings/{id}
-                [HttpGet("{id}")]
-                public async Task<ActionResult<Booking>> GetBookingById(string id)
-                {
-                    try
-                    {
-                        var Booking = await _bookingService.GetBookingByIdAsync(id);
-                        if (Booking == null)
-                        {
-                            return NotFound();
-                        }
-                        return Ok(Booking);
-                    }
-                    catch (Exception ex)
-                    {
-                        return StatusCode(500, new { error = ex.Message });
-                    }
-                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
-                [HttpDelete("{id}")]
-                public async Task<ActionResult> DeleteBookingById(string id)
-                {
-                    try
-                    {
-                        var Booking = await _bookingService.GetBookingByIdAsync(id);
-                        if (Booking == null)
-                        {
-                            return NotFound();
-                        }
-
-                        await _bookingService.DeleteBookingAsync(id);
-
-                        return NoContent();
-                    }
-                    catch (Exception ex)
-                    {
-                        return StatusCode(500, new { error = ex.Message });
-                    }
-                }
+    }
 
 }
 
