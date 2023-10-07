@@ -1,12 +1,14 @@
 import { Outlet, Link } from "react-router-dom";
+import "../Assets/Styles/start.css";
 
 const Login = (props) => {
   return (
-    <div className="h-screen w-screen p-0 m-0  justify-center items-center flex">
-      <div className="w-screen bg-[#0052A8] justify-center items-center flex flex-col py-10 h-full  ">
-        <h1 className="text-5xl  font-bold text-white py-10">Office Login</h1>
+    <div className="login-background">
+      <div className="w-screen bg-[] justify-center items-center flex flex-col py-10 h-full  ">
+        
 
-        <div className="gap-10 flex px-10 py-10  justify-center bg-slate-700/20  items-center">
+        <div className="gap-10 flex px-10 py-10  justify-center bg-slate-900/50  items-center">
+        <h1 className="text-5xl  font-bold text-white py-10">Office Login</h1>
           <form
             onSubmit="#"
             className="text-white  justify-center   items-center"
