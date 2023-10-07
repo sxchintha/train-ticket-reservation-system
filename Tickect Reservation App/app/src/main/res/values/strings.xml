@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Train Ticket Reservation App</string>
+    <string name="no_of_passengers">No of Passengers</string>
+    <string name="select_date">Select Date</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="name">Enter Your Name</string>
+    <string name="email">Enter Your Email</string>
+    <string name="nic">Enter Your NIC No</string>
+    <string name="phone">Enter Your Phone Number</string>
+    <string name="passengers">No of Passengers</string>
+    <string name="signup">Sign Up</string>
+    <string name="signin">Sign In</string>
+    <string name="niclogin">Enter Your NIC No</string>
+    <string name="phonelogin">Enter Your Phone Number</string>
+</resources>
