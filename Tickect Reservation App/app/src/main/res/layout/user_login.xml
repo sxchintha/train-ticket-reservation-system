@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.user.UserLogin">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -25,13 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_person_outline_white_24dp" />
 
             </RelativeLayout>
 
@@ -62,32 +55,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="260dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/bus_image_1" />
+                        android:src="@drawable/login" />
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/print_clearly"
-                        android:text="Hey Akila!"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="32sp" />
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textView"
-                        android:layout_marginTop="8dp"
                         android:fontFamily="@font/gotham"
-                        android:text="Book Your Seat Now"
+                        android:text="Login Here"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="25sp" />
 
                 </RelativeLayout>
 
@@ -117,10 +96,9 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_location_on_light_blue_24dp"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/from"
+                                android:hint="@string/niclogin"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
@@ -136,52 +114,14 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_location_on_light_blue_24dp"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/to"
+                                android:hint="@string/phonelogin"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_date_range_light_blue_24dp"
-                                android:drawablePadding="16dp"
-                                android:fontFamily="@font/calibri"
-                                android:hint="@string/select_date"
-                                android:inputType="date"
-                                android:maxLines="1"
-                                android:textColor="@android:color/black"
-                                android:textSize="16sp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_person_outline_black_24dp"
-                                android:drawablePadding="16dp"
-                                android:fontFamily="@font/calibri"
-                                android:hint="@string/passengers"
-                                android:inputType="number"
-                                android:maxLines="1"
-                                android:textColor="@android:color/black"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                tools:ignore="TouchTargetSizeCheck" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -190,7 +130,7 @@
 
 
                 <Button
-                    android:id="@+id/search_buses"
+                    android:id="@+id/btn_search_trains"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -198,11 +138,22 @@
                     android:background="@drawable/buttonshape"
                     android:backgroundTint="#0052A8"
                     android:fontFamily="@font/calibri"
-                    android:text="Search Trains"
+                    android:text="@string/signin"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gotham"
+                    android:text="Don't Have an Account? Sign Up Here"
+                    android:textAlignment="center"
+                    android:textColor="#686868"
+                    android:textSize="12sp" />
+
             </LinearLayout>
 
 

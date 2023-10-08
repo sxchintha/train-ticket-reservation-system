@@ -13,4 +13,5 @@
     <string name="signin">Sign In</string>
     <string name="niclogin">Enter Your NIC No</string>
     <string name="phonelogin">Enter Your Phone Number</string>
+    <string name="search_trains">Search Trains</string>
 </resources>

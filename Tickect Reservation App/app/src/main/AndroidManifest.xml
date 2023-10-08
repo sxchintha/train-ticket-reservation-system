@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tickectreservation">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/bus_booking_logo"
@@ -10,9 +12,10 @@
         android:roundIcon="@drawable/bus_booking_round_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="AllowBackup">
         <activity
-            android:name="com.tickectreservation.MainActivity"
+            android:name="com.tickectreservation.activities.booking.SearchTrain"
             android:configChanges="orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
@@ -25,14 +28,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tickectreservation.Main2Activity"
+            android:name="com.tickectreservation.activities.booking.SelectTrain"
             android:configChanges="orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.tickectreservation.Main3Activity"
+            android:name="com.tickectreservation.activities.booking.SelectSeat"
             android:configChanges="orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"

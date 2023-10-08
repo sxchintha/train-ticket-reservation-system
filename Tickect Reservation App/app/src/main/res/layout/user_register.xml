@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main5Activity">
+    tools:context=".activities.user.UserRegister">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -55,15 +55,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="260dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/login" />
+                        android:src="@drawable/register" />
 
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:fontFamily="@font/gotham"
-                        android:text="Login Here"
+                        android:text="Register with Us"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="25sp" />
@@ -98,7 +99,7 @@
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/niclogin"
+                                android:hint="@string/name"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
@@ -116,12 +117,47 @@
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/phonelogin"
+                                android:hint="@string/email"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp"
-                                tools:ignore="TouchTargetSizeCheck" />
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/nic"
+                                android:inputType="date"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/phone"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -130,7 +166,7 @@
 
 
                 <Button
-                    android:id="@+id/search_buses"
+                    android:id="@+id/btn_search_trains"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -138,7 +174,7 @@
                     android:background="@drawable/buttonshape"
                     android:backgroundTint="#0052A8"
                     android:fontFamily="@font/calibri"
-                    android:text="@string/signin"
+                    android:text="@string/signup"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
                     android:textSize="18sp"
@@ -149,11 +185,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gotham"
-                    android:text="Don't Have an Account? Sign Up Here"
+                    android:text="Already Have an Account? Sign In Here"
                     android:textAlignment="center"
                     android:textColor="#686868"
                     android:textSize="12sp" />
-
             </LinearLayout>
 
 

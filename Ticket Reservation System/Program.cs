@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
 
 // Apply the CORS policy named "AllowAll".
 app.UseCors("AllowAll");
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
