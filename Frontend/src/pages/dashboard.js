@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { getAllBookings } from "../services/bookingManagementService";
 import Dashboard from "../component/navBar";
+import DeleteModel from "../component/deleteModel";
 
 const AllReservation = () => {
   const [bookings, setBookings] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   useEffect(() => {
     const bookings = getAllBookings().then((res) => {
       // console.log(res);
@@ -16,6 +18,7 @@ const AllReservation = () => {
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
+        {isModalOpen && <DeleteModel confirm={() => setIsModalOpen(false)} />}
         <div className="w-1/6">
           <Dashboard />
         </div>
