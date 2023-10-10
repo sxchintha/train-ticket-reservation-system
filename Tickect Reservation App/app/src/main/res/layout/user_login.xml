@@ -130,7 +130,7 @@
 
 
                 <Button
-                    android:id="@+id/btn_search_trains"
+                    android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -144,15 +144,32 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/gotham"
-                    android:text="Don't Have an Account? Sign Up Here"
-                    android:textAlignment="center"
-                    android:textColor="#686868"
-                    android:textSize="12sp" />
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham"
+                        android:text="Don't Have an Account? "
+                        android:textAlignment="center"
+                        android:textColor="#686868"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham"
+                        android:text="Sign Up Here"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
 
             </LinearLayout>
 

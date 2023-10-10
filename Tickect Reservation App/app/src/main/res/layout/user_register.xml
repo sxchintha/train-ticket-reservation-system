@@ -40,7 +40,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,11 +96,12 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etFirstName"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/name"
+                                android:hint="@string/first_name"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
@@ -113,6 +115,26 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/last_name"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:id="@+id/etEmail"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
@@ -131,6 +153,7 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etNIC"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
@@ -149,6 +172,7 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etPhone"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
@@ -160,13 +184,32 @@
                                 android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:id="@+id/etPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/password"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
 
                 <Button
-                    android:id="@+id/btn_search_trains"
+                    android:id="@+id/btnRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -180,15 +223,32 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/gotham"
-                    android:text="Already Have an Account? Sign In Here"
-                    android:textAlignment="center"
-                    android:textColor="#686868"
-                    android:textSize="12sp" />
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="40dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham"
+                        android:text="Already Have an Account? "
+                        android:textAlignment="center"
+                        android:textColor="#686868"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham"
+                        android:text="Sign In Here"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
 
 

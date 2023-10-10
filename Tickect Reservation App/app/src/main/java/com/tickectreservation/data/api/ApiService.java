@@ -17,6 +17,9 @@ public interface ApiService {
     @GET("users/{id}")
     Call<User> getUser(@Path("id") int userId);
 
+    @POST("user/traveller/create")
+    Call<?> createUser(User user);
+
 
     // Train related APIs
     @GET("train")

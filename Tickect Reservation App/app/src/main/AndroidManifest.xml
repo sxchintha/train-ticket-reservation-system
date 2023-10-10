@@ -9,13 +9,13 @@
         android:allowBackup="true"
         android:icon="@drawable/bus_booking_logo"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/bus_booking_round_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="AllowBackup">
         <activity
-            android:name="com.tickectreservation.activities.booking.SearchTrain"
+            android:name="com.tickectreservation.activities.user.UserLogin"
             android:configChanges="orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
@@ -27,6 +27,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.tickectreservation.activities.user.UserRegister"
+            android:configChanges="orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.tickectreservation.activities.booking.SearchTrain"
+            android:configChanges="orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name="com.tickectreservation.activities.booking.SelectTrain"
             android:configChanges="orientation|screenSize"

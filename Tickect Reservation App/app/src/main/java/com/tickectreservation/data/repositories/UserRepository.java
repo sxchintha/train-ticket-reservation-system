@@ -1,6 +1,7 @@
 package com.tickectreservation.data.repositories;
 
 import com.tickectreservation.data.api.ApiService;
+import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.User;
 
 import java.io.IOException;
@@ -9,6 +10,10 @@ import retrofit2.Response;
 
 public class UserRepository {
     private ApiService apiService;
+
+    public UserRepository() {
+        this.apiService = RetrofitClient.getClient().create(ApiService.class);
+    }
 
     public UserRepository(ApiService apiService) {
         this.apiService = apiService;
@@ -24,5 +29,17 @@ public class UserRepository {
             System.out.println("Exception in UserRepository.getUser: " + e);
         }
         return null;
+    }
+
+    public boolean createUser(User user) {
+        try {
+            Response<?> response = apiService.createUser(user).execute();
+            if (response.isSuccessful()) {
+                return true;
+            }
+        } catch (IOException e) {
+            System.out.println("Exception in UserRepository.createUser: " + e);
+        }
+        return false;
     }
 }
