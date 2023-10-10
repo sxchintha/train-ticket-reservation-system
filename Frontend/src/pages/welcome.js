@@ -1,8 +1,9 @@
 import { Outlet, Link } from "react-router-dom";
+import "../Assets/Styles/start.css";
 
 function Welcome() {
   return (
-    <div className="h-screen w-screen p-0 m-0  justify-center items-center flex">
+    <div className="background-container">
       <div className="w-4/5 bg-[#0052A8] justify-center items-center flex flex-col py-10 h-3/5  rounded-3xl">
         <h1 className="text-5xl  font-bold text-white">Select your Role</h1>
         <div className="gap-10 flex py-20">
