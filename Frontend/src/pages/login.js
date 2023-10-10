@@ -32,7 +32,9 @@ const Login = (props) => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  setCookie("User", "asas");
+                  setCookie("User", {
+                    userRole: "admin",
+                  });
                 }}
                 className="text-white text-xl py-3 bg-[#F5A622] w-full  font-bold rounded-md mt-5"
               >

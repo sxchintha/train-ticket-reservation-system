@@ -7,6 +7,8 @@ import DeleteModel from "../component/deleteModel";
 const AllReservation = () => {
   const [bookings, setBookings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  // const [cookies, setCookie] = useCookies(["User"]);
+
   useEffect(() => {
     const bookings = getAllBookings().then((res) => {
       // console.log(res);
