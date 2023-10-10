@@ -9,6 +9,7 @@ import AllTrains from "./pages/allTrains";
 import { useEffect } from "react";
 import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
+import Selectmanagement from "./pages/selectmanagement";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -27,6 +28,7 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Homepage />} />
       <Route exact path="/signup" element={<SignUp />} />
+      <Route exact path="/selectmanagement" element={<Selectmanagement />} />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route
         path="/dashboard"

@@ -19,7 +19,8 @@
   }
   
   .login-background {
-    background-image: url('../Images/Globe-Blank.gif');
+    background-image: url('../Images/ezgif.com-gif-maker (1).gif');
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     height: 100vh;
@@ -27,5 +28,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   

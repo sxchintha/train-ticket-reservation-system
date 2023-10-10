@@ -7,8 +7,10 @@ const Login = (props) => {
   return (
     <div className="login-background">
       <div className="w-screen bg-[] justify-center items-center flex flex-col py-10 h-full  ">
-        <div className="gap-10 flex px-10 py-10  justify-center bg-slate-900/50  items-center">
-          <h1 className="text-5xl  font-bold text-white py-10">Office Login</h1>
+        
+
+        <div className="gap-10 flex px-10 py-10  justify-center bg-slate-600 rounded-lg  items-center" style={{ backgroundColor: 'rgb(0 82 168 / var(--tw-bg-opacity))' }}>
+        <h1 className="text-5xl  font-bold text-white py-10">Office Sign In</h1>
           <form
             onSubmit="#"
             className="text-white  justify-center   items-center"
@@ -40,9 +42,12 @@ const Login = (props) => {
               >
                 Sign In
               </button>
-              {/* <Link to="/signup">
-                <p className="pt-6 underline">create an account</p>
-              </Link> */}
+              <Link to="/signup">
+              <p className="pt-6 ">
+                  Don't have an account?
+                  <span className="underline px-2 font-semibold">Sign Up here</span>
+                </p>
+              </Link>
             </div>
           </form>
         </div>
