@@ -90,6 +90,7 @@
                         android:weightSum="100">
 
                         <TextView
+                            android:id="@+id/tvFromLocation"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="45"
@@ -107,6 +108,7 @@
                             android:src="@drawable/ic_swap_horiz_white_24dp" />
 
                         <TextView
+                            android:id="@+id/tvToLocation"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="45"
@@ -120,13 +122,25 @@
 
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/tvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/linearLayout"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/print_clearly"
                         android:text="09th - Oct - 2023 | Tuesday"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvNoOfPassengers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDate"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/print_clearly"
+                        android:text="3 Passengers"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />

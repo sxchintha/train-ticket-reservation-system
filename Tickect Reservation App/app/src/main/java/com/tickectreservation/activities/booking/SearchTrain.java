@@ -81,6 +81,11 @@ public class SearchTrain extends AppCompatActivity {
                                 // Navigate to SelectTrain activity with the list of trains
                                  Intent intent = new Intent(getApplicationContext(), SelectTrain.class);
                                     intent.putExtra("trainsList", serializedTrains);
+                                    intent.putExtra("fromLocation", fromLocation);
+                                    intent.putExtra("toLocation", toLocation);
+                                    intent.putExtra("date", date);
+                                    intent.putExtra("noOfPassengers", noOfPassengers);
+
                                     startActivity(intent);
 
                             } else {

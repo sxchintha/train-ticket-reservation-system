@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class SelectTrain extends AppCompatActivity {
 
-    CardView cardView;
+    TextView tvFromLocation, tvToLocation, tvDate, tvNoOfPassengers;
     RecyclerView recyclerView;
     SelectTrainAdapter trainAdapter;
     ArrayList<Train> list;
@@ -37,9 +38,26 @@ public class SelectTrain extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.select_train);
 
+        // Show searching details
+        String fromLocation = getIntent().getStringExtra("fromLocation");
+        String toLocation = getIntent().getStringExtra("toLocation");
+        String date = getIntent().getStringExtra("date");
+        String noOfPassengers = getIntent().getStringExtra("noOfPassengers");
+
+        tvFromLocation = findViewById(R.id.tvFromLocation);
+        tvToLocation = findViewById(R.id.tvToLocation);
+        tvDate = findViewById(R.id.tvDate);
+        tvNoOfPassengers = findViewById(R.id.tvNoOfPassengers);
+
+        tvFromLocation.setText(fromLocation);
+        tvToLocation.setText(toLocation);
+        tvDate.setText(date);
+        tvNoOfPassengers.setText(noOfPassengers);
+
+        
+        // Show train list
         recyclerView = findViewById(R.id.trainListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         String serializedTrains = getIntent().getStringExtra("trainsList");
         Type type = new TypeToken<List<Train>>() {
@@ -51,7 +69,7 @@ public class SelectTrain extends AppCompatActivity {
         list = new ArrayList<>();
         list.addAll(trains);
 
-        trainAdapter = new SelectTrainAdapter(this, list);
+        trainAdapter = new SelectTrainAdapter(this, list, fromLocation, toLocation, date, noOfPassengers);
         recyclerView.setAdapter(trainAdapter);
 
     }
