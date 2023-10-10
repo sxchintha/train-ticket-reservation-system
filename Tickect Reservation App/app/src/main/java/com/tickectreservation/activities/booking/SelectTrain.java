@@ -49,7 +49,10 @@ public class SelectTrain extends AppCompatActivity {
         tvFromLocation.setText(fromLocation);
         tvToLocation.setText(toLocation);
         tvDate.setText(date);
-        tvNoOfPassengers.setText(noOfPassengers);
+        if (noOfPassengers.equals("1"))
+            tvNoOfPassengers.setText(noOfPassengers + " Passenger");
+        else
+            tvNoOfPassengers.setText(noOfPassengers + " Passengers");
 
 
         // Show train list

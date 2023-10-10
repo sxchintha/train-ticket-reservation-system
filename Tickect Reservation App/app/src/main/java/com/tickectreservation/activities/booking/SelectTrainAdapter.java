@@ -73,7 +73,7 @@ public class SelectTrainAdapter extends RecyclerView.Adapter<SelectTrainAdapter.
                 Gson gson = new Gson();
                 String serializedTrain = gson.toJson(train);
 
-                Intent intent = new Intent(context, SelectSeat.class);
+                Intent intent = new Intent(context, BookingConfirm.class);
                 intent.putExtra("train", serializedTrain);
                 intent.putExtra("fromLocation", fromLocation);
                 intent.putExtra("toLocation", toLocation);

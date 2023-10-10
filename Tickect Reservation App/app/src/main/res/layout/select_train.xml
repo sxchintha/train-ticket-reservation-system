@@ -91,17 +91,17 @@
 
                         <TextView
                             android:id="@+id/tvFromLocation"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="45"
                             android:fontFamily="@font/gotham"
                             android:text="Anuradhapura"
-                            android:textAlignment="center"
+                            android:textAlignment="textEnd"
                             android:textColor="#FFFFFF"
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_weight="10"
@@ -109,12 +109,12 @@
 
                         <TextView
                             android:id="@+id/tvToLocation"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="45"
                             android:fontFamily="@font/gotham"
-                            android:text="Colombo Fort"
-                            android:textAlignment="center"
+                            android:text="Colombo"
+                            android:textAlignment="textStart"
                             android:textColor="#FFFFFF"
                             android:textSize="18sp" />
 

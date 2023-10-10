@@ -35,7 +35,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.tickectreservation.activities.booking.SelectSeat"
+            android:name="com.tickectreservation.activities.booking.BookingConfirm"
             android:configChanges="orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"

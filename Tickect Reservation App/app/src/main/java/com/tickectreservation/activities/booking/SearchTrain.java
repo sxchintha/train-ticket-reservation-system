@@ -22,6 +22,7 @@ import com.tickectreservation.data.models.Train;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,12 +52,14 @@ public class SearchTrain extends AppCompatActivity {
 
         btn_search_trains = findViewById(R.id.btn_search_trains);
 
+        // set default no of passengers to 1
+        et_no_of_passengers.setText("1");
 
-        // Set date picker
+        // set date picker
         et_date.setInputType(View.AUTOFILL_TYPE_NONE);
 
         // set default date to today
-        String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        String date = new java.text.SimpleDateFormat("yyyy-MMM-dd, EEEE").format(new java.util.Date());
         et_date.setText(date);
 
         // set min date to today
@@ -77,7 +80,21 @@ public class SearchTrain extends AppCompatActivity {
         datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String dateStr = String.format("%d-%d-%d", year, monthOfYear + 1, dayOfMonth);
+                String yearStr = String.valueOf(year);
+                String dayStr = String.valueOf(dayOfMonth);
+
+                if (dayOfMonth < 10) {
+                    dayStr = "0" + dayStr;
+                }
+
+                // format the date
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, monthOfYear, dayOfMonth);
+                String monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
+                String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+
+                String dateStr = String.format("%s-%s-%s, %s", dayStr, monthName, yearStr, dayOfWeek);
+
                 et_date.setText(dateStr);
                 blurryScreen.setVisibility(View.GONE);
                 btn_search_trains.setVisibility(View.VISIBLE);
@@ -97,22 +114,25 @@ public class SearchTrain extends AppCompatActivity {
                     String noOfPassengers = et_no_of_passengers.getText().toString();
 
                     if (TextUtils.isEmpty(fromLocation)) {
-                        et_from_location.setError("required");
+                        et_from_location.setError("Required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(toLocation)) {
-                        et_to_location.setError("required");
+                        et_to_location.setError("Required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(date)) {
-                        et_date.setError("required");
+                        et_date.setError("Required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(noOfPassengers)) {
-                        et_no_of_passengers.setError("required");
+                        et_no_of_passengers.setError("Required");
                         isValid = false;
                     } else if (Integer.parseInt(noOfPassengers) > 4) {
                         et_no_of_passengers.setError("Maximum 4 passengers");
+                        isValid = false;
+                    } else if (Integer.parseInt(noOfPassengers) < 1) {
+                        et_no_of_passengers.setError("Minimum 1 passenger");
                         isValid = false;
                     }
 
