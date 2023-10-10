@@ -10,4 +10,13 @@ const getAllBookings = async () => {
   }
 };
 
-export { getAllBookings };
+const createBooking = async (booking) => {
+  try {
+    const response = await API.post("/Booking", booking);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { getAllBookings, createBooking };
