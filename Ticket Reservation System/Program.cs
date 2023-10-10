@@ -17,6 +17,9 @@ builder.Services.Configure<UserDatabaseSettings>(
 builder.Services.Configure<TravelAgentDatabaseSettings>(
     builder.Configuration.GetSection("TravelAgentDatabase"));
 
+builder.Services.Configure<BackOfficeDatabaseSettings>(
+    builder.Configuration.GetSection("BackOfficeDatabase"));
+
 // Add the TrainService as a singleton to the service container.
 builder.Services.AddSingleton<TrainService>();
 builder.Services.AddControllers();
@@ -28,6 +31,9 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<TravelAgentService>();
+builder.Services.AddControllers();
+
+builder.Services.AddSingleton<BackOfficeService>();
 builder.Services.AddControllers();
 
 // Set up CORS (Cross-Origin Resource Sharing) to allow requests from any origin, method, and header.

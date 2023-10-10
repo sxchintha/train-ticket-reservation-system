@@ -3,15 +3,10 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
 namespace Ticket_Reservation_System.Models
-{ 
-    public class User
+{
+    [BsonIgnoreExtraElements]
+    public class BackOffice
     {
-        [BsonId]
-        [BsonElement("nic")]
-        [BsonRepresentation(BsonType.String)]
-        [BsonRequired]
-        public string Nic { get; set; } = null!;
-
         [BsonElement("firstName")]
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
@@ -47,14 +42,12 @@ namespace Ticket_Reservation_System.Models
             // Compare the provided password with the stored password
             return Password == providedPassword;
         }
+
     }
-
-
-    public class UserDatabaseSettings
+    public class BackOfficeDatabaseSettings
     {
         public string ConnectionString { get; set; } = null!;
         public string DatabaseName { get; set; } = null!;
-        public string UserCollectionName { get; set; } = null!;
+        public string BackOfficeCollectionName { get; set; } = null!;
     }
 }
-
