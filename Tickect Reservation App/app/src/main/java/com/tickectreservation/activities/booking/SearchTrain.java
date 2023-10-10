@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.tickectreservation.R;
+import com.tickectreservation.activities.user.UserProfile;
 import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.Train;
@@ -34,6 +36,7 @@ public class SearchTrain extends AppCompatActivity {
     DatePicker datePicker;
     Button btn_search_trains;
     RelativeLayout blurryScreen;
+    ImageView btnViewProfile;
     ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
     @Override
@@ -178,6 +181,15 @@ public class SearchTrain extends AppCompatActivity {
                     System.out.println("Error in searching... :" + e);
                     Toast.makeText(SearchTrain.this, "Error in searching...", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        // Navigate to Profile activity
+        btnViewProfile = findViewById(R.id.btnViewProfile);
+        btnViewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), UserProfile.class));
             }
         });
     }
