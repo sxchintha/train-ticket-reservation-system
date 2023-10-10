@@ -6,38 +6,38 @@ namespace Ticket_Reservation_System.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TravelAgentController : ControllerBase
+    public class BackOfficeController : ControllerBase
     {
-        private readonly TravelAgentService _travelAgentService;
+       private readonly BackOfficeService _backOfficeService;
 
-        public TravelAgentController(TravelAgentService travelAgentService)
+        public BackOfficeController(BackOfficeService backofficeService)
         {
-            _travelAgentService = travelAgentService;
+            _backOfficeService = backofficeService;
         }
 
-        //POST: api/TravelAgent/create
+        //POST: api/BackOffice/create
         [HttpPost("create")]
 
-        public async Task<IActionResult>CrateTravelAgent(TravelAgent travelAgent)
+        public async Task<IActionResult>CreateBackOffice(BackOffice backOffice)
         {
             try
             {
-                await _travelAgentService.CreateAsync(travelAgent);
+                await _backOfficeService.CreateAsync(backOffice);
                 return StatusCode(201); // Return HTTP 201 (Created) status code
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = ex.Message });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        // POST: api/TravelAgent/login
+        // POST: api/BackOffice/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestTravelAgent request)
         {
             try
             {
-                var user = await _travelAgentService.AuthenticateAsync(request.Email, request.Password);
+                var user = await _backOfficeService.AuthenticateAsync(request.Email, request.Password);
 
                 if (user != null)
                 {
