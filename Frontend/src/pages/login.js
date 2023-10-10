@@ -1,7 +1,9 @@
 import { Outlet, Link } from "react-router-dom";
 import "../Assets/Styles/start.css";
+import { useCookies } from "react-cookie";
 
 const Login = (props) => {
+  const [cookies, setCookie] = useCookies(["User"]);
   return (
     <div className="login-background">
       <div className="w-screen bg-[] justify-center items-center flex flex-col py-10 h-full  ">
@@ -30,7 +32,12 @@ const Login = (props) => {
               />
 
               <button
-                className="text-white text-xl py-3 bg-[#F5A622] w-full  font-bold rounded-md mt-5">
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCookie("User", "asas");
+                }}
+                className="text-white text-xl py-3 bg-[#F5A622] w-full  font-bold rounded-md mt-5"
+              >
                 Sign In
               </button>
               <Link to="/signup">
@@ -46,6 +53,6 @@ const Login = (props) => {
       <div></div>
     </div>
   );
-}
+};
 
 export default Login;

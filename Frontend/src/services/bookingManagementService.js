@@ -19,4 +19,13 @@ const createBooking = async (booking) => {
   }
 };
 
+const cancelBooking = async (booking) => {
+  try {
+    const response = await API.post("/Booking", booking);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export { getAllBookings, createBooking };
