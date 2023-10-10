@@ -41,7 +41,7 @@ const AllReservation = () => {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking) => (
+              {bookings?.map((booking) => (
                 <tr className="bg-white border-b">
                   <th
                     scope="row"
