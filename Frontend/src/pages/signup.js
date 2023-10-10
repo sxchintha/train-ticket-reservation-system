@@ -4,7 +4,7 @@ function SignUp() {
   return (
     <div className="h-screen w-screen p-0 m-0  justify-center items-center flex">
       <div className="w-screen bg-[#0052A8] justify-center items-center flex flex-col py-10 h-full  ">
-        <h1 className="text-5xl  font-bold text-white py-10">Office Signup</h1>
+        <h1 className="text-5xl  font-bold text-white py-10">Office Sign Up</h1>
 
         <div className="gap-10 flex px-10 py-10  justify-center bg-slate-700/20  items-center">
           <form
@@ -13,31 +13,37 @@ function SignUp() {
           >
             <div className="justify-start items-start flex flex-col w-96  ">
               <label className=" justify-start items-start flex text-lg font-semibold w-full">
-                Name
+                First Name
               </label>
               <input
-                placeholder="name"
+                placeholder="Enter Your First Name"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
               />
               <label className=" justify-start items-start flex text-lg font-semibold w-full">
-                Name
+                Last Name
               </label>
               <input
-                placeholder="name"
+                placeholder="Enter Your Last Name"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
               />
               <label className=" justify-start items-start flex text-lg font-semibold w-full">
-                Name
+                Phone Number
               </label>
               <input
-                placeholder="name"
+                placeholder="Enter Your Phone"
+                className="p-3 rounded-md my-3 outline-none text-black w-full"
+              /><label className=" justify-start items-start flex text-lg font-semibold w-full">
+                Email
+              </label>
+              <input
+                placeholder="Enter Your Email"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
               />
               <label className=" justify-start items-start flex text-lg font-semibold w-full">
-                Name
+                Password
               </label>
               <input
-                placeholder="name"
+                placeholder="Enter Your Password"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
               />
 
@@ -51,7 +57,7 @@ function SignUp() {
               <Link to="/login">
                 <p className="pt-6 ">
                   Already have an account?
-                  <span className="underline px-2 font-semibold">Login</span>
+                  <span className="underline px-2 font-semibold">Sign In here</span>
                 </p>
               </Link>
             </div>

@@ -6,6 +6,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import Dashboard from "./pages/dashboard";
 import AllTrains from "./pages/allTrains";
+import Selectmanagement from "./pages/selectmanagement";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route exact path="/" element={<Homepage />} />
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<SignUp />} />
+      <Route exact path="/selectmanagement" element={<Selectmanagement />} />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route exact path="/dashboard" element={<Dashboard />} />
       <Route exact path="/allTrains" element={<AllTrains />} />
