@@ -1,13 +1,12 @@
 package com.tickectreservation.activities.booking;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,9 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tickectreservation.R;
-import com.tickectreservation.activities.booking.SelectSeat;
-import com.tickectreservation.data.models.Reservation;
-import com.tickectreservation.data.models.Schedule;
 import com.tickectreservation.data.models.Train;
 
 import java.lang.reflect.Type;
@@ -27,6 +23,7 @@ import java.util.List;
 public class SelectTrain extends AppCompatActivity {
 
     TextView tvFromLocation, tvToLocation, tvDate, tvNoOfPassengers;
+    ImageView btnGoBack;
     RecyclerView recyclerView;
     SelectTrainAdapter trainAdapter;
     ArrayList<Train> list;
@@ -54,7 +51,7 @@ public class SelectTrain extends AppCompatActivity {
         tvDate.setText(date);
         tvNoOfPassengers.setText(noOfPassengers);
 
-        
+
         // Show train list
         recyclerView = findViewById(R.id.trainListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -71,6 +68,13 @@ public class SelectTrain extends AppCompatActivity {
 
         trainAdapter = new SelectTrainAdapter(this, list, fromLocation, toLocation, date, noOfPassengers);
         recyclerView.setAdapter(trainAdapter);
+
+
+        // Go back to previous activity
+        btnGoBack = findViewById(R.id.trainSelectBackButton);
+        btnGoBack.setOnClickListener(v -> {
+            finish();
+        });
 
     }
 }

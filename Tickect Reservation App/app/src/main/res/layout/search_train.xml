@@ -112,7 +112,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
+                            android:textColorHint="@color/textHint">
 
                             <EditText
                                 android:id="@+id/et_from_destination"
@@ -132,7 +132,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
+                            android:textColorHint="@color/textHint">
 
                             <EditText
                                 android:id="@+id/et_to_destination"
@@ -152,7 +152,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
+                            android:textColorHint="@color/textHint">
 
                             <EditText
                                 android:id="@+id/et_date"
@@ -165,14 +165,15 @@
                                 android:inputType="date"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:editable="false"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="#FF8A99AF">
+                            android:textColorHint="@color/textHint">
 
                             <EditText
                                 android:id="@+id/et_no_of_passengers"
@@ -200,17 +201,37 @@
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
                     android:background="@drawable/buttonshape"
-                    android:backgroundTint="#0052A8"
+                    android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="@font/calibri"
                     android:text="@string/search_trains"
                     android:textAllCaps="false"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-
         </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/blurryScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/blurryBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/white"/>
 
     </RelativeLayout>
 
