@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
 import Selectmanagement from "./pages/selectmanagement";
+import Usermanagement from "./pages/usermanagement";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -37,6 +38,10 @@ function App() {
       <Route
         path="/allTrains"
         element={<PrivateRoute element={<AllTrains />} />}
+      />
+      <Route
+        path="/usermanagement"
+        element={<PrivateRoute element={<Usermanagement />} />}
       />
       <Route path="/login" element={<Login />} />
       {/* <Route exact path="/dashboard" element={<Dashboard />} />
