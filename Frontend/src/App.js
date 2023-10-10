@@ -9,6 +9,7 @@ import AllTrains from "./pages/allTrains";
 import { useEffect } from "react";
 import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
+import Selectmanagement from "./pages/selectmanagement";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
