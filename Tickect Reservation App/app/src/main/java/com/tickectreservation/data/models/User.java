@@ -17,6 +17,15 @@ public class User {
         this.phone = phone;
     }
 
+    public User(String firstName, String lastName, String email, String nic, String phone, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.nic = nic;
+        this.phone = phone;
+        this.password = password;
+    }
+
     public String getFirstName() {
         return firstName;
     }

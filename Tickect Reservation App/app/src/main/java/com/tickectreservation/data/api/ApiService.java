@@ -8,6 +8,7 @@ import com.tickectreservation.data.models.User;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -17,8 +18,8 @@ public interface ApiService {
     @GET("users/{id}")
     Call<User> getUser(@Path("id") int userId);
 
-    @POST("user/traveller/create")
-    Call<?> createUser(User user);
+    @POST("user/traveler/create")
+    Call<Void> createUser(@Body User user);
 
 
     // Train related APIs

@@ -110,26 +110,26 @@ public class SearchTrain extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    Boolean isValid = true;
+                    boolean isValid = true;
                     String fromLocation = et_from_location.getText().toString();
                     String toLocation = et_to_location.getText().toString();
                     String date = et_date.getText().toString();
                     String noOfPassengers = et_no_of_passengers.getText().toString();
 
                     if (TextUtils.isEmpty(fromLocation)) {
-                        et_from_location.setError("Required");
+                        et_from_location.setError("Location is required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(toLocation)) {
-                        et_to_location.setError("Required");
+                        et_to_location.setError("Location is required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(date)) {
-                        et_date.setError("Required");
+                        et_date.setError("Date is required");
                         isValid = false;
                     }
                     if (TextUtils.isEmpty(noOfPassengers)) {
-                        et_no_of_passengers.setError("Required");
+                        et_no_of_passengers.setError("No of passengers is required");
                         isValid = false;
                     } else if (Integer.parseInt(noOfPassengers) > 4) {
                         et_no_of_passengers.setError("Maximum 4 passengers");
