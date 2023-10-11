@@ -222,7 +222,7 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/tvRegister"
+                        android:id="@+id/tvLogin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gotham"

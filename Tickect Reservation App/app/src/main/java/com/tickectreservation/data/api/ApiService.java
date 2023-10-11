@@ -1,6 +1,8 @@
 package com.tickectreservation.data.api;
 
 // ApiService.java
+import com.google.gson.JsonObject;
+import com.tickectreservation.data.models.LoginRequest;
 import com.tickectreservation.data.models.Reservation;
 import com.tickectreservation.data.models.Train;
 import com.tickectreservation.data.models.User;
@@ -20,6 +22,9 @@ public interface ApiService {
 
     @POST("user/traveler/create")
     Call<Void> createUser(@Body User user);
+
+    @POST("user/traveler/login")
+    Call<JsonObject> loginUser(@Body LoginRequest loginRequest);
 
 
     // Train related APIs

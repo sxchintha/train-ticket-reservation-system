@@ -94,11 +94,12 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etNic"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/niclogin"
+                                android:hint="@string/loginNic"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
@@ -112,11 +113,12 @@
                             android:textColorHint="#FF8A99AF">
 
                             <EditText
+                                android:id="@+id/etPassword"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/phonelogin"
+                                android:hint="@string/loginPassword"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"

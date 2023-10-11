@@ -6,6 +6,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class UserRegister extends AppCompatActivity {
 
     EditText etFirstName, etLastName, etEmail, etNIC, etPhone, etPassword;
     Button btnRegister;
+    TextView tvLogin;
     static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     static final Pattern VALID_NIC_REGEX =
@@ -48,6 +50,7 @@ public class UserRegister extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
 
         btnRegister = findViewById(R.id.btnRegister);
+        tvLogin = findViewById(R.id.tvLogin);
 
         // register user
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +86,7 @@ public class UserRegister extends AppCompatActivity {
                         isFocusRequested = true;
                     }
                     isValid = false;
-                }
-                if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
+                } else if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
                     etEmail.setError("Invalid email");
                     if (!isFocusRequested) {
                         etEmail.requestFocus();
@@ -99,8 +101,7 @@ public class UserRegister extends AppCompatActivity {
                         isFocusRequested = true;
                     }
                     isValid = false;
-                }
-                if (!VALID_NIC_REGEX.matcher(nic).find()) {
+                } else if (!VALID_NIC_REGEX.matcher(nic).find()) {
                     etNIC.setError("Invalid NIC");
                     if (!isFocusRequested) {
                         etNIC.requestFocus();
@@ -115,8 +116,7 @@ public class UserRegister extends AppCompatActivity {
                         isFocusRequested = true;
                     }
                     isValid = false;
-                }
-                if (!VALID_PHONE_REGEX.matcher(phone).find()) {
+                } else if (!VALID_PHONE_REGEX.matcher(phone).find()) {
                     etPhone.setError("Invalid phone number");
                     if (!isFocusRequested) {
                         etPhone.requestFocus();
@@ -131,8 +131,7 @@ public class UserRegister extends AppCompatActivity {
                         isFocusRequested = true;
                     }
                     isValid = false;
-                }
-                if(password.length() < 8) {
+                } else if (password.length() < 8) {
                     etPassword.setError("Password should be at least 8 characters");
                     if (!isFocusRequested) {
                         etPassword.requestFocus();
@@ -161,13 +160,21 @@ public class UserRegister extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-
+                                Toast.makeText(getApplicationContext(), "Error in creating user", Toast.LENGTH_SHORT).show();
+                                System.out.println("Error in creating user: " + t);
                             }
                         });
                     } catch (Exception e) {
                         System.out.println("Error in creating user: " + e);
                     }
                 }
+            }
+        });
+
+        tvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

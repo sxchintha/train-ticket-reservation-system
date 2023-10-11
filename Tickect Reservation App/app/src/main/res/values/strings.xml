@@ -12,7 +12,9 @@
     <string name="passengers">No of Passengers (Max. 4)</string>
     <string name="signup">Sign Up</string>
     <string name="signin">Sign In</string>
-    <string name="niclogin">Enter Your NIC No</string>
+    <string name="loginEmail">Enter your email</string>
+    <string name="loginNic">Enter you NIC</string>
+    <string name="loginPassword">Enter your password</string>
     <string name="phonelogin">Enter Your Phone Number</string>
     <string name="search_trains">Search Trains</string>
     <string name="select_your_train">Select your train!</string>
