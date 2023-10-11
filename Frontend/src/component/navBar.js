@@ -40,7 +40,7 @@ const Dashboard = (props) => {
           </li>
           <li
             className="hover:bg-yellow-500 px-5 py-6 duration-300"
-            onClick={() => toggleMenu("create")}
+            onClick={() => toggleMenu("usermanagement")}
           >
             User Management
           </li>
