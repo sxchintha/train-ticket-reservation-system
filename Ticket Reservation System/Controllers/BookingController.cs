@@ -16,13 +16,24 @@ namespace Ticket_Reservation_System.Controllers
         }
 
         // POST: api/Bookings
-        [HttpPost]
-        public async Task<ActionResult<Booking>> CreateBooking(Booking Booking)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateBooking([FromBody] Booking booking)
         {
             try
             {
-                await _bookingService.CreateAsync(Booking);
-                return CreatedAtAction(nameof(GetBookingById), new { id = Booking.Id }, Booking);
+                // Create a new Booking object excluding the "id" property
+                var newBooking = new Booking
+                {
+                    TrainID = booking.TrainID,
+                    TrainName = booking.TrainName,
+                    Sheduledate = booking.Sheduledate,
+                    Sheduletime = booking.Sheduletime,
+                    Quentity = booking.Quentity,
+                    Price = booking.Price
+                };
+
+                await _bookingService.CreateAsync(newBooking);
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
@@ -48,7 +59,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
+       
         // PATCH: api/Bookings/cancel/{id}
         [HttpPatch("cancel/{id}")]
         public async Task<ActionResult<Booking>> CancelBooking(string id)

@@ -8,7 +8,8 @@ namespace Ticket_Reservation_System.Models
         /// Gets or sets the unique identifier for the train.
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        [BsonIgnoreIfDefault]
+        public string Id { get; set; }
 
         /// Gets or sets the train ID.
         [BsonElement("trainID")]
@@ -53,5 +54,14 @@ namespace Ticket_Reservation_System.Models
         /// Gets or sets the list of stations that the train will pass through.
         [BsonElement("stations")]
         public List<string> Stations { get; set; } = new List<string>();
+    }
+
+    public class TrainDatabaseSetting
+    {
+        public string ConnectionString { get; set; } = null!;
+        public string DatabaseName { get; set; } = null!;
+        public string TrainCollectionName { get; set; } = null!;
+
+
     }
 }
