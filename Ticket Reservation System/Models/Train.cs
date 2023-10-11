@@ -8,7 +8,8 @@ namespace Ticket_Reservation_System.Models
         /// Gets or sets the unique identifier for the train.
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        [BsonIgnoreIfDefault]
+        public string Id { get; set; }
 
         /// Gets or sets the train ID.
         [BsonElement("trainID")]
