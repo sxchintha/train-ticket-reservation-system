@@ -2,8 +2,8 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./pages/index";
 import Welcome from "./pages/welcome";
-import Login from "./pages/login";
-import SignUp from "./pages/signup";
+import Login from "./pages/backOfficerLogin";
+import SignUp from "./pages/backOfficerSignup";
 import Dashboard from "./pages/dashboard";
 import AllTrains from "./pages/allTrains";
 import { useEffect } from "react";
@@ -11,6 +11,8 @@ import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
 import Selectmanagement from "./pages/selectmanagement";
 import Usermanagement from "./pages/usermanagement";
+import BackOfficerSignUp from "./pages/backOfficerSignup";
+import BackOfficerLogin from "./pages/backOfficerLogin";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -19,7 +21,7 @@ function PrivateRoute({ element }) {
   const isAuthenticated = cookies.User !== undefined;
 
   // If the user is authenticated, render the element, otherwise, redirect to login
-  return isAuthenticated ? element : <Navigate to="/login" />;
+  return isAuthenticated ? element : <Navigate to="/backOfficerLogin" />;
 }
 
 function App() {
@@ -28,7 +30,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/" element={<Homepage />} />
-      <Route exact path="/signup" element={<SignUp />} />
+      <Route exact path="/backOfficerSignup" element={<BackOfficerSignUp />} />
       <Route exact path="/selectmanagement" element={<Selectmanagement />} />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route
@@ -43,7 +45,7 @@ function App() {
         path="/usermanagement"
         element={<PrivateRoute element={<Usermanagement />} />}
       />
-      <Route path="/login" element={<Login />} />
+      <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       {/* <Route exact path="/dashboard" element={<Dashboard />} />
       <Route exact path="/allTrains" element={<AllTrains />} /> */}
     </Routes>
