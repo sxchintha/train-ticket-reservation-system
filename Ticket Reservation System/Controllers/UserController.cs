@@ -30,6 +30,104 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //GET: api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            try
+            {
+                var Users = await _userService.GetAllUsersAsync();
+                return Ok(Users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        //PUT: api/Users/{nic}
+        [HttpPut("{nic}")]
+        public async Task<ActionResult<User>> UpdateUser(string nic, User updatedUser)
+        {
+            try
+            {
+                var User = await _userService.UpdateUserAsync(nic, updatedUser);
+                if (User == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(User);
+            } 
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        //DELETE: api/Users/{nic}
+        [HttpDelete("{nic}")]
+        public async Task<ActionResult> DeleteUserByNic(string nic)
+        {
+            try
+            {
+                var User = await _userService.GetUserByNic(nic);
+                if (User == null)
+                {
+                    return NotFound();
+                }
+
+                await _userService.DeleteUserAsync(nic);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        //GET: api/Users/{nic}
+        [HttpGet("{nic}")]
+        public async Task<ActionResult<User>> GetUserByNic(string nic)
+        {
+            try
+            {
+                var User = await _userService.GetUserByNic(nic);
+                if (User == null)
+                {
+                    return NotFound();
+                }
+                return Ok(User);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        //PATCH: api/User/deactivate/{nic}
+        [HttpPatch("deactivate/{nic}")]
+        public async Task<ActionResult<User>> DeactivateUser(string nic)
+        {
+            try
+            {
+                var User = await _userService.DeactivateUserAsync(nic);
+                if (User == null)
+                {
+                    return NotFound();
+                }
+                return Ok(User);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { error = "An error occurred while deactivating the account." });
+            }
+        }
+
         // POST: api/Users/traveler/login
         [HttpPost("traveler/login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)

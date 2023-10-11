@@ -18,6 +18,7 @@ namespace Ticket_Reservation_System.Models
         [BsonRequired]
         public string LastName { get; set; } = null!;
 
+        [BsonId]
         [BsonElement("email")]
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
