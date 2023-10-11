@@ -21,5 +21,17 @@ namespace Ticket_Reservation_System.Services
             await _users.InsertOneAsync(newUser);
             return newUser;
         }
+
+        public async Task<User> AuthenticateAsync(string nic, string password)
+        {
+            var user = await _users.Find(u => u.Nic == nic).FirstOrDefaultAsync();
+
+            if (user != null && user.VerifyPassword(password))
+            {
+                return user;
+            }
+
+            return null;
+        }
     }
 }

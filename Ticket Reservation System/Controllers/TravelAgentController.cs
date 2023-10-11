@@ -6,22 +6,23 @@ namespace Ticket_Reservation_System.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class TravelAgentController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly TravelAgentService _travelAgentService;
 
-        public UserController(UserService userService)
+        public TravelAgentController(TravelAgentService travelAgentService)
         {
-            _userService = userService;
+            _travelAgentService = travelAgentService;
         }
 
-        // POST: api/Users
-        [HttpPost("traveler/create")]
-        public async Task<IActionResult> CreateUser(User user)
+        //POST: api/TravelAgent/create
+        [HttpPost("create")]
+
+        public async Task<IActionResult>CrateTravelAgent(TravelAgent travelAgent)
         {
             try
             {
-                await _userService.CreateAsync(user);
+                await _travelAgentService.CreateAsync(travelAgent);
                 return StatusCode(201); // Return HTTP 201 (Created) status code
             }
             catch (Exception ex)
@@ -30,13 +31,13 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
-        // POST: api/Users/traveler/login
-        [HttpPost("traveler/login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        // POST: api/TravelAgent/login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestTravelAgent request)
         {
             try
             {
-                var user = await _userService.AuthenticateAsync(request.Nic, request.Password);
+                var user = await _travelAgentService.AuthenticateAsync(request.Email, request.Password);
 
                 if (user != null)
                 {
@@ -44,7 +45,7 @@ namespace Ticket_Reservation_System.Controllers
                 }
                 else
                 {
-                    return Unauthorized(new { error = "Invalid nic or password" });
+                    return Unauthorized(new { error = "Invalid email or password" });
                 }
             }
             catch (Exception ex)
@@ -52,6 +53,5 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
     }
 }

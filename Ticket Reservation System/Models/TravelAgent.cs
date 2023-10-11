@@ -1,16 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 using System.Text.Json.Serialization;
 
 namespace Ticket_Reservation_System.Models
-{ 
-    public class User
+{
+    [BsonIgnoreExtraElements]
+    public class TravelAgent
     {
-        [BsonId]
-        [BsonElement("nic")]
-        [BsonRepresentation(BsonType.String)]
-        [BsonRequired]
-        public string Nic { get; set; } = null!;
 
         [BsonElement("firstName")]
         [BsonRepresentation(BsonType.String)]
@@ -49,12 +45,10 @@ namespace Ticket_Reservation_System.Models
         }
     }
 
-
-    public class UserDatabaseSettings
+    public class TravelAgentDatabaseSettings
     {
         public string ConnectionString { get; set; } = null!;
         public string DatabaseName { get; set; } = null!;
-        public string UserCollectionName { get; set; } = null!;
+        public string TravelAgentCollectionName { get; set; } = null!;
     }
 }
-
