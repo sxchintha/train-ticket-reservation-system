@@ -103,7 +103,8 @@
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:maxLength="12"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -119,7 +120,7 @@
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
                                 android:hint="@string/loginPassword"
-                                android:inputType="text"
+                                android:inputType="textPassword"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"

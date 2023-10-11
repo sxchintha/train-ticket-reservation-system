@@ -1,6 +1,8 @@
 package com.tickectreservation.activities.booking;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,14 +40,22 @@ public class SearchTrain extends AppCompatActivity {
     Button btn_search_trains;
     RelativeLayout blurryScreen;
     ImageView btnViewProfile;
+    TextView tv_user_firstName;
     ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", Context.MODE_PRIVATE);
+        String userFirstName = sharedPreferences.getString("user_firstName", "");
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.search_train);
+
+        tv_user_firstName = findViewById(R.id.tvUserFirstName);
+        tv_user_firstName.setText(String.format("Hey %s!", userFirstName));
 
         et_from_location = findViewById(R.id.et_from_destination);
         et_to_location = findViewById(R.id.et_to_destination);
