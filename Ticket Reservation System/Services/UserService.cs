@@ -22,6 +22,41 @@ namespace Ticket_Reservation_System.Services
             return newUser;
         }
 
+        public async Task<List<User>>GetAllUsersAsync() => 
+            await _users.Find(nic => true).ToListAsync();
+
+        public async Task<User?> UpdateUserAsync(string nic, User updatedUser)
+        {
+            updatedUser.Nic = nic;
+
+            var result = await _users.ReplaceOneAsync(user => user.Nic == nic, updatedUser);
+
+            if (result.MatchedCount == 0)
+            {
+                return null;
+            }
+
+            return updatedUser;
+        }
+
+        public async Task DeleteUserAsync(string nic) => 
+            await _users.DeleteOneAsync(User => User.Nic == nic);
+
+        public async Task<User?> DeactivateUserAsync(string nic)
+        {
+            var User = await _users.Find(User => User.Nic == nic).FirstOrDefaultAsync(); ;
+            if (User == null)
+            {
+                return null;
+            }
+
+            await _users.ReplaceOneAsync(t => t.Nic == nic, User);
+            return User;
+        }
+
+        public async Task<User?> GetUserByNic(string nic) =>
+            await _users.Find(User => User.Nic == nic).FirstOrDefaultAsync();
+
         public async Task<User> AuthenticateAsync(string nic, string password)
         {
             var user = await _users.Find(u => u.Nic == nic).FirstOrDefaultAsync();
