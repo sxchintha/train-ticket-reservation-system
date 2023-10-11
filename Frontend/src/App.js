@@ -11,6 +11,7 @@ import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
 import Selectmanagement from "./pages/selectmanagement";
 import Usermanagement from "./pages/usermanagement";
+import Reservationmanagement from "./pages/reservationmanagement";
 import BackOfficerSignUp from "./pages/backOfficerSignup";
 import BackOfficerLogin from "./pages/backOfficerLogin";
 
@@ -44,6 +45,10 @@ function App() {
       <Route
         path="/usermanagement"
         element={<PrivateRoute element={<Usermanagement />} />}
+      />
+      <Route
+        path="/reservationmanagement"
+        element={<PrivateRoute element={<Reservationmanagement />} />}
       />
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       {/* <Route exact path="/dashboard" element={<Dashboard />} />
