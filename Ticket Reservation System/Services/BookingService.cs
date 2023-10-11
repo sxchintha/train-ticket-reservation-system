@@ -24,11 +24,16 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<Booking?> UpdateAsync(string id, Booking updatedBooking)
         {
-            var result = await _bookingsCollection.ReplaceOneAsync(Booking => Booking.Id == id, updatedBooking);
+            // Use the existing _id value from the updatedBooking
+            updatedBooking.Id = id;
+
+            var result = await _bookingsCollection.ReplaceOneAsync(booking => booking.Id == id, updatedBooking);
+
             if (result.MatchedCount == 0)
             {
                 return null;
             }
+
             return updatedBooking;
         }
 
