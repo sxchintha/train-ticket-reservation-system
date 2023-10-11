@@ -44,14 +44,17 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<User?> DeactivateUserAsync(string nic)
         {
-            var User = await _users.Find(User => User.Nic == nic).FirstOrDefaultAsync(); ;
-            if (User == null)
+            var user = await _users.Find(user => user.Nic == nic).FirstOrDefaultAsync();
+            if (user == null)
             {
                 return null;
             }
 
-            await _users.ReplaceOneAsync(t => t.Nic == nic, User);
-            return User;
+            // Update the status property to "deactivate"
+            user.Status = "deactive";
+
+            await _users.ReplaceOneAsync(t => t.Nic == nic, user);
+            return user;
         }
 
         public async Task<User?> GetUserByNic(string nic) =>
