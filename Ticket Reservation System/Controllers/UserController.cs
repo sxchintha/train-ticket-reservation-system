@@ -138,7 +138,8 @@ namespace Ticket_Reservation_System.Controllers
 
                 if (user != null)
                 {
-                    return Ok(new { message = "Login successful" });
+                    user.Password = "";
+                    return Ok(new { message = "Login successful", userDetails = user });
                 }
                 else
                 {

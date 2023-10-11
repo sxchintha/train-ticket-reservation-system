@@ -1,7 +1,10 @@
 package com.tickectreservation.activities.user;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceDataStore;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,10 +36,17 @@ public class UserLogin extends AppCompatActivity {
     static final Pattern VALID_NIC_REGEX =
             Pattern.compile("^([0-9]{9}[vVxX]|[0-9]{12})$", Pattern.CASE_INSENSITIVE);
 
-    ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", Context.MODE_PRIVATE);
+
+        // check if user is already logged in
+        if (sharedPreferences.contains("user_nic")) {
+            startActivity(new Intent(UserLogin.this, SearchTrain.class));
+            finish();
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.user_login);
@@ -87,22 +97,39 @@ public class UserLogin extends AppCompatActivity {
                                         JsonObject jsonObject = response.body();
 
                                         if (jsonObject != null) {
-//                                        Intent intent = new Intent(UserLogin.this, SearchTrain.class);
-//                                        intent.putExtra("userId", jsonObject.get("userId").getAsInt());
-//                                        startActivity(intent);
-//                                        finish();
-                                            System.out.println("Login success");
-                                            System.out.println("Message " + jsonObject.get("message").getAsString());
-                                            System.out.println("User id: " + jsonObject.get("userDetails").getAsJsonObject().get("nic").getAsString());
+                                            try {
+                                                String firstName = jsonObject.get("userDetails").getAsJsonObject().get("firstName").getAsString();
+                                                String lastName = jsonObject.get("userDetails").getAsJsonObject().get("lastName").getAsString();
+                                                String email = jsonObject.get("userDetails").getAsJsonObject().get("email").getAsString();
+                                                String nic = jsonObject.get("userDetails").getAsJsonObject().get("nic").getAsString();
+                                                String phone = jsonObject.get("userDetails").getAsJsonObject().get("phone").getAsString();
 
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("user_firstName", firstName);
+                                                editor.putString("user_lastName", lastName);
+                                                editor.putString("user_email", email);
+                                                editor.putString("user_nic", nic);
+                                                editor.putString("user_phone", phone);
+                                                editor.apply();
+
+                                                Intent intent = new Intent(UserLogin.this, SearchTrain.class);
+                                                startActivity(intent);
+                                                finish();
+
+                                            } catch (Exception e) {
+                                                Toast.makeText(UserLogin.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                                System.out.println("Error in storing data locally: " + e);
+                                            }
                                         } else {
                                             Toast.makeText(UserLogin.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                            System.out.println("jsonObject is null: " + response);
                                         }
                                     } else {
                                         Toast.makeText(UserLogin.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                        System.out.println("Error in login response: " + response);
                                     }
                                 } catch (Exception e) {
-                                    System.out.println("Error: " + e);
+                                    System.out.println("Error onResponse: " + e);
                                 }
 
                             }
