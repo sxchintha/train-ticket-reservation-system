@@ -21,8 +21,18 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
-                await _trainService.CreateAsync(train);
-                return CreatedAtAction(nameof(GetTrainById), new { id = train.Id }, train);
+                // Create a new train object based on the request body
+                var newTrain = new Train
+                {
+                    TrainID = train.TrainID,
+                    TrainName = train.TrainName,
+                    Schedule = train.Schedule,
+                    Status = train.Status,
+                    Reservations = train.Reservations
+                };
+
+                await _trainService.CreateAsync(newTrain);
+                return CreatedAtAction(nameof(GetTrainById), new { id = newTrain.Id }, newTrain);
             }
             catch (Exception ex)
             {
