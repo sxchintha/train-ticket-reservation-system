@@ -22,5 +22,6 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_reservation">Confirm Reservation</string>
+    <string name="my_reservations">My Reservations</string>
     <string name="password">Password</string>
 </resources>
