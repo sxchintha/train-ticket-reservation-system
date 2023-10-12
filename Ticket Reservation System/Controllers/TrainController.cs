@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Ticket_Reservation_System.Dtos;
 using Ticket_Reservation_System.Models;
 using Ticket_Reservation_System.Services;
 
@@ -21,12 +22,17 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
-                // Create a new train object based on the request body
                 var newTrain = new Train
                 {
                     TrainID = train.TrainID,
                     TrainName = train.TrainName,
-                    Schedule = train.Schedule,
+                    AvailableSeats = train.AvailableSeats,
+                    Schedule = new Schedule
+                    {
+                        DepartureTime = train.Schedule.DepartureTime,
+                        ArrivalTime = train.Schedule.ArrivalTime,
+                        StationDistances = train.Schedule.StationDistances
+                    },
                     Status = train.Status,
                     Reservations = train.Reservations
                 };
@@ -39,6 +45,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
 
         // PUT: api/trains/{id}
         [HttpPut("{id}")]
@@ -114,5 +121,52 @@ namespace Ticket_Reservation_System.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Train>>> SearchAvailableTrains(string fromStation, string toStation)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(fromStation) || string.IsNullOrEmpty(toStation))
+                {
+                    return BadRequest("Both 'fromStation' and 'toStation' must be provided.");
+                }
+
+                var availableTrains = await _trainService.GetAllTrainsAsync();
+
+                // Filter the available trains based on the 'fromStation' and 'toStation' criteria.
+                var filteredTrains = availableTrains.Where(train =>
+                {
+                    var stationDistances = train.Schedule.StationDistances;
+                    var fromStationIndex = stationDistances.FindIndex(s => s.Station.Equals(fromStation, StringComparison.OrdinalIgnoreCase));
+                    var toStationIndex = stationDistances.FindIndex(s => s.Station.Equals(toStation, StringComparison.OrdinalIgnoreCase));
+
+                    // Ensure that both the 'fromStation' and 'toStation' are found in the station distances.
+                    if (fromStationIndex != -1 && toStationIndex != -1)
+                    {
+                        // Make sure 'fromStation' comes before 'toStation' in the station order.
+                        if (fromStationIndex < toStationIndex)
+                        {
+                            // Calculate the distance between 'fromStation' and 'toStation'.
+                            var distance = stationDistances[toStationIndex].DistanceFromStart -
+                                           stationDistances[fromStationIndex].DistanceFromStart;
+
+                            // Check if there are available seats on the train.
+                            return train.AvailableSeats > 0 && train.Status == "available" && distance > 0;
+                        }
+                    }
+
+                    return false;
+                }).ToList();
+
+                return Ok(filteredTrains);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
     }
 }

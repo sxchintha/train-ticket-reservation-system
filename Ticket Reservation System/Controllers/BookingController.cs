@@ -29,7 +29,8 @@ namespace Ticket_Reservation_System.Controllers
                     Sheduledate = booking.Sheduledate,
                     Sheduletime = booking.Sheduletime,
                     Quentity = booking.Quentity,
-                    Price = booking.Price
+                    Price = booking.Price,
+                    CreatedDate = DateTime.Now
                 };
 
                 await _bookingService.CreateAsync(newBooking);
