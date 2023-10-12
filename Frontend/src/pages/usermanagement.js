@@ -114,7 +114,7 @@ const Usermanagement = () => {
                 type="text"
                 id="table-search"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-50"
-                placeholder="Search for users"
+                placeholder="Search train schedules"
               />
             </div>
             <button
@@ -187,7 +187,7 @@ const Usermanagement = () => {
                     Active
                   </div>
                 </td>
-                <td className="px-6 py-4 gap-2 flex">
+                <td className="px-6 py-4 gap-1 flex">
                   <button
                     type="button"
                     onClick={toggleModaluseredit}
