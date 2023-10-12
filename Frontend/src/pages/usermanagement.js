@@ -1,19 +1,42 @@
 import { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Dashboard from "../component/navBar";
-import { getAllTravelers } from "../services/travelerManagementService";
+import {
+  createTravelerAccount,
+  deleteTravelerAccount,
+  editTravelerAccount,
+  getAllTravelers,
+} from "../services/travelerManagementService";
+import Swal from "sweetalert2";
+import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
 
 const Usermanagement = () => {
   const [isModaluseraddOpen, setIsModaluseraddOpen] = useState(false);
   const [isModalusereditOpen, setIsModalusereditOpen] = useState(false);
   const [users, setUsers] = useState([]);
+  const [nic, setNic] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [phone, setPhoneNumber] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
 
   const toggleModaluseradd = () => {
     setIsModaluseraddOpen(!isModaluseraddOpen);
+    setFirstName(null);
+    setLastName(null);
+    setNic(null);
+    setEmail(null);
+    setPhoneNumber(null);
   };
 
   const toggleModaluseredit = () => {
     setIsModalusereditOpen(!isModalusereditOpen);
+    setFirstName(null);
+    setLastName(null);
+    setNic(null);
+    setEmail(null);
+    setPhoneNumber(null);
   };
 
   const [isActive, setIsActive] = useState(false);
@@ -23,11 +46,97 @@ const Usermanagement = () => {
   };
 
   useEffect(() => {
-    const users = getAllTravelers().then((res) => {
+    getAll();
+  }, []);
+
+  const getAll = async () => {
+    getAllTravelers().then((res) => {
       console.log(res);
       setUsers(res);
     });
-  }, []);
+  };
+
+  const createTraveler = async (e) => {
+    e.preventDefault();
+    const data = {
+      nic,
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+    };
+    if (!firstName || !lastName || !phone || !email || !password) {
+      // alert("Please fill in all the fields");
+      Swal.fire("Please fill in all the fields");
+    } else if (!isValidEmail(email)) {
+      Swal.fire("Please enter a valid email");
+    } else if (!isValidPhoneNumber(phone)) {
+      Swal.fire("Please enter a valid phone number");
+    } else {
+      const data = {
+        nic,
+        firstName,
+        lastName,
+        email,
+        phone,
+        password,
+      };
+
+      console.log("Sending", data);
+
+      const response = await createTravelerAccount(data);
+
+      if (response == 201) {
+        Swal.fire("Account Created Successfully");
+        // setIsModaluseraddOpen(false);
+        toggleModaluseradd();
+        getAll();
+      } else {
+        Swal.fire("Error Creating Account");
+      }
+
+      // All validations passed, call the API
+    }
+  };
+
+  const deleteTraveler = async (e, id) => {
+    // e.preventDefault();
+    const response = await deleteTravelerAccount(id);
+    console.log("Reess", response);
+    // if (response == 201) {
+    if (response == 204) {
+      Swal.fire("Account Deleted Successfully");
+      getAll();
+    } else {
+      Swal.fire("Error Deleting Account");
+    }
+
+    // }
+  };
+
+  const editTraveler = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      firstName,
+      lastName,
+      phone,
+      email,
+      nic,
+      password,
+    };
+
+    const response = await editTravelerAccount(nic, data);
+
+    console.log("Reess", response);
+    if (response == 200) {
+      getAll();
+      toggleModaluseredit();
+    } else {
+      Swal.fire("Error Editing Account");
+    }
+  };
 
   return (
     <>
@@ -169,63 +278,73 @@ const Usermanagement = () => {
             <br />
             <tbody>
               {users.map((user, index) => (
-              <tr className="bg-white border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                >
-                  {index}
-                </th>
-                <td className="px-6 py-4">{user.firstName}</td>
+                <tr className="bg-white border-b">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                  >
+                    {index}
+                  </th>
+                  <td className="px-6 py-4">{user.firstName}</td>
                   <td className="px-6 py-4">{user.lastName}</td>
                   <td className="px-6 py-4">{user.nic}</td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.phone}</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-                <td className="px-6 py-4 gap-2 flex">
-                  <button
-                    type="button"
-                    onClick={toggleModaluseredit}
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      Active
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 gap-2 flex">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFirstName(user.firstName);
+                        setLastName(user.lastName);
+                        setNic(user.nic);
+                        setEmail(user.email);
+                        setPhoneNumber(user.phone);
+                        setPassword(user.password);
+
+                        setIsModalusereditOpen(true);
+                      }}
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 20"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => deleteTraveler(e, user.nic)}
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-               ))} 
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 18 20"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
@@ -281,6 +400,7 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler First Name"
                             required
+                            onChange={(e) => setFirstName(e.target.value)}
                           />
                         </div>
                         <div>
@@ -295,6 +415,7 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Last Name"
                             required
+                            onChange={(e) => setLastName(e.target.value)}
                           />
                         </div>
                         <div>
@@ -309,6 +430,7 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler NIC"
                             required
+                            onChange={(e) => setNic(e.target.value)}
                           />
                         </div>
                         <div>
@@ -323,6 +445,7 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Email"
                             required
+                            onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
                         <div>
@@ -337,6 +460,7 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Phone"
                             required
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                         </div>
                         <div>
@@ -351,44 +475,14 @@ const Usermanagement = () => {
                             placeholder="Enter Password"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             required
+                            onChange={(e) => setPassword(e.target.value)}
                           />
                         </div>
-                        <div className="flex items-center">
-                          <label
-                            htmlFor="toggle"
-                            className="mr-2 text-sm font-medium text-gray-900 dark:text-dark"
-                          >
-                            {isActive ? "Activate" : "Deactivate"}
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggle"
-                              className="sr-only"
-                              onChange={handleToggle}
-                              checked={isActive}
-                            />
-                            <label
-                              htmlFor="toggle"
-                              className={`${
-                                isActive ? "bg-blue-600" : "bg-gray-300"
-                              } relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                isActive
-                                  ? "focus:ring-blue-400"
-                                  : "focus:ring-gray-400"
-                              }`}
-                            >
-                              <span
-                                className={`${
-                                  isActive ? "translate-x-5" : "translate-x-1"
-                                } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
-                              />
-                            </label>
-                          </div>
-                        </div>
+
                         <button
                           type="submit"
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          onClick={(e) => createTraveler(e)}
                         >
                           Create Account
                         </button>
@@ -452,6 +546,8 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler First Name"
                             required
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                           />
                         </div>
                         <div>
@@ -466,6 +562,8 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Last Name"
                             required
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                           />
                         </div>
                         <div>
@@ -480,6 +578,8 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler NIC"
                             required
+                            value={nic}
+                            disabled
                           />
                         </div>
                         <div>
@@ -494,6 +594,8 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Email"
                             required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
                         <div>
@@ -508,9 +610,11 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             placeholder="Enter Traveler Phone"
                             required
+                            value={phone}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                         </div>
-                        <div>
+                        {/* <div>
                           <label
                             htmlFor="password"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
@@ -523,15 +627,15 @@ const Usermanagement = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                             required
                           />
-                        </div>
+                        </div> */}
                         <div className="flex items-center">
-                          <label
+                          {/* <label
                             htmlFor="toggle"
                             className="mr-2 text-sm font-medium text-gray-900 dark:text-dark"
                           >
                             {isActive ? "Activate" : "Deactivate"}
-                          </label>
-                          <div className="relative">
+                          </label> */}
+                          {/* <div className="relative">
                             <input
                               type="checkbox"
                               id="toggle"
@@ -555,10 +659,14 @@ const Usermanagement = () => {
                                 } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
                               />
                             </label>
-                          </div>
+                          </div> */}
                         </div>
                         <button
                           type="submit"
+                          onClick={(e) => {
+                            editTraveler(e);
+                            // toggleModaluseredit()
+                          }}
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                           Update Account
