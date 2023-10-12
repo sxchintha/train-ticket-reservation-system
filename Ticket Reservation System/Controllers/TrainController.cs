@@ -26,6 +26,7 @@ namespace Ticket_Reservation_System.Controllers
                 {
                     TrainID = train.TrainID,
                     TrainName = train.TrainName,
+                    PricePerKM = train.PricePerKM,
                     AvailableSeats = train.AvailableSeats,
                     Schedule = new Schedule
                     {
@@ -148,11 +149,21 @@ namespace Ticket_Reservation_System.Controllers
                         if (fromStationIndex < toStationIndex)
                         {
                             // Calculate the distance between 'fromStation' and 'toStation'.
-                            var distance = stationDistances[toStationIndex].DistanceFromStart -
-                                           stationDistances[fromStationIndex].DistanceFromStart;
+                            var distanceFrom = stationDistances[fromStationIndex].DistanceFromStart;
+                            var distanceTo = stationDistances[toStationIndex].DistanceFromStart;
+                            var distance = distanceTo - distanceFrom;
 
                             // Check if there are available seats on the train.
-                            return train.AvailableSeats > 0 && train.Status == "available" && distance > 0;
+                            if (train.AvailableSeats > 0 && train.Status == "available" && distance > 0)
+                            {
+                                // Calculate the price per ticket based on the distance and pricePerKM.
+                                var pricePerTicket = distance * train.PricePerKM;
+
+                                // Include the calculated price in the train object.
+                                train.PricePerTicket = pricePerTicket;
+
+                                return true;
+                            }
                         }
                     }
 
@@ -166,6 +177,7 @@ namespace Ticket_Reservation_System.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
 
 
     }
