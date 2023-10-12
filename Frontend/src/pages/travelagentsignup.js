@@ -3,6 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
 import { createBackOfficerAccount } from "../services/userManagementServices";
 import Swal from "sweetalert2";
+import { createTravelAgentAccount } from "../services/travelAgentManagementService";
 function Travelagentsignup() {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
@@ -41,7 +42,7 @@ function Travelagentsignup() {
 
       console.log("Sending", data);
 
-      const response = await createBackOfficerAccount(data);
+      const response = await createTravelAgentAccount(data);
 
       if (response != false) {
         Swal.fire("Account Created Successfully");

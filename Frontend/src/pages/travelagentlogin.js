@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { isValidEmail } from "../utils/validations";
 import { backOfficerLogin } from "../services/userManagementServices";
 import { useNavigate } from "react-router-dom";
+import { travelAgentLogin } from "../services/travelAgentManagementService";
 
 const Travelagentlogin = (props) => {
   const [cookies, setCookie] = useCookies(["User"]);
@@ -35,12 +36,12 @@ const Travelagentlogin = (props) => {
 
       console.log("Sending", data);
 
-      const response = await backOfficerLogin(data);
+      const response = await travelAgentLogin(data);
 
       if (response != false) {
         // navigate to dashboard
         setCookie("User", {
-          userRole: "officer",
+          userRole: "agent",
         });
         navigate("/selectmanagement");
         // props.history.push("/dashboard");
@@ -88,9 +89,6 @@ const Travelagentlogin = (props) => {
                 onClick={(e) => {
                   handleSubmit(e);
                   // e.preventDefault();
-                  // setCookie("User", {
-                  //   userRole: "admin",
-                  // });
                 }}
                 className="text-white text-xl py-3 bg-[#F5A622] w-full  font-bold rounded-md mt-5"
               >

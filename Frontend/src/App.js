@@ -19,7 +19,19 @@ function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
 
   // Check if the user is authenticated (you can define this function based on your logic)
-  const isAuthenticated = cookies.User !== undefined;
+  const isAuthenticated = cookies.User?.userRole !== undefined;
+
+  // If the user is authenticated, render the element, otherwise, redirect to login
+  return isAuthenticated ? element : <Navigate to="/backOfficerLogin" />;
+}
+
+function BackofficerOnly({ element }) {
+  const [cookies] = useCookies(["User"]);
+
+  // Check if the user is authenticated (you can define this function based on your logic)
+  const isAuthenticated =
+    cookies.User?.userRole !== undefined &&
+    cookies.User?.userRole === "officer";
 
   // If the user is authenticated, render the element, otherwise, redirect to login
   return isAuthenticated ? element : <Navigate to="/backOfficerLogin" />;
@@ -33,7 +45,11 @@ function App() {
       <Route exact path="/" element={<Homepage />} />
       <Route exact path="/backOfficerSignup" element={<BackOfficerSignUp />} />
       <Route exact path="/travelagentsignup" element={<Travelagentsignup />} />
-      <Route exact path="/selectmanagement" element={<Selectmanagement />} />
+      <Route
+        exact
+        path="/selectmanagement"
+        element={<PrivateRoute element={<Selectmanagement />} />}
+      />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route
         path="/dashboard"
@@ -49,7 +65,7 @@ function App() {
       />
       <Route
         path="/reservationmanagement"
-        element={<PrivateRoute element={<Reservationmanagement />} />}
+        element={<BackofficerOnly element={<Reservationmanagement />} />}
       />
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       <Route path="/travelagentlogin" element={<Travelagentlogin />} />
