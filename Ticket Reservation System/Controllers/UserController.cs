@@ -138,11 +138,11 @@ namespace Ticket_Reservation_System.Controllers
 
                 if (user != null)
                 {
-                    return Ok(new { message = "Login successful" });
+                    return Ok(new { message = "Login successful", userDetails = user });
                 }
                 else
                 {
-                    return Unauthorized(new { error = "Invalid nic or password" });
+                    return Unauthorized(new { error = "Invalid NIC, password, or account is deactivated" });
                 }
             }
             catch (Exception ex)

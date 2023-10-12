@@ -64,7 +64,7 @@ namespace Ticket_Reservation_System.Services
         {
             var user = await _users.Find(u => u.Nic == nic).FirstOrDefaultAsync();
 
-            if (user != null && user.VerifyPassword(password))
+            if (user != null && user.Status == "active" && user.VerifyPassword(password))
             {
                 return user;
             }
