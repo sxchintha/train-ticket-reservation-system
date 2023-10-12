@@ -55,5 +55,6 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<Train?> GetTrainByIdAsync(string id) =>
             await _trainsCollection.Find(train => train.Id == id).FirstOrDefaultAsync();
+
     }
 }

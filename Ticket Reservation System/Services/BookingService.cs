@@ -58,6 +58,7 @@ namespace Ticket_Reservation_System.Services
             await _bookingsCollection.Find(Booking => Booking.Id == id).FirstOrDefaultAsync();
 
         public async Task DeleteBookingAsync(string id) =>
-    await _bookingsCollection.DeleteOneAsync(Booking => Booking.Id == id);
+            await _bookingsCollection.DeleteOneAsync(Booking => Booking.Id == id);
+
     }
 }
