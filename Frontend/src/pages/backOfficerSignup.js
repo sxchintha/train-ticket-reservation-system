@@ -53,7 +53,7 @@ function BackOfficerSignUp() {
     }
   };
   return (
-    <div className="h-screen w-screen p-0 m-0  justify-center items-center flex">
+    <div className="h-screen w-screen p-0 m-0  justify-center items-center flex ">
       <div className="w-screen bg-[#0052A8] justify-center items-center flex flex-col py-10 h-full  ">
         <h1 className="text-5xl  font-bold text-white py-10">Office Sign Up</h1>
 
@@ -111,10 +111,10 @@ function BackOfficerSignUp() {
                 href=""
                 onClick={handleSubmit}
               >
-                Signup
+                Sign Up
               </button>
 
-              <Link to="/login">
+              <Link to="/backOfficerLogin">
                 <p className="pt-6 ">
                   Already have an account?
                   <span className="underline px-2 font-semibold">

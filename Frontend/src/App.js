@@ -2,8 +2,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./pages/index";
 import Welcome from "./pages/welcome";
-import Login from "./pages/backOfficerLogin";
-import SignUp from "./pages/backOfficerSignup";
 import Dashboard from "./pages/dashboard";
 import AllTrains from "./pages/allTrains";
 import { useEffect } from "react";
@@ -14,6 +12,8 @@ import Usermanagement from "./pages/usermanagement";
 import Reservationmanagement from "./pages/reservationmanagement";
 import BackOfficerSignUp from "./pages/backOfficerSignup";
 import BackOfficerLogin from "./pages/backOfficerLogin";
+import Travelagentlogin from "./pages/travelagentlogin";
+import Travelagentsignup from "./pages/travelagentsignup";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -32,6 +32,7 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Homepage />} />
       <Route exact path="/backOfficerSignup" element={<BackOfficerSignUp />} />
+      <Route exact path="/travelagentsignup" element={<Travelagentsignup />} />
       <Route exact path="/selectmanagement" element={<Selectmanagement />} />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route
@@ -51,6 +52,7 @@ function App() {
         element={<PrivateRoute element={<Reservationmanagement />} />}
       />
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
+      <Route path="/travelagentlogin" element={<Travelagentlogin />} />
       {/* <Route exact path="/dashboard" element={<Dashboard />} />
       <Route exact path="/allTrains" element={<AllTrains />} /> */}
     </Routes>

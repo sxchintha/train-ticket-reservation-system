@@ -95,7 +95,7 @@ const BackOfficerLogin = (props) => {
               >
                 Sign In
               </button>
-              <Link to="/signup">
+              <Link to="/backOfficerSignup">
                 <p className="pt-6 ">
                   Don't have an account?
                   <span className="underline px-2 font-semibold">
