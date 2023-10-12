@@ -143,7 +143,7 @@ namespace Ticket_Reservation_System.Controllers
                 }
                 else
                 {
-                    return Unauthorized(new { error = "Invalid nic or password" });
+                    return Unauthorized(new { error = "Invalid NIC, password, or account is deactivated" });
                 }
             }
             catch (Exception ex)

@@ -23,6 +23,10 @@ namespace Ticket_Reservation_System.Models
         [BsonRequired]
         public string TrainName { get; set; } = null!;
 
+        /// Gets or sets the list of seats for different classes.
+        [BsonElement("availableSeats")]
+        public int AvailableSeats { get; set; }
+
         /// Gets or sets the schedule details of the train.
         [BsonElement("schedule")]
         public Schedule Schedule { get; set; } = new Schedule();
@@ -30,7 +34,7 @@ namespace Ticket_Reservation_System.Models
         /// Gets or sets the current status of the train (e.g. active, inactive).
         [BsonElement("status")]
         [BsonRepresentation(BsonType.String)]
-        public string Status { get; set; } = "inactive";
+        public string Status { get; set; } =null!;
 
         /// Gets or sets the list of reservation identifiers associated with the train.
         [BsonElement("reservations")]
@@ -41,19 +45,24 @@ namespace Ticket_Reservation_System.Models
     /// Represents the schedule details of a train, including departure and arrival times, and stations.
     public class Schedule
     {
-        /// Gets or sets the departure time of the train.
         [BsonElement("departureTime")]
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime DepartureTime { get; set; }
 
-        /// Gets or sets the arrival time of the train.
         [BsonElement("arrivalTime")]
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime ArrivalTime { get; set; }
 
-        /// Gets or sets the list of stations that the train will pass through.
-        [BsonElement("stations")]
-        public List<string> Stations { get; set; } = new List<string>();
+        [BsonElement("stationDistances")]
+        public List<StationDistance> StationDistances { get; set; } = new List<StationDistance>();
+    }
+
+    public class StationDistance
+    {
+        public string Station { get; set; } = null!;
+
+        [BsonRepresentation(BsonType.Double)]
+        public double DistanceFromStart { get; set; }
     }
 
     public class TrainDatabaseSetting
