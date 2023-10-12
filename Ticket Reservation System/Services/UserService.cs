@@ -50,8 +50,8 @@ namespace Ticket_Reservation_System.Services
                 return null;
             }
 
-            // Update the status property to "deactivate"
-            user.Status = "deactive";
+            // Toggle the status property
+            user.Status = user.Status == "active" ? "deactive" : "active";
 
             await _users.ReplaceOneAsync(t => t.Nic == nic, user);
             return user;
