@@ -38,6 +38,10 @@ namespace Ticket_Reservation_System.Models
         [BsonRepresentation(BsonType.String)]
         public string Price { get; set; } = null!;
 
+        [BsonElement("createdDate")]
+        [BsonRepresentation(BsonType.DateTime)]
+        public DateTime CreatedDate { get; set; }
+
     }
 
     public class BookingDatabaseSetting
