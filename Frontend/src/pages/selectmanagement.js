@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 
 function Selectmanagement() {
   const [cookies] = useCookies(["User"]);
-
+  console.log(cookies.User.userRole);
   return (
     <div className="background-container">
       <h1 className="font-bold text-5xl text-gray-700">
@@ -111,7 +111,7 @@ function Selectmanagement() {
               </center>
             </div>
           </div>
-          {cookies.User?.userRole === "office" ? (
+          {cookies.User?.userRole === "officer" ? (
             <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
               <a href="#">
                 <img class="rounded-t-lg" src={tm} alt="" />

@@ -2,11 +2,23 @@ import { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Dashboard from "../component/navBar";
 import "../Assets/Styles/start.css";
+import {
+  createTrainSchedule,
+  getAllTrains,
+} from "../services/trainManagementService";
+import Swal from "sweetalert2";
 
 const Trainmanagement = () => {
   const [isModaltrainaddOpen, setIsModaltrainaddOpen] = useState(false);
   const [isModaltraineditOpen, setIsModaltraineditOpen] = useState(false);
   const [trains, settrains] = useState([]);
+  const [trainID, settrainID] = useState("");
+  const [trainName, settrainName] = useState("");
+  const [pricePerKm, setpricePerKm] = useState("");
+  const [availableSeats, setAvailableSeats] = useState("");
+  const [departureTime, setDepartureTime] = useState("");
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [scheduleDate, setScheduleDate] = useState("");
 
   const toggleModaltrainadd = () => {
     setIsModaltrainaddOpen(!isModaltrainaddOpen);
@@ -51,8 +63,56 @@ const Trainmanagement = () => {
 
   const handleInputChange = (index, field, value) => {
     const updatedSections = [...sections];
+    console.log(updatedSections);
     updatedSections[index][field] = value;
     setSections(updatedSections);
+  };
+
+  const getTrains = async () => {
+    const res = await getAllTrains();
+    if (res.status === 200) {
+      settrains(res.data);
+      console.log("Trains", res.data);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getTrains();
+  }, []);
+
+  const createTrain = async (e) => {
+    e.preventDefault();
+    const data = {
+      id: "string",
+      trainID,
+      trainName,
+      availableSeats,
+      pricePerKm,
+      pricePerTicket: 0,
+      schedules: {
+        departureTime,
+        arrivalTime,
+        stationDistances: sections,
+      },
+      status: "string",
+      reservations: [],
+    };
+
+    console.log("Data", data);
+    const res = await createTrainSchedule(data);
+    setArrivalTime("");
+    setDepartureTime("");
+    setAvailableSeats("");
+    setpricePerKm("");
+    settrainName("");
+    settrainID("");
+    setSections([{ station: "", distance: "" }]);
   };
 
   return (
@@ -204,65 +264,67 @@ const Trainmanagement = () => {
             </thead>
             <br />
             <tbody>
-              <tr className="bg-white border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                >
-                  01
-                </th>
-                <td className="px-6 py-4">8057</td>
-                <td className="px-6 py-4">Ruhunu Kumari</td>
-                <td className="px-6 py-4">Jaffna</td>
-                <td className="px-6 py-4">Colombo Fort</td>
-                <td className="px-6 py-4">400</td>
-                <td className="px-6 py-4">13:23PM</td>
-                <td className="px-6 py-4">18:15PM</td>
-                <td className="px-6 py-4">2023-10-12</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-                <td className="px-6 py-4 gap-1 flex">
-                  <button
-                    type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              {trains.map((train, index) => (
+                <tr className="bg-white border-b">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-black whitespace-nowrap"
                   >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
+                    {index}
+                  </th>
+                  <td className="px-6 py-4">{train.trainID}</td>
+                  <td className="px-6 py-4">{train.trainName}</td>
+                  <td className="px-6 py-4">Jaffna</td>
+                  <td className="px-6 py-4">Colombo Fort</td>
+                  <td className="px-6 py-4">{train.availableSeats}</td>
+                  <td className="px-6 py-4">13:23PM</td>
+                  <td className="px-6 py-4">18:15PM</td>
+                  <td className="px-6 py-4">2023-10-12</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      Active
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 gap-1 flex">
+                    <button
+                      type="button"
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      <path d="M12.687 14.408a3.01 3.01 0 0 1-1.533.821l-3.566.713a3 3 0 0 1-3.53-3.53l.713-3.566a3.01 3.01 0 0 1 .821-1.533L10.905 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V11.1l-3.313 3.308Zm5.53-9.065.546-.546a2.518 2.518 0 0 0 0-3.56 2.576 2.576 0 0 0-3.559 0l-.547.547 3.56 3.56Z" />
-                      <path d="M13.243 3.2 7.359 9.081a.5.5 0 0 0-.136.256L6.51 12.9a.5.5 0 0 0 .59.59l3.566-.713a.5.5 0 0 0 .255-.136L16.8 6.757 13.243 3.2Z" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 20"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M12.687 14.408a3.01 3.01 0 0 1-1.533.821l-3.566.713a3 3 0 0 1-3.53-3.53l.713-3.566a3.01 3.01 0 0 1 .821-1.533L10.905 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V11.1l-3.313 3.308Zm5.53-9.065.546-.546a2.518 2.518 0 0 0 0-3.56 2.576 2.576 0 0 0-3.559 0l-.547.547 3.56 3.56Z" />
+                        <path d="M13.243 3.2 7.359 9.081a.5.5 0 0 0-.136.256L6.51 12.9a.5.5 0 0 0 .59.59l3.566-.713a.5.5 0 0 0 .255-.136L16.8 6.757 13.243 3.2Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 18 20"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
@@ -319,6 +381,9 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Train ID"
                               required
+                              onChange={(e) => {
+                                settrainID(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -333,6 +398,9 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Train Name"
                               required
+                              onChange={(e) => {
+                                settrainName(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -348,6 +416,9 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Available Seats"
                               required
+                              onChange={(e) => {
+                                setAvailableSeats(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -363,6 +434,9 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               onFocus={setMinDate}
                               required
+                              onChange={(e) => {
+                                setScheduleDate(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -373,9 +447,13 @@ const Trainmanagement = () => {
                               Start Time
                             </label>
                             <input
-                              type="time"
+                              type="datetime-local"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              onChange={(e) => {
+                                setDepartureTime(e.target.value);
+                                console.log(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -386,13 +464,46 @@ const Trainmanagement = () => {
                               End Time
                             </label>
                             <input
-                              type="time"
+                              type="datetime-local"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              onChange={(e) => {
+                                setArrivalTime(e.target.value);
+                              }}
                             />
                           </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Price Per KM
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                              onChange={(e) => {
+                                setpricePerKm(e.target.value);
+                              }}
+                            />
+                          </div>
+                          {/* <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Price Per Ticket
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                              onChange={(e)=>{
+                                setpricePerKm(e.target.value);
+                              }}
+                            />
+                          </div> */}
                         </div>
-                        
+
                         <div className="w-full">
                           {sections.map((section, index) => (
                             <div
@@ -457,7 +568,7 @@ const Trainmanagement = () => {
                                   required
                                 />
                               </div>
-                              
+
                               <button
                                 onClick={() => handleRemoveSection(index)}
                                 type="button"
@@ -474,17 +585,16 @@ const Trainmanagement = () => {
                                 </svg>
                               </button>
                             </div>
-                            
                           ))}
                           <button
-                                type="button"
-                                onClick={handleAddSection}
-                                class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-yellow-800"
-                              >
+                            type="button"
+                            onClick={handleAddSection}
+                            class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-yellow-800"
+                          >
                             Add More Stations
-                              </button>
+                          </button>
                         </div>
-                        <div className="flex items-center">
+                        {/* <div className="flex items-center">
                           <label
                             htmlFor="toggle"
                             className="mr-2 text-sm font-medium text-gray-900 dark:text-dark"
@@ -516,10 +626,13 @@ const Trainmanagement = () => {
                               />
                             </label>
                           </div>
-                        </div>
+                        </div> */}
                         <br />
                         <button
-                          type="submit"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            createTrain(e);
+                          }}
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                           Create Schedule
