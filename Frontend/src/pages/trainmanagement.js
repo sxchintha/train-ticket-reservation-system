@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 const Trainmanagement = () => {
   const [isModaltrainaddOpen, setIsModaltrainaddOpen] = useState(false);
   const [isModaltraineditOpen, setIsModaltraineditOpen] = useState(false);
+  const [isModalstationsOpen, setIsModalstationsOpen] = useState(false);
   const [trains, settrains] = useState([]);
   const [trainID, settrainID] = useState("");
   const [trainName, settrainName] = useState("");
@@ -26,6 +27,10 @@ const Trainmanagement = () => {
 
   const toggleModaltrainedit = () => {
     setIsModaltraineditOpen(!isModaltraineditOpen);
+  };
+
+  const toggleModalstations = () => {
+    setIsModalstationsOpen(!isModalstationsOpen);
   };
 
   const [isActive, setIsActive] = useState(false);
@@ -237,12 +242,6 @@ const Trainmanagement = () => {
                   Train Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Start Station
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  End Station
-                </th>
-                <th scope="col" className="px-6 py-3">
                   Available Seats
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -258,6 +257,9 @@ const Trainmanagement = () => {
                   Status
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  Stations
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -265,65 +267,103 @@ const Trainmanagement = () => {
             <br />
             <tbody>
               {trains.map((train, index) => (
-                <tr className="bg-white border-b">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-black whitespace-nowrap"
+              <tr className="bg-white border-b">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                >
+                  {index}
+                </th>
+                <td className="px-6 py-4">{train.trainID}</td>
+                <td className="px-6 py-4">{train.trainName}</td>
+                <td className="px-6 py-4">{train.availableSeats}</td>
+                <td className="px-6 py-4">13:23PM</td>
+                <td className="px-6 py-4">18:15PM</td>
+                <td className="px-6 py-4">2023-10-12</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                    Active
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <button
+                    type="button"
+                    onClick={toggleModalstations}
+                    class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
                   >
-                    {index}
-                  </th>
-                  <td className="px-6 py-4">{train.trainID}</td>
-                  <td className="px-6 py-4">{train.trainName}</td>
-                  <td className="px-6 py-4">Jaffna</td>
-                  <td className="px-6 py-4">Colombo Fort</td>
-                  <td className="px-6 py-4">{train.availableSeats}</td>
-                  <td className="px-6 py-4">13:23PM</td>
-                  <td className="px-6 py-4">18:15PM</td>
-                  <td className="px-6 py-4">2023-10-12</td>
-                  <td class="px-6 py-4">
-                    <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                      Active
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 gap-1 flex">
-                    <button
-                      type="button"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    <svg
+                      class="w-3 h-3 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 14"
                     >
-                      <svg
-                        class="w-3 h-3 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 18"
+                      <g
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
                       >
-                        <path d="M12.687 14.408a3.01 3.01 0 0 1-1.533.821l-3.566.713a3 3 0 0 1-3.53-3.53l.713-3.566a3.01 3.01 0 0 1 .821-1.533L10.905 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V11.1l-3.313 3.308Zm5.53-9.065.546-.546a2.518 2.518 0 0 0 0-3.56 2.576 2.576 0 0 0-3.559 0l-.547.547 3.56 3.56Z" />
-                        <path d="M13.243 3.2 7.359 9.081a.5.5 0 0 0-.136.256L6.51 12.9a.5.5 0 0 0 .59.59l3.566-.713a.5.5 0 0 0 .255-.136L16.8 6.757 13.243 3.2Z" />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                        <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                        <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
+                      </g>
+                    </svg>
+                  </button>
+                </td>
+                <td className="px-6 py-4 gap-0 flex">
+                  <button
+                    type="button"
+                    onClick={toggleModaltrainedit}
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    <svg
+                      class="w-3 h-3 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 18"
                     >
-                      <svg
-                        class="w-3 h-3 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 18 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
-                        />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
+                      <path d="M12.687 14.408a3.01 3.01 0 0 1-1.533.821l-3.566.713a3 3 0 0 1-3.53-3.53l.713-3.566a3.01 3.01 0 0 1 .821-1.533L10.905 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V11.1l-3.313 3.308Zm5.53-9.065.546-.546a2.518 2.518 0 0 0 0-3.56 2.576 2.576 0 0 0-3.559 0l-.547.547 3.56 3.56Z" />
+                      <path d="M13.243 3.2 7.359 9.081a.5.5 0 0 0-.136.256L6.51 12.9a.5.5 0 0 0 .59.59l3.566-.713a.5.5 0 0 0 .255-.136L16.8 6.757 13.243 3.2Z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
+                  >
+                    <svg
+                      class="w-3 h-3 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                  >
+                    <svg
+                      class="w-3 h-3 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 18 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
               ))}
             </tbody>
           </table>
@@ -955,6 +995,93 @@ const Trainmanagement = () => {
                           Update Schedule
                         </button>
                       </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* station list */}
+          {isModalstationsOpen && (
+            <div className="modal-overlay">
+              <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div className="relative w-full max-w-md mx-auto">
+                  <div className="relative bg-white rounded-lg">
+                    <button
+                      type="button"
+                      className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                      data-modal-hide="authentication-modal"
+                      onClick={toggleModalstations}
+                    >
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 14"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                        />
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                    </button>
+                    <div className="px-6 py-6 lg:px-8">
+                      <center>
+                        <h1
+                          className="mb-4 text-xl font-bold text-gray-900 dark:text-dark"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          Stopping Station List
+                        </h1>
+                      </center>
+                      <br />
+
+                      <div class="relative overflow-x-auto">
+                        <table className="w-full text-sm text-left text-gray-500">
+                          <thead className="text-xs text-black-200 uppercase bg-blue-100">
+                            <tr className="">
+                              <th scope="col" className="px-6 py-3">
+                                No
+                              </th>
+                              <th scope="col" className="px-6 py-3">
+                                Station
+                              </th>
+                              <th scope="col" className="px-6 py-3">
+                                Distance
+                              </th>
+                            </tr>
+                          </thead>
+                          <br />
+                          <tbody>
+                            <tr className="bg-white border-b">
+                              <th
+                                scope="row"
+                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                              >
+                                01
+                              </th>
+                              <td className="px-6 py-4">Colombo Fort</td>
+                              <td className="px-6 py-4">0 KM</td>
+                            </tr>
+                            <tr className="bg-white border-b">
+                              <th
+                                scope="row"
+                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                              >
+                                02
+                              </th>
+                              <td className="px-6 py-4">Kalutara</td>
+                              <td className="px-6 py-4">50 KM</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
