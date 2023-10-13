@@ -6,7 +6,7 @@ namespace Ticket_Reservation_System.Services
 {
     public class TravelAgentService
     {
-        //MongoDB collection for storing Booking details
+        //Mongo collection for storing Travel agent details
         private readonly IMongoCollection<TravelAgent> _travelAgent;
 
         public TravelAgentService(IOptions<TravelAgentDatabaseSettings> travelAgentDatabaseSettings)

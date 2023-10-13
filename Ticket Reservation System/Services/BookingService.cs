@@ -6,7 +6,7 @@ namespace Ticket_Reservation_System.Services
 {
     public class BookingService
     {
-        /// MongoDB collection for storing Booking details.
+        // Mongo collection for storing Ticket reservation details.
         private readonly IMongoCollection<Booking> _bookingsCollection;
 
         public BookingService(IOptions<BookingDatabaseSetting> bookingDatabaseSettings)
@@ -45,8 +45,8 @@ namespace Ticket_Reservation_System.Services
                 return null;
             }
 
-            // Check if the booking can be canceled based on the date condition
-            DateTime currentDate = DateTime.UtcNow; // Assuming you're working with UTC time
+            // Check if the booking can be canceled based on the date
+            DateTime currentDate = DateTime.UtcNow; //UTC time
             DateTime scheduledDate = DateTime.Parse(booking.Sheduledate);
 
             // Calculate the difference in days between the current date and the scheduled date
@@ -55,7 +55,7 @@ namespace Ticket_Reservation_System.Services
             if (daysUntilScheduledDate >= 5)
             {
                 // Booking can be canceled
-                // Update the booking status to "canceled" (if you intend to do so)
+                // Update the booking status to "canceled".
                 booking.Status = "canceled";
                 await _bookingsCollection.ReplaceOneAsync(b => b.Id == id, booking);
                 return booking;
