@@ -9,6 +9,56 @@ const Searchtrain = () => {
   // const [cookies, setCookie] = useCookies(["User"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    const setMinMaxDate = () => {
+      const today = new Date().toISOString().split("T")[0];
+      const maxDate = new Date();
+      maxDate.setDate(maxDate.getDate() + 30);
+      const thirtyDaysLater = maxDate.toISOString().split("T")[0];
+
+      const dateInput = document.getElementById("date-input");
+      dateInput.min = today;
+      dateInput.max = thirtyDaysLater;
+    };
+
+    setMinMaxDate();
+
+    return () => {
+      document
+        .getElementById("date-input")
+        .removeEventListener("focus", setMinMaxDate);
+    };
+  }, []);
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const options = [
+    { field1: "Select a Station" },
+    { field1: "Galle" },
+    { field1: "Colombo Fort" },
+    { field1: "Jaffna" },
+  ];
+
+  const initialFormState = {
+    fromStation: "",
+    toStation: "",
+    date: "",
+    numberOfPassengers: 1,
+  };
+
+  const [formValues, setFormValues] = useState(initialFormState);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+  const resetForm = () => {
+    setFormValues(initialFormState);
+  };
+
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -74,7 +124,96 @@ const Searchtrain = () => {
 
           <br />
 
-
+          <form className="space-y-6" action="#">
+            <div className="grid grid-cols-3 gap-5">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                >
+                  From Station
+                </label>
+                <select
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                  name="fromStation"
+                >
+                  <option value="" disabled>
+                    Select a Station
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.field1} value={option.field1}>
+                      {option.field1}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                >
+                  To Station
+                </label>
+                <select
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                  name="toStation"
+                >
+                  <option value="" disabled>
+                    Select a Station
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.field1} value={option.field1}>
+                      {option.field1}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                >
+                  Date
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  id="date-input"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                >
+                  No of Passengers
+                </label>
+                <input
+                  type="number"
+                  name="numberOfPassengers"
+                  min={1}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                  placeholder="Enter No of Passengers"
+                />
+              </div>
+            </div>
+            <center>
+              <button
+                type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Search Train
+              </button>
+              <button
+                type="submit"
+                onClick={resetForm}
+                class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              >
+                Reset
+              </button>
+            </center>
+          </form>
           <br />
           <footer class="bg-white rounded-lg dark: m-8">
             <div class="w-full max-w-screen-xl mx-auto p-4 md:py-10">
