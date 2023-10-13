@@ -152,7 +152,7 @@ public class SearchTrain extends AppCompatActivity {
 
                     System.out.println("Button clicked");
                     if (isValid) {
-                        Call<List<Train>> call = apiService.getAllTrains();
+                        Call<List<Train>> call = apiService.searchTrains(fromLocation, toLocation);
                         call.enqueue(new Callback<List<Train>>() {
                             @Override
                             public void onResponse(Call<List<Train>> call, Response<List<Train>> response) {

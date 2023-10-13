@@ -14,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // User related APIs
@@ -30,6 +31,9 @@ public interface ApiService {
     // Train related APIs
     @GET("train")
     Call<List<Train>> getAllTrains();
+
+    @GET("train/search")
+    Call<List<Train>> searchTrains(@Query("fromStation") String fromLocation, @Query("toStation") String toLocation);
 
 
     // Reservation related APIs

@@ -52,20 +52,20 @@ public class SelectTrainAdapter extends RecyclerView.Adapter<SelectTrainAdapter.
         // trainTimes, trainIdName, trainStartEnd, ticketPrice, noOfSeats
         String trainTimes = String.format("%s - %s", arrivalTime, departureTime);
         String trainIdName = String.format("%s - %s", train.getTrainId(), train.getTrainName());
-        // String ticketPrice = String.format("LKR %s", train.getPrice());
-        // String noOfSeats = String.format("%s seats available", train.getNoOfSeats());
+        String ticketPrice = String.format("LKR %s", train.getPricePerTicket());
+        String noOfSeats = String.format("%s seats available", train.getAvailableSeats());
 
         // get first and last stations of the stations list
         String trainStartEnd = String.format("%s - %s",
-                train.getSchedule().getStations().get(0),
-                train.getSchedule().getStations().get(train.getSchedule().getStations().size() - 1));
+                train.getSchedule().getStationDistances().get(0).getStation(),
+                train.getSchedule().getStationDistances().get(train.getSchedule().getStationDistances().size() - 1).getStation());
 
 
         holder.trainTimes.setText(trainTimes);
         holder.trainIdName.setText(trainIdName);
         holder.trainStartEnd.setText(trainStartEnd); // get first station of the stations list
-        // holder.ticketPrice.setText(ticketPrice);
-        // holder.noOfSeats.setText(noOfSeats);
+        holder.ticketPrice.setText(ticketPrice);
+        holder.noOfSeats.setText(noOfSeats);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

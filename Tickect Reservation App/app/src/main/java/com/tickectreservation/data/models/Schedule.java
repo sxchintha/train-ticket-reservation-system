@@ -5,12 +5,12 @@ import java.util.List;
 public class Schedule {
     private String departureTime;
     private String arrivalTime;
-    private List<String> stations;
+    private List<Station> stationDistances;
 
-    public Schedule(String departureTime, String arrivalTime, List<String> stations) {
+    public Schedule(String departureTime, String arrivalTime, List<Station> stationDistances) {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
-        this.stations = stations;
+        this.stationDistances = stationDistances;
     }
 
     public String getDepartureTime() {
@@ -29,11 +29,11 @@ public class Schedule {
         this.arrivalTime = arrivalTime;
     }
 
-    public List<String> getStations() {
-        return stations;
+    public List<Station> getStationDistances() {
+        return stationDistances;
     }
 
-    public void setStations(List<String> stations) {
-        this.stations = stations;
+    public void setStationDistances(List<Station> stationDistances) {
+        this.stationDistances = stationDistances;
     }
 }
