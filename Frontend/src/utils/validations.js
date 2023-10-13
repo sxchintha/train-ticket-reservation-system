@@ -3,6 +3,7 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
+// validations for phone number
 const isValidPhoneNumber = (phoneNumber) => {
   return phoneNumber.length === 10 && !isNaN(phoneNumber);
 };

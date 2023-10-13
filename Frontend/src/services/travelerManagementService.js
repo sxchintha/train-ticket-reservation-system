@@ -39,9 +39,19 @@ const editTravelerAccount = async (id, data) => {
   }
 };
 
+const deactivateTravelerAccount = async (id, data) => {
+  try {
+    const response = await API.put(`/User/deactivate/${id}`, data);
+    return response.status;
+  } catch (error) {
+    return false;
+  }
+};
+
 export {
   getAllTravelers,
   createTravelerAccount,
   deleteTravelerAccount,
   editTravelerAccount,
+  deactivateTravelerAccount,
 };

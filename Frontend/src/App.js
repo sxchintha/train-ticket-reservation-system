@@ -17,18 +17,26 @@ import Searchtrain from "./pages/searchtrain";
 import Trainlisting from "./pages/trainlisting";
 
 function PrivateRoute({ element }) {
+  // ref from https://www.npmjs.com/package/react-cookie
   const [cookies] = useCookies(["User"]);
 
-  // Check if the user is authenticated (you can define this function based on your logic)
+  // Check if the user is authenticated
   const isAuthenticated = cookies.User !== undefined;
 
   // If the user is authenticated, render the element, otherwise, redirect to login
   return isAuthenticated ? element : <Navigate to="/backOfficerLogin" />;
 }
+function BackofficerOnly({ element }) {
+  const [cookies] = useCookies(["User"]);
+
+  const isAuthenticated =
+    cookies.User?.userRole !== undefined &&
+    cookies.User?.userRole === "officer";
+
+  return isAuthenticated ? element : <Navigate to="/backOfficerLogin" />;
+}
 
 function App() {
-  const [cookies] = useCookies(["User"]);
-  console.log("Cookieeeeeeeeeeee", cookies.User);
   return (
     <Routes>
       <Route exact path="/" element={<Homepage />} />
@@ -46,7 +54,7 @@ function App() {
       />
       <Route
         path="/trainmanagement"
-        element={<PrivateRoute element={<Trainmanagement />} />}
+        element={<BackofficerOnly element={<Trainmanagement />} />}
       />
       <Route
         path="/searchtrain"
@@ -56,11 +64,6 @@ function App() {
         path="/trainlisting"
         element={<PrivateRoute element={<Trainlisting />} />}
       />
-      {/* <Route path="/usermanagement" element={<Usermanagement />} />
-      <Route path="/reservationmanagement" element={<Reservationmanagement />} />
-      <Route path="/trainmanagement" element={<Trainmanagement />} />
-      <Route path="/searchtrain" element={<Searchtrain />} />
-      <Route path="/trainlisting" element={<Trainlisting />} /> */}
 
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       <Route path="/travelagentlogin" element={<Travelagentlogin />} />

@@ -49,8 +49,6 @@ function Travelagentsignup() {
       } else {
         Swal.fire("Error Creating Account");
       }
-
-      // All validations passed, call the API
     }
   };
   return (

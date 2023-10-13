@@ -9,6 +9,7 @@ import {
 } from "../services/travelerManagementService";
 import Swal from "sweetalert2";
 import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
+import DeleteModel from "../component/deleteModel";
 
 const Usermanagement = () => {
   const [isModaluseraddOpen, setIsModaluseraddOpen] = useState(false);
@@ -20,6 +21,7 @@ const Usermanagement = () => {
   const [phone, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
 
   const toggleModaluseradd = () => {
     setIsModaluseraddOpen(!isModaluseraddOpen);
@@ -132,9 +134,24 @@ const Usermanagement = () => {
     }
   };
 
+  const deactivateTravelerAccount = async (e, id) => {
+    e.preventDefault();
+    const response = await deactivateTravelerAccount(id);
+    console.log("Reess", response);
+    if (response == 201) {
+      Swal.fire("Account Deactivated Successfully");
+      getAll();
+    } else {
+      Swal.fire("Error Deactivating Account");
+    }
+  };
+
+  const activateTravelerAccount = async (e, id) => {};
+
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
+        {isDeleteModelOpen ? <DeleteModel /> : null}
         <div className="w-1/6">
           <Dashboard />
         </div>
@@ -272,86 +289,87 @@ const Usermanagement = () => {
             <br />
             <tbody>
               {users.map((user, index) => (
-              <tr className="bg-white border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                >
-                  {index}
-                </th>
-                <td className="px-6 py-4">{user.firstName}</td>
+                <tr className="bg-white border-b">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                  >
+                    {index}
+                  </th>
+                  <td className="px-6 py-4">{user.firstName}</td>
                   <td className="px-6 py-4">{user.lastName}</td>
                   <td className="px-6 py-4">{user.nic}</td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.phone}</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-                <td className="px-6 py-4 gap-0 flex">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFirstName(user.firstName);
-                      setLastName(user.lastName);
-                      setNic(user.nic);
-                      setEmail(user.email);
-                      setPhoneNumber(user.phone);
-                      setPassword(user.password);
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      Active
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 gap-0 flex">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFirstName(user.firstName);
+                        setLastName(user.lastName);
+                        setNic(user.nic);
+                        setEmail(user.email);
+                        setPhoneNumber(user.phone);
+                        setPassword(user.password);
 
-                      setIsModalusereditOpen(true);
-                    }}
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
+                        setIsModalusereditOpen(true);
+                      }}
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsDeleteModelOpen(true)}
+                      class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                     >
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => deleteTraveler(e, user.nic)}
-                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 20"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => deleteTraveler(e, user.nic)}
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 18 20"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>

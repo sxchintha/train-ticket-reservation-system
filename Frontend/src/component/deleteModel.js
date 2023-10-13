@@ -40,9 +40,7 @@ const DeleteModel = ({ confirm, cance }) => {
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Are you sure you want to deactivate your account? All of
-                      your data will be permanently removed. This action cannot
-                      be undone.
+                      Are you sure you want to deactivate your account?
                     </p>
                   </div>
                 </div>

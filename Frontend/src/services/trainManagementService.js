@@ -10,8 +10,35 @@ const getAllTrains = async () => {
 const createTrainSchedule = async (data) => {
   try {
     const response = await API.post("/Train", data);
-    console.log("REs", response);
+    return response;
   } catch (error) {}
 };
 
-export { getAllTrains, createTrainSchedule };
+const cancelTrainSchedule = async (id) => {
+  try {
+    const response = await API.patch(`/Train/cancel/${id}`);
+    return response;
+  } catch (error) {}
+};
+
+const publishTrainSchedule = async (id) => {
+  try {
+    const response = await API.patch(`/Train/publish/${id}`);
+    return response;
+  } catch (error) {}
+};
+
+const editTrainSchedule = async (id) => {
+  try {
+    const response = await API.put(`/Train/${id}`);
+    return response;
+  } catch (error) {}
+};
+
+export {
+  getAllTrains,
+  createTrainSchedule,
+  cancelTrainSchedule,
+  publishTrainSchedule,
+  editTrainSchedule,
+};

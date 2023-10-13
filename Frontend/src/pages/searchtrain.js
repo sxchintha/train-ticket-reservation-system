@@ -23,11 +23,11 @@ const Searchtrain = () => {
 
     setMinMaxDate();
 
-    return () => {
-      document
-        .getElementById("date-input")
-        .removeEventListener("focus", setMinMaxDate);
-    };
+    // return () => {
+    //   document
+    //     .getElementById("date-input")
+    //     .removeEventListener("focus", setMinMaxDate);
+    // };
   }, []);
 
   const [selectedOption, setSelectedOption] = useState("");
@@ -59,6 +59,20 @@ const Searchtrain = () => {
     setFormValues(initialFormState);
   };
 
+  const searchForTrain = async () => {
+    const data = {
+      startStation,
+      endStation,
+      date,
+    };
+
+    const response = await searchForTrain(data);
+    if (response != false) {
+      Swal.fire("Train Found");
+    } else {
+      Swal.fire("Error Finding Train");
+    }
+  };
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -95,28 +109,28 @@ const Searchtrain = () => {
                     </Link>
                   </li>
                   <Link to="/reservationmanagement">
-                  <li aria-current="page">
-                    <div class="flex items-center">
-                      <svg
-                        class="w-3 h-3 text-gray-400 mx-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m1 9 4-4-4-4"
-                        />
-                      </svg>
-                      <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                        Ticket Reservation Management
-                      </span>
-                    </div>
-                  </li>
+                    <li aria-current="page">
+                      <div class="flex items-center">
+                        <svg
+                          class="w-3 h-3 text-gray-400 mx-1"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m1 9 4-4-4-4"
+                          />
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                          Ticket Reservation Management
+                        </span>
+                      </div>
+                    </li>
                   </Link>
                   <li aria-current="page">
                     <div class="flex items-center">
@@ -223,13 +237,13 @@ const Searchtrain = () => {
               </div>
             </div>
             <center>
-            <Link to="/trainlisting">
-              <button
-                type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                Search Train
-              </button>
+              <Link to="/trainlisting">
+                <button
+                  type="submit"
+                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                >
+                  Search Train
+                </button>
               </Link>
               <button
                 type="submit"

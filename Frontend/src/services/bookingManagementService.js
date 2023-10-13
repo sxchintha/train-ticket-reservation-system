@@ -19,13 +19,13 @@ const createBooking = async (booking) => {
   }
 };
 
-const cancelBooking = async (booking) => {
+const cancelBooking = async (id) => {
   try {
-    const response = await API.post("/Booking", booking);
+    const response = await API.post(`/Booking/cancel/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export { getAllBookings, createBooking };
+export { getAllBookings, createBooking, cancelBooking };

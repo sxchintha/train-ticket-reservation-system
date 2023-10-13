@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Dashboard from "../component/navBar";
-import { getAllBookings } from "../services/bookingManagementService";
+import {
+  cancelBooking,
+  getAllBookings,
+} from "../services/bookingManagementService";
 import "../Assets/Styles/start.css";
 
 const Reservationmanagement = () => {
@@ -16,6 +19,15 @@ const Reservationmanagement = () => {
     });
     // console.log(bookings.then((res) => console.log(res)));
   }, []);
+
+  const handleCancelBooking = async (id) => {
+    const response = await cancelBooking(id);
+    if (response.status == 200) {
+      alert("Booking Cancelled");
+    } else {
+      alert("Booking Cancelation Failed");
+    }
+  };
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -105,21 +117,21 @@ const Reservationmanagement = () => {
               />
             </div>
             <Link to="/searchtrain">
-            <button
-              type="button"
-              class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              <svg
-                class="w-3 h-3 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
+              <button
+                type="button"
+                class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                <path d="M9.546.5a9.5 9.5 0 1 0 9.5 9.5 9.51 9.51 0 0 0-9.5-9.5ZM13.788 11h-3.242v3.242a1 1 0 1 1-2 0V11H5.304a1 1 0 0 1 0-2h3.242V5.758a1 1 0 0 1 2 0V9h3.242a1 1 0 1 1 0 2Z" />
-              </svg>
-              Add Reservation
-            </button>
+                <svg
+                  class="w-3 h-3 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.546.5a9.5 9.5 0 1 0 9.5 9.5 9.51 9.51 0 0 0-9.5-9.5ZM13.788 11h-3.242v3.242a1 1 0 1 1-2 0V11H5.304a1 1 0 0 1 0-2h3.242V5.758a1 1 0 0 1 2 0V9h3.242a1 1 0 1 1 0 2Z" />
+                </svg>
+                Add Reservation
+              </button>
             </Link>
           </div>
 
@@ -142,7 +154,8 @@ const Reservationmanagement = () => {
                 </th>
                 <th scope="col" className="px-6 py-3">
                   NIC
-                </th><th scope="col" className="px-6 py-3">
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Phone
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -186,10 +199,11 @@ const Reservationmanagement = () => {
                 <td className="px-6 py-4">2023-10-12</td>
                 <td className="px-6 py-4">LKR 600.00</td>
                 <td class="px-6 py-4">
-                    <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Active
-                    </div>
-                  </td>
+                  <div class="flex items-center">
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                    Active
+                  </div>
+                </td>
               </tr>
               {/* ))} */}
             </tbody>

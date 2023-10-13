@@ -48,8 +48,6 @@ const Travelagentlogin = (props) => {
       } else {
         Swal.fire("Error Creating Account");
       }
-
-      // All validations passed, call the API
     }
   };
 
