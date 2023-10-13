@@ -14,6 +14,7 @@ import BackOfficerSignUp from "./pages/backOfficerSignup";
 import BackOfficerLogin from "./pages/backOfficerLogin";
 import Travelagentlogin from "./pages/travelagentlogin";
 import Travelagentsignup from "./pages/travelagentsignup";
+import Trainmanagement from "./pages/trainmanagement";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -67,6 +68,7 @@ function App() {
         path="/reservationmanagement"
         element={<BackofficerOnly element={<Reservationmanagement />} />}
       />
+      <Route exact path="/trainmanagement" element={<Trainmanagement />} />
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       <Route path="/travelagentlogin" element={<Travelagentlogin />} />
       {/* <Route exact path="/dashboard" element={<Dashboard />} />
