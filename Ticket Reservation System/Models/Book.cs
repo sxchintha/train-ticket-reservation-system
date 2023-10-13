@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Text.Json.Serialization;
 
 namespace Ticket_Reservation_System.Models
 {
@@ -14,6 +15,11 @@ namespace Ticket_Reservation_System.Models
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
         public string TrainID { get; set; } = null!;
+
+        [BsonElement("nic")]
+        [BsonRepresentation(BsonType.String)]
+        [BsonRequired]
+        public string Nic { get; set; } = null!;
 
         [BsonElement("trainName")]
         [BsonRepresentation(BsonType.String)]
@@ -37,6 +43,11 @@ namespace Ticket_Reservation_System.Models
         [BsonElement("price")]
         [BsonRepresentation(BsonType.String)]
         public string Price { get; set; } = null!;
+
+        [BsonElement("status")]
+        [JsonIgnore]
+        [BsonRepresentation(BsonType.String)]
+        public string Status { get; set; } = "Reserved";
 
         [BsonElement("createdDate")]
         [BsonRepresentation(BsonType.DateTime)]

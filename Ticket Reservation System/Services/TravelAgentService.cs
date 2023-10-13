@@ -18,6 +18,15 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<TravelAgent> CreateAsync(TravelAgent newTravelAgent)
         {
+            // Check if the email already exists in the database
+            var existingUser = await _travelAgent.Find(u => u.Email == newTravelAgent.Email).FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                throw new Exception("The email you entered is already exists.");
+            }
+
+            newTravelAgent.SetPassword(newTravelAgent.Password);
             await _travelAgent.InsertOneAsync(newTravelAgent);
             return newTravelAgent;
         }

@@ -26,6 +26,7 @@ namespace Ticket_Reservation_System.Controllers
                 {
                     TrainID = booking.TrainID,
                     TrainName = booking.TrainName,
+                    Nic = booking.Nic,
                     Sheduledate = booking.Sheduledate,
                     Sheduletime = booking.Sheduletime,
                     Quentity = booking.Quentity,
@@ -60,19 +61,36 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-       
+
         // PATCH: api/Bookings/cancel/{id}
         [HttpPatch("cancel/{id}")]
-        public async Task<ActionResult<Booking>> CancelBooking(string id)
+        public async Task<ActionResult> CancelBooking(string id)
         {
             try
             {
-                var Booking = await _bookingService.CancelBookingAsync(id);
-                if (Booking == null)
+                var booking = await _bookingService.CancelBookingAsync(id);
+                if (booking == null)
                 {
-                    return NotFound();
+                    return NotFound("Booking not found");
                 }
-                return Ok(Booking);
+
+                // Check if the booking is an error response
+                if (booking is Booking && ((Booking)booking).Status == "canceled")
+                {
+                    return Ok(new
+                    {
+                        Message = "Booking canceled successfully",
+                        Booking = booking
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        Message = "Booking cannot be canceled.",
+                        Reason = "The scheduled date is less than 5 days from the current date."
+                    });
+                }
             }
             catch (InvalidOperationException ex)
             {
@@ -80,9 +98,11 @@ namespace Ticket_Reservation_System.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { error = "An error occurred while cancelling the Booking." });
+                return BadRequest(new { error = "An error occurred while canceling the Booking." });
             }
         }
+
+
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()

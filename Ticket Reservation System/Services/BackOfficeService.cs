@@ -18,6 +18,15 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<BackOffice> CreateAsync(BackOffice newBackOffice)
         {
+            // Check if the email already exists in the database
+            var existingUser = await _backOffice.Find(u => u.Email == newBackOffice.Email).FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                throw new Exception("The email you entered is already exists.");
+            }
+
+            newBackOffice.SetPassword(newBackOffice.Password);
             await _backOffice.InsertOneAsync(newBackOffice);
             return newBackOffice;
         }
