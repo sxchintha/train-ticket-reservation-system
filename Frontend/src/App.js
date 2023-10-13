@@ -2,8 +2,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./pages/index";
 import Welcome from "./pages/welcome";
-import Dashboard from "./pages/dashboard";
-import AllTrains from "./pages/allTrains";
 import { useEffect } from "react";
 import { useIsAuthenticated } from "./utils/auth";
 import { Cookies, useCookies } from "react-cookie";
@@ -15,6 +13,8 @@ import BackOfficerLogin from "./pages/backOfficerLogin";
 import Travelagentlogin from "./pages/travelagentlogin";
 import Travelagentsignup from "./pages/travelagentsignup";
 import Trainmanagement from "./pages/trainmanagement";
+import Searchtrain from "./pages/searchtrain";
+import Trainlisting from "./pages/trainlisting";
 
 function PrivateRoute({ element }) {
   const [cookies] = useCookies(["User"]);
@@ -37,14 +37,6 @@ function App() {
       <Route exact path="/selectmanagement" element={<Selectmanagement />} />
       <Route exact path="/welcome" element={<Welcome />} />
       <Route
-        path="/dashboard"
-        element={<PrivateRoute element={<Dashboard />} />}
-      />
-      <Route
-        path="/allTrains"
-        element={<PrivateRoute element={<AllTrains />} />}
-      />
-      <Route
         path="/usermanagement"
         element={<PrivateRoute element={<Usermanagement />} />}
       />
@@ -56,10 +48,22 @@ function App() {
         path="/trainmanagement"
         element={<PrivateRoute element={<Trainmanagement />} />}
       />
+      <Route
+        path="/searchtrain"
+        element={<PrivateRoute element={<Searchtrain />} />}
+      />
+      <Route
+        path="/trainlisting"
+        element={<PrivateRoute element={<Trainlisting />} />}
+      />
+      {/* <Route path="/usermanagement" element={<Usermanagement />} />
+      <Route path="/reservationmanagement" element={<Reservationmanagement />} />
+      <Route path="/trainmanagement" element={<Trainmanagement />} />
+      <Route path="/searchtrain" element={<Searchtrain />} />
+      <Route path="/trainlisting" element={<Trainlisting />} /> */}
+
       <Route path="/backOfficerLogin" element={<BackOfficerLogin />} />
       <Route path="/travelagentlogin" element={<Travelagentlogin />} />
-      {/* <Route exact path="/dashboard" element={<Dashboard />} />
-      <Route exact path="/allTrains" element={<AllTrains />} /> */}
     </Routes>
   );
 }
