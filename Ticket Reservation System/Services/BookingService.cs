@@ -39,17 +39,33 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<Booking?> CancelBookingAsync(string id)
         {
-            var Booking = await _bookingsCollection.Find(Booking => Booking.Id == id).FirstOrDefaultAsync();
-            if (Booking == null)
+            var booking = await _bookingsCollection.Find(b => b.Id == id).FirstOrDefaultAsync();
+            if (booking == null)
             {
                 return null;
             }
 
+            // Check if the booking can be canceled based on the date condition
+            DateTime currentDate = DateTime.UtcNow; // Assuming you're working with UTC time
+            DateTime scheduledDate = DateTime.Parse(booking.Sheduledate);
 
-            // Booking.Status = "canceled";
-            await _bookingsCollection.ReplaceOneAsync(t => t.Id == id, Booking);
-            return Booking;
+            // Calculate the difference in days between the current date and the scheduled date
+            int daysUntilScheduledDate = (int)(scheduledDate - currentDate).TotalDays;
+
+            if (daysUntilScheduledDate >= 5)
+            {
+                // Booking can be canceled
+                // Update the booking status to "canceled" (if you intend to do so)
+                booking.Status = "canceled";
+                await _bookingsCollection.ReplaceOneAsync(b => b.Id == id, booking);
+                return booking;
+            }
+            else
+            {
+                return booking;
+            }
         }
+
 
         public async Task<List<Booking>> GetAllBookingsAsync() =>
             await _bookingsCollection.Find(_ => true).ToListAsync();
