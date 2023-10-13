@@ -123,6 +123,26 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        [HttpPatch("publish/{id}")]
+        public async Task<ActionResult<Train>> PublishShedule(string id)
+        {
+            try
+            {
+                var train = await _trainService.ChangeSheduleStatus(id);
+                if(train == null)
+                {
+                    return NotFound();
+                }
+                return Ok(train);
+            } catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            } catch (Exception)
+            {
+                return BadRequest(new { error = "An error occurred while publishing the shedule." });
+            }
+        }
+
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Train>>> SearchAvailableTrains(string fromStation, string toStation)
         {
