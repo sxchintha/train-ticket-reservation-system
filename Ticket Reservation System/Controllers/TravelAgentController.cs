@@ -39,7 +39,7 @@ namespace Ticket_Reservation_System.Controllers
             {
                 var user = await _travelAgentService.AuthenticateAsync(request.Email, request.Password);
 
-                if (user != null)
+                if (user != null && user.VerifyPassword(request.Password))
                 {
                     return Ok(new { message = "Login successful" });
                 }

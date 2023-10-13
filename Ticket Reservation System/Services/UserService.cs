@@ -18,6 +18,7 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<User> CreateAsync(User newUser)
         {
+            newUser.SetPassword(newUser.Password);
             await _users.InsertOneAsync(newUser);
             return newUser;
         }

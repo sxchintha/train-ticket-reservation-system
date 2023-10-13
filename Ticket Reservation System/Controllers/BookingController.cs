@@ -26,6 +26,7 @@ namespace Ticket_Reservation_System.Controllers
                 {
                     TrainID = booking.TrainID,
                     TrainName = booking.TrainName,
+                    Nic = booking.Nic,
                     Sheduledate = booking.Sheduledate,
                     Sheduletime = booking.Sheduletime,
                     Quentity = booking.Quentity,

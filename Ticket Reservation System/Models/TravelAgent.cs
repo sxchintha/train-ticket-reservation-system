@@ -39,10 +39,14 @@ namespace Ticket_Reservation_System.Models
         [BsonRepresentation(BsonType.String)]
         public string Status { get; set; } = "active";
 
+        public void SetPassword(string password)
+        {
+            Password = BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
         public bool VerifyPassword(string providedPassword)
         {
-            // Compare the provided password with the stored password
-            return Password == providedPassword;
+            return BCrypt.Net.BCrypt.Verify(providedPassword, Password);
         }
     }
 

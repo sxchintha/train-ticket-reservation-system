@@ -15,6 +15,11 @@ namespace Ticket_Reservation_System.Models
         [BsonRequired]
         public string TrainID { get; set; } = null!;
 
+        [BsonElement("nic")]
+        [BsonRepresentation(BsonType.String)]
+        [BsonRequired]
+        public string Nic { get; set; } = null!;
+
         [BsonElement("trainName")]
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
