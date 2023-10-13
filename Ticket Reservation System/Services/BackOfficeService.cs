@@ -6,7 +6,7 @@ namespace Ticket_Reservation_System.Services
 {
     public class BackOfficeService
     {
-        //MongoDB collection for storing Booking details
+        //Mongo collection for storing Back office user details
         private readonly IMongoCollection<BackOffice> _backOffice;
 
         public BackOfficeService(IOptions<BackOfficeDatabaseSettings> backOfficeDatabaseSettings)

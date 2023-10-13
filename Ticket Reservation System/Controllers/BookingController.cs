@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * This controller handles every API endpoint connected to ticket booking operations.
+It offers functions such as creating, updating, retrieving, and canceling reservations.
+*/
+
+using Microsoft.AspNetCore.Mvc;
 using Ticket_Reservation_System.Models;
 using Ticket_Reservation_System.Services;
 
@@ -15,6 +20,7 @@ namespace Ticket_Reservation_System.Controllers
             _bookingService = bookingService;
         }
 
+        //create a booking
         // POST: api/Bookings
         [HttpPost("create")]
         public async Task<IActionResult> CreateBooking([FromBody] Booking booking)
@@ -43,6 +49,7 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //Update booking by booking id
         // PUT: api/Bookings/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult<Booking>> UpdateBooking(string id, Booking updatedBooking)
@@ -62,6 +69,7 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //Cancel booking by id.
         // PATCH: api/Bookings/cancel/{id}
         [HttpPatch("cancel/{id}")]
         public async Task<ActionResult> CancelBooking(string id)
@@ -103,7 +111,7 @@ namespace Ticket_Reservation_System.Controllers
         }
 
 
-
+        //Get All bookings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
         {
@@ -118,6 +126,7 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //get each booking by booking id
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetBookingById(string id)
         {
@@ -136,6 +145,7 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //delete the booking by id
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBookingById(string id)
         {

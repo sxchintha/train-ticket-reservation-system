@@ -6,7 +6,7 @@ namespace Ticket_Reservation_System.Services
 {
     public class TrainService
     {
-        /// MongoDB collection for storing train details.
+        // Mongo collection for storing train schedule details.
         private readonly IMongoCollection<Train> _trainsCollection;
 
         public TrainService(IOptions<TrainDatabaseSetting> trainDatabaseSettings)

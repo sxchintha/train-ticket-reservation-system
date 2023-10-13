@@ -6,47 +6,50 @@ namespace Ticket_Reservation_System.Models
 {
     public class Train
     {
-        /// Gets or sets the unique identifier for the train.
+        // Get or set the unique id for the train.
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonIgnoreIfDefault]
         public string Id { get; set; }
 
-        /// Gets or sets the train ID.
+        // Get or set the train ID.
         [BsonElement("trainID")]
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
         public string TrainID { get; set; } = null!;
 
-        /// Gets or sets the train name.
+        // Get or set the train name.
         [BsonElement("trainName")]
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
         public string TrainName { get; set; } = null!;
 
+        // Get or set the price per km for the trane(train rate).
         [BsonElement("pricePerKM")]
         public double PricePerKM { get; set; }
 
         [BsonElement("pricePerTicket")]
         public double PricePerTicket { get; set; }
 
-        /// Gets or sets the list of seats for different classes.
+        // Get or set the available seats of the train
         [BsonElement("availableSeats")]
         public int AvailableSeats { get; set; }
 
-        /// Gets or sets the schedule details of the train.
+        // Get or set the schedule details of the train.
         [BsonElement("schedule")]
         public Schedule Schedule { get; set; } = new Schedule();
 
-        /// Gets or sets the current status of the train (e.g. active, inactive).
+        // Get or set the current status of the train
+        //available or not
         [BsonElement("status")]
         [BsonRepresentation(BsonType.String)]
         public string Status { get; set; } =null!;
 
-        /// Gets or sets the list of reservation identifiers associated with the train.
+        // Get or set the list of reservations.
         [BsonElement("reservations")]
         public List<string> Reservations { get; set; } = new List<string>();
 
+        //Get or Set train shedule status publish or unpublish
         [BsonElement("publishStatus")]
         [JsonIgnore]
         [BsonRepresentation(BsonType.String)]
@@ -54,7 +57,7 @@ namespace Ticket_Reservation_System.Models
 
     }
 
-    /// Represents the schedule details of a train, including departure and arrival times, and stations.
+    // represents the train's schedule information, such as station information and departure and arrival times.
     public class Schedule
     {
         [BsonElement("departureTime")]
@@ -69,6 +72,7 @@ namespace Ticket_Reservation_System.Models
         public List<StationDistance> StationDistances { get; set; } = new List<StationDistance>();
     }
 
+    //represents the  station distance info. station and distance from the start.
     public class StationDistance
     {
         public string Station { get; set; } = null!;
@@ -77,6 +81,7 @@ namespace Ticket_Reservation_System.Models
         public double DistanceFromStart { get; set; }
     }
 
+    //Train managment Db connection settings for Tran shedule Database.
     public class TrainDatabaseSetting
     {
         public string ConnectionString { get; set; } = null!;

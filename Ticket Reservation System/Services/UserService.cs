@@ -6,7 +6,7 @@ namespace Ticket_Reservation_System.Services
 {
     public class UserService
     {
-        //MongoDB collection for storing Booking details
+        //Mongo collection for storing Traveller(User) details
         private readonly IMongoCollection<User> _users;
 
         public UserService(IOptions<UserDatabaseSettings> userDatabaseSettings)
