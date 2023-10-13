@@ -292,8 +292,29 @@ const Usermanagement = () => {
                   <td className="px-6 py-4">{user.phone}</td>
                   <td class="px-6 py-4">
                     <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                      Active
+                      <input
+                        type="checkbox"
+                        id="toggle"
+                        className="sr-only"
+                        onChange={handleToggle}
+                        checked={isActive}
+                      />
+                      <label
+                        htmlFor="toggle"
+                        className={`${
+                          isActive ? "bg-blue-600" : "bg-gray-300"
+                        } relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                          isActive
+                            ? "focus:ring-blue-400"
+                            : "focus:ring-gray-400"
+                        }`}
+                      >
+                        <span
+                          className={`${
+                            isActive ? "translate-x-5" : "translate-x-1"
+                          } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
+                        />
+                      </label>
                     </div>
                   </td>
                   <td className="px-6 py-4 gap-2 flex">

@@ -221,13 +221,33 @@ const Trainmanagement = () => {
                 <td className="px-6 py-4">2023-10-12</td>
                 <td class="px-6 py-4">
                   <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
+                    <input
+                      type="checkbox"
+                      id="toggle"
+                      className="sr-only"
+                      onChange={handleToggle}
+                      checked={isActive}
+                    />
+                    <label
+                      htmlFor="toggle"
+                      className={`${
+                        isActive ? "bg-blue-600" : "bg-gray-300"
+                      } relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                        isActive ? "focus:ring-blue-400" : "focus:ring-gray-400"
+                      }`}
+                    >
+                      <span
+                        className={`${
+                          isActive ? "translate-x-5" : "translate-x-1"
+                        } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
+                      />
+                    </label>
                   </div>
                 </td>
                 <td className="px-6 py-4 gap-1 flex">
                   <button
                     type="button"
+                    onClick={toggleModaltrainedit}
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                   >
                     <svg
@@ -392,7 +412,7 @@ const Trainmanagement = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="w-full">
                           {sections.map((section, index) => (
                             <div
@@ -457,7 +477,7 @@ const Trainmanagement = () => {
                                   required
                                 />
                               </div>
-                              
+
                               <button
                                 onClick={() => handleRemoveSection(index)}
                                 type="button"
@@ -474,55 +494,251 @@ const Trainmanagement = () => {
                                 </svg>
                               </button>
                             </div>
-                            
                           ))}
                           <button
-                                type="button"
-                                onClick={handleAddSection}
-                                class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 focus:outline-none dark:focus:ring-yellow-800"
-                              >
-                            Add More Stations
-                              </button>
-                        </div>
-                        <div className="flex items-center">
-                          <label
-                            htmlFor="toggle"
-                            className="mr-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            type="button"
+                            onClick={handleAddSection}
+                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
                           >
-                            {isActive ? "Activate" : "Deactivate"}
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggle"
-                              className="sr-only"
-                              onChange={handleToggle}
-                              checked={isActive}
-                            />
-                            <label
-                              htmlFor="toggle"
-                              className={`${
-                                isActive ? "bg-blue-600" : "bg-gray-300"
-                              } relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                isActive
-                                  ? "focus:ring-blue-400"
-                                  : "focus:ring-gray-400"
-                              }`}
-                            >
-                              <span
-                                className={`${
-                                  isActive ? "translate-x-5" : "translate-x-1"
-                                } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
-                              />
-                            </label>
-                          </div>
+                            Add More Stations
+                          </button>
                         </div>
-                        <br />
                         <button
                           type="submit"
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                           Create Schedule
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* train edit modal */}
+          {isModaltraineditOpen && (
+            <div className="modal-overlay">
+              <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div className="relative w-full max-w-md mx-auto">
+                  <div className="relative bg-white rounded-lg">
+                    <button
+                      type="button"
+                      className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                      data-modal-hide="authentication-modal"
+                      onClick={toggleModaltrainedit}
+                    >
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 14"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                        />
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                    </button>
+                    <div className="px-6 py-6 lg:px-8">
+                      <center>
+                        <h1
+                          className="mb-4 text-xl font-bold text-gray-900 dark:text-dark"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          Edit Train Schedule
+                        </h1>
+                      </center>
+                      <br />
+                      <form className="space-y-3 ">
+                        <div className="grid grid-cols-2 gap-5">
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Train ID
+                            </label>
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              placeholder="Enter Train ID"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Train Name
+                            </label>
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              placeholder="Enter Train Name"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Available Seats
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              placeholder="Enter Available Seats"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Schedule Date
+                            </label>
+                            <input
+                              type="date"
+                              id="date-input"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              onFocus={setMinDate}
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Start Time
+                            </label>
+                            <input
+                              type="time"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              End Time
+                            </label>
+                            <input
+                              type="time"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="w-full">
+                          {sections.map((section, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-white rounded-lg p-4 shadow mb-4 w-full"
+                            >
+                              <div className="flex-1 mr-4">
+                                <label
+                                  htmlFor={`station-${index}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                                >
+                                  Station
+                                </label>
+                                <select
+                                  id={`station-${index}`}
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                                  value={section.station}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "station",
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                >
+                                  <option value="" disabled>
+                                    Select a Station
+                                  </option>
+                                  {options.map((option) => (
+                                    <option
+                                      key={option.field1}
+                                      value={option.field1}
+                                    >
+                                      {option.field1}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="flex-1 mr-4">
+                                <label
+                                  htmlFor={`distance-${index}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                                >
+                                  Distance
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="0.50"
+                                  id={`distance-${index}`}
+                                  placeholder="Enter Distance From Start Station"
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                                  value={section.distance}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "distance",
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                />
+                              </div>
+
+                              <button
+                                onClick={() => handleRemoveSection(index)}
+                                type="button"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                              >
+                                <svg
+                                  class="w-3 h-3 text-gray-800 dark:text-white"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={handleAddSection}
+                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                          >
+                            Add More Stations
+                          </button>
+                        </div>
+                        <button
+                          type="submit"
+                          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                          Update Schedule
                         </button>
                       </form>
                     </div>
