@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Text.Json.Serialization;
 
 namespace Ticket_Reservation_System.Models
 {
@@ -23,6 +24,12 @@ namespace Ticket_Reservation_System.Models
         [BsonRequired]
         public string TrainName { get; set; } = null!;
 
+        [BsonElement("pricePerKM")]
+        public double PricePerKM { get; set; }
+
+        [BsonElement("pricePerTicket")]
+        public double PricePerTicket { get; set; }
+
         /// Gets or sets the list of seats for different classes.
         [BsonElement("availableSeats")]
         public int AvailableSeats { get; set; }
@@ -39,6 +46,11 @@ namespace Ticket_Reservation_System.Models
         /// Gets or sets the list of reservation identifiers associated with the train.
         [BsonElement("reservations")]
         public List<string> Reservations { get; set; } = new List<string>();
+
+        [BsonElement("publishStatus")]
+        [JsonIgnore]
+        [BsonRepresentation(BsonType.String)]
+        public string PublishStatus { get; set; } = "Unpublished";
 
     }
 

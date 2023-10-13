@@ -50,6 +50,20 @@ namespace Ticket_Reservation_System.Services
             return train;
         }
 
+        public async Task<Train?> ChangeSheduleStatus(string id)
+        {
+            var train =await _trainsCollection.Find(train => train.Id == id).FirstOrDefaultAsync();
+            if(train == null)
+            {
+                return null;
+            }
+
+            // Toggle the status property
+            train.PublishStatus = train.PublishStatus == "Unpublished" ? "Published" : "Unpublished";
+            await _trainsCollection.ReplaceOneAsync(train => train.Id == id, train);
+            return train;
+        }
+
         public async Task<List<Train>> GetAllTrainsAsync() =>
             await _trainsCollection.Find(_ => true).ToListAsync();
 
