@@ -27,6 +27,18 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
+
+                var createdDate = DateTime.Now;
+                var scheduledDate = DateTime.Parse(booking.Sheduledate);
+
+                // Calculate the difference in days between the current date and the scheduled date
+                int daysUntilScheduledDate = (int)(scheduledDate - createdDate).TotalDays;
+
+                if (daysUntilScheduledDate > 30)
+                {
+                    return BadRequest("Scheduled date must be at least 30 days in the future.");
+                }
+
                 // Create a new Booking object excluding the "id" property
                 var newBooking = new Booking
                 {
@@ -50,6 +62,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
 
         //Update booking by booking id
         // PUT: api/Bookings/{id}

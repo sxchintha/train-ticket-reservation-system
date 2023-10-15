@@ -8,7 +8,7 @@ namespace Ticket_Reservation_System.Services
     {
         // Mongo collection for storing Ticket reservation details.
         private readonly IMongoCollection<Booking> _bookingsCollection;
-        private readonly IMongoCollection<Train> _trainsCollection;
+        private readonly IMongoCollection<Train> _trainsCollection; 
 
         public BookingService(IOptions<BookingDatabaseSetting> bookingDatabaseSettings, IOptions<TrainDatabaseSetting> trainDatabaseSettings)
         {
