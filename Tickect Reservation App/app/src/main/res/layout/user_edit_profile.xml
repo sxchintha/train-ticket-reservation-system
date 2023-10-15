@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.booking.SearchTrain">
+    tools:context=".activities.user.UserRegister">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -13,42 +13,17 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#0052A8"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/AppTheme.Toolbar">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
-
-                <ImageView
-                    android:id="@+id/btnViewProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_person_outline_white_24dp" />
-
-            </RelativeLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,31 +38,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="260dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/bus_image_1" />
+                        android:src="@drawable/register" />
 
-                    <TextView
-                        android:id="@+id/tvUserFirstName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/print_clearly"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="32sp" />
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvUserFirstName"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/gotham"
-                        android:text="Book Your Seat Now"
+                        android:text="Register with Us"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="25sp" />
 
                 </RelativeLayout>
 
@@ -95,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="-44dp"
+                    android:layout_marginTop="-65dp"
                     android:layout_marginRight="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardUseCompatPadding="true"
@@ -112,80 +75,112 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="@color/textHint">
+                            android:textColorHint="#FF8A99AF">
 
-                            <AutoCompleteTextView
-                                android:id="@+id/et_from_destination"
+                            <EditText
+                                android:id="@+id/etFirstName"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_location_on_light_blue_24dp"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/from"
+                                android:hint="@string/first_name"
+                                android:inputType="textPersonName"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:id="@+id/etLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/last_name"
+                                android:inputType="textPersonName"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:id="@+id/etEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/email"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColorHint="#FF8A99AF">
+
+                            <EditText
+                                android:id="@+id/etNIC"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="@string/nic"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"
-                                android:completionThreshold="0"/>
+                                android:maxLength="12"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="@color/textHint">
-
-                            <AutoCompleteTextView
-                                android:id="@+id/et_to_destination"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_location_on_light_blue_24dp"
-                                android:drawablePadding="16dp"
-                                android:fontFamily="@font/calibri"
-                                android:hint="@string/to"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:textColor="@android:color/black"
-                                android:textSize="16sp"
-                                android:completionThreshold="0"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:textColorHint="@color/textHint">
+                            android:textColorHint="#FF8A99AF">
 
                             <EditText
-                                android:id="@+id/et_date"
+                                android:id="@+id/etPhone"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_date_range_light_blue_24dp"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/select_date"
-                                android:inputType="date"
+                                android:hint="@string/phone"
+                                android:inputType="phone"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp"
-                                android:editable="false"/>
+                                android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textColorHint="@color/textHint">
+                            android:textColorHint="#FF8A99AF">
 
                             <EditText
-                                android:id="@+id/et_no_of_passengers"
+                                android:id="@+id/etPassword"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableStart="@drawable/ic_person_outline_black_24dp"
                                 android:drawablePadding="16dp"
                                 android:fontFamily="@font/calibri"
-                                android:hint="@string/passengers"
-                                android:inputType="number"
+                                android:hint="@string/password"
+                                android:inputType="textPassword"
                                 android:maxLines="1"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp" />
@@ -197,43 +192,23 @@
 
 
                 <Button
-                    android:id="@+id/btn_search_trains"
+                    android:id="@+id/btnRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
                     android:background="@drawable/buttonshape"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:backgroundTint="#0052A8"
                     android:fontFamily="@font/calibri"
-                    android:text="@string/search_trains"
+                    android:text="@string/update_profile"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="#ffffff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
+
         </ScrollView>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/blurryScreen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"
-        android:visibility="gone">
-
-        <FrameLayout
-            android:id="@+id/blurryBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <DatePicker
-            android:id="@+id/datePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/white"/>
 
     </RelativeLayout>
 

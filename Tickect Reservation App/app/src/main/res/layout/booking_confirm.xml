@@ -143,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:fontFamily="@font/calibri"
-                            android:text="Time Start -> End"
+                            android:text="Departure time"
                             android:textColor="@color/gray" />
 
                         <TextView

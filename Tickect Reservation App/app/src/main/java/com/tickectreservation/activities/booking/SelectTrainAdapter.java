@@ -50,7 +50,8 @@ public class SelectTrainAdapter extends RecyclerView.Adapter<SelectTrainAdapter.
         String departureTime = train.getSchedule().getDepartureTime().substring(11, 16);
 
         // trainTimes, trainIdName, trainStartEnd, ticketPrice, noOfSeats
-        String trainTimes = String.format("%s - %s", arrivalTime, departureTime);
+        // String trainTimes = String.format("%s - %s", arrivalTime, departureTime);
+        String trainTimes = String.format("%s", arrivalTime);
         String trainIdName = String.format("%s - %s", train.getTrainId(), train.getTrainName());
         String ticketPrice = String.format("LKR %s", train.getPricePerTicket());
         String noOfSeats = String.format("%s seats available", train.getAvailableSeats());
@@ -63,7 +64,7 @@ public class SelectTrainAdapter extends RecyclerView.Adapter<SelectTrainAdapter.
 
         holder.trainTimes.setText(trainTimes);
         holder.trainIdName.setText(trainIdName);
-        holder.trainStartEnd.setText(trainStartEnd); // get first station of the stations list
+        holder.trainStartEnd.setText(trainStartEnd);
         holder.ticketPrice.setText(ticketPrice);
         holder.noOfSeats.setText(noOfSeats);
 

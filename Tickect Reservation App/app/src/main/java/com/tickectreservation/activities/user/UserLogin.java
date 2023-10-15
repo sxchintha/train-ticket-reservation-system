@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tickectreservation.R;
 import com.tickectreservation.activities.booking.SearchTrain;
@@ -24,6 +25,7 @@ import com.tickectreservation.data.models.LoginRequest;
 
 import java.util.regex.Pattern;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +56,9 @@ public class UserLogin extends AppCompatActivity {
         etNic = findViewById(R.id.etNic);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+
+//        etNic.setText("999999999v");
+//        etPassword.setText("12341234");
 
         // login user
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +103,14 @@ public class UserLogin extends AppCompatActivity {
 
                                         if (jsonObject != null) {
                                             try {
-                                                String firstName = jsonObject.get("userDetails").getAsJsonObject().get("firstName").getAsString();
-                                                String lastName = jsonObject.get("userDetails").getAsJsonObject().get("lastName").getAsString();
-                                                String email = jsonObject.get("userDetails").getAsJsonObject().get("email").getAsString();
-                                                String nic = jsonObject.get("userDetails").getAsJsonObject().get("nic").getAsString();
-                                                String phone = jsonObject.get("userDetails").getAsJsonObject().get("phone").getAsString();
+                                                // store user details locally
+                                                JsonObject jsonUserDetails = jsonObject.get("userDetails").getAsJsonObject();
+
+                                                String firstName = jsonUserDetails.get("firstName").getAsString();
+                                                String lastName = jsonUserDetails.get("lastName").getAsString();
+                                                String email = jsonUserDetails.get("email").getAsString();
+                                                String nic = jsonUserDetails.get("nic").getAsString();
+                                                String phone = jsonUserDetails.get("phone").getAsString();
 
                                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("user_firstName", firstName);
@@ -125,8 +133,13 @@ public class UserLogin extends AppCompatActivity {
                                             System.out.println("jsonObject is null: " + response);
                                         }
                                     } else {
-                                        Toast.makeText(UserLogin.this, "Login failed", Toast.LENGTH_SHORT).show();
-                                        System.out.println("Error in login response: " + response);
+                                        Gson gson = new Gson();
+                                        JsonObject jsonObject = gson.fromJson(response.errorBody().string(), JsonObject.class);
+                                        String error = jsonObject.get("error").getAsString();
+
+                                        Toast.makeText(UserLogin.this, error, Toast.LENGTH_SHORT).show();
+
+                                        System.out.println("Error login: " + error);
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Error onResponse: " + e);

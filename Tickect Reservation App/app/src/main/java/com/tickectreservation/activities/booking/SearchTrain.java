@@ -8,10 +8,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +38,8 @@ import retrofit2.Response;
 
 public class SearchTrain extends AppCompatActivity {
 
-    EditText et_from_location, et_to_location, et_no_of_passengers, et_date;
+    EditText et_no_of_passengers, et_date;
+    AutoCompleteTextView et_from_location, et_to_location;
     DatePicker datePicker;
     Button btn_search_trains;
     RelativeLayout blurryScreen;
@@ -83,6 +87,22 @@ public class SearchTrain extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 30);
         datePicker.setMaxDate(calendar.getTimeInMillis());
+
+        // adapter for the autocomplete text views
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.stations));
+        et_from_location.setAdapter(adapter);
+        et_to_location.setAdapter(adapter);
+
+        // check if there is a previous search
+        if (sharedPreferences.contains("fromLocation") && sharedPreferences.contains("toLocation")) {
+            String fromLocation = sharedPreferences.getString("fromLocation", "");
+            String toLocation = sharedPreferences.getString("toLocation", "");
+
+            et_from_location.setText(fromLocation);
+            et_to_location.setText(toLocation);
+        }
 
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +172,14 @@ public class SearchTrain extends AppCompatActivity {
 
                     System.out.println("Button clicked");
                     if (isValid) {
+                        // set previous search details
+                        SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("fromLocation", fromLocation);
+                        editor.putString("toLocation", toLocation);
+                        editor.apply();
+
+                        // search trains api call
                         Call<List<Train>> call = apiService.searchTrains(fromLocation, toLocation);
                         call.enqueue(new Callback<List<Train>>() {
                             @Override

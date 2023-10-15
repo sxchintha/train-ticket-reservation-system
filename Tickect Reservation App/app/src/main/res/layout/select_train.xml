@@ -146,7 +146,6 @@
                         android:textSize="18sp" />
                 </RelativeLayout>
 
-
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -158,6 +157,17 @@
                 android:paddingTop="0dp"
                 android:scrollbars="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <TextView
+                android:id="@+id/tvNoTrainAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/gotham"
+                android:text="@string/no_trains_available"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:visibility="gone" />
 
 
         </LinearLayout>

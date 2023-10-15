@@ -12,6 +12,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -27,6 +28,9 @@ public interface ApiService {
     @POST("user/traveler/login")
     Call<JsonObject> loginUser(@Body LoginRequest loginRequest);
 
+    @PATCH("user/deactivate/{nic}")
+    Call<User> deactivateAccount(@Path("nic") String nic);
+
 
     // Train related APIs
     @GET("train")
@@ -37,8 +41,8 @@ public interface ApiService {
 
 
     // Reservation related APIs
-    @POST("reservations")
-    Call<Reservation> createReservation(Reservation reservation);
+    @POST("booking/create")
+    Call<Void> createReservation(@Body Reservation reservation);
 }
 
 

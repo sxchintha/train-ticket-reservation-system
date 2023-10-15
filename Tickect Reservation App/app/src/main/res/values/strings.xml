@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Train Ticket Reservation App</string>
+    <string name="app_name">TRACLIN</string>
     <string name="no_of_passengers">No of Passengers</string>
     <string name="select_date">Select Date</string>
     <string name="from">From</string>
@@ -24,4 +24,47 @@
     <string name="confirm_reservation">Confirm Reservation</string>
     <string name="my_reservations">My Reservations</string>
     <string name="password">Password</string>
+    <string name="no_trains_available">No Trains Available</string>
+    <string name="update_profile">Update Profile</string>
+    <string-array name="stations">
+        <item>Ahangama</item>
+        <item>Ahungalla</item>
+        <item>Aluthgama</item>
+        <item>Ambalangoda</item>
+        <item>Balapitiya</item>
+        <item>Bambalapitiya</item>
+        <item>Bentota</item>
+        <item>Beruwala</item>
+        <item>Colombo</item>
+        <item>Dehiwela</item>
+        <item>Dodanduwa</item>
+        <item>Egoda Uyana</item>
+        <item>Galle</item>
+        <item>Habaraduwa</item>
+        <item>Hikkaduwa</item>
+        <item>Induruwa</item>
+        <item>Kalutara</item>
+        <item>Katugoda</item>
+        <item>Katukurunda</item>
+        <item>Koggala</item>
+        <item>Kollupitiya</item>
+        <item>Kompanna Veediya</item>
+        <item>Koralawella</item>
+        <item>Kosgoda</item>
+        <item>Madampagama</item>
+        <item>Maggona</item>
+        <item>Maha Induruwa</item>
+        <item>Matara</item>
+        <item>Midigama</item>
+        <item>Mirissa</item>
+        <item>Moratuwa</item>
+        <item>Mount Lavinia</item>
+        <item>Panadura</item>
+        <item>Payagala South</item>
+        <item>Ratmalana</item>
+        <item>Unawatuna</item>
+        <item>Wadduwa</item>
+        <item>Weligama</item>
+        <item>Wellawatte</item>
+    </string-array>
 </resources>

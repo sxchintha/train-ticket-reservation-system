@@ -1,11 +1,13 @@
 package com.tickectreservation.activities.booking;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,9 +15,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tickectreservation.R;
+import com.tickectreservation.data.api.ApiService;
+import com.tickectreservation.data.api.RetrofitClient;
+import com.tickectreservation.data.models.Reservation;
 import com.tickectreservation.data.models.Train;
 
 import java.lang.reflect.Type;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BookingConfirm extends AppCompatActivity {
 
@@ -59,10 +68,11 @@ public class BookingConfirm extends AppCompatActivity {
         // get time start->end
         String arrivalTime = train.getSchedule().getArrivalTime();
         String departureTime = train.getSchedule().getDepartureTime();
-        String startEnd = arrivalTime.substring(11, 16) + " - " + departureTime.substring(11, 16);
+        // String startEnd = arrivalTime.substring(11, 16) + " - " + departureTime.substring(11, 16);
+        String startEnd = arrivalTime.substring(11, 16);
 
         // calculate total price
-        double pricePerPerson = 600.00;
+        double pricePerPerson = train.getPricePerTicket();
         double totalPrice = pricePerPerson * Integer.parseInt(noOfPassengers);
 
         tvTrainId.setText(trainIdName);
@@ -73,6 +83,37 @@ public class BookingConfirm extends AppCompatActivity {
         tvNoOfPassengers.setText(noOfPassengers);
         tvPricePerPerson.setText(String.format("LKR %.2f", pricePerPerson));
         tvTotal.setText(String.format("LKR %.2f", totalPrice));
+
+        // Confirm booking
+        btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
+        btnConfirmBooking.setOnClickListener(v -> {
+            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+            SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", MODE_PRIVATE);
+            String nic = sharedPreferences.getString("nic", "");
+            String currentDateTime = java.time.LocalDateTime.now().toString();
+
+            Reservation reservation = new Reservation(String.valueOf(train.getTrainId()), nic, train.getTrainName(), date, departureTime, fromLocation, toLocation, noOfPassengers, String.valueOf(totalPrice), currentDateTime);
+            Call<Void> call = apiService.createReservation(reservation);
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    System.out.println("Response: " + response);
+                    if (response.isSuccessful()) {
+                        System.out.println("Reservation created successfully");
+                        finish();
+                    } else {
+                        System.out.println("Error in creating reservation: " + response);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    System.out.println("Error in creating reservation: " + t);
+                    Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
 
         // Cancel booking
         btnCancelBooking = findViewById(R.id.btnCancelBooking);

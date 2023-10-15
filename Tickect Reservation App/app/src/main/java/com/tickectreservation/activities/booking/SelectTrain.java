@@ -5,6 +5,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class SelectTrain extends AppCompatActivity {
 
-    TextView tvFromLocation, tvToLocation, tvDate, tvNoOfPassengers;
+    TextView tvFromLocation, tvToLocation, tvDate, tvNoOfPassengers, tvNoTrainAvailable;
     ImageView btnGoBack;
     RecyclerView recyclerView;
     SelectTrainAdapter trainAdapter;
@@ -45,6 +46,7 @@ public class SelectTrain extends AppCompatActivity {
         tvToLocation = findViewById(R.id.tvToLocation);
         tvDate = findViewById(R.id.tvDate);
         tvNoOfPassengers = findViewById(R.id.tvNoOfPassengers);
+        tvNoTrainAvailable = findViewById(R.id.tvNoTrainAvailable);
 
         tvFromLocation.setText(fromLocation);
         tvToLocation.setText(toLocation);
@@ -72,6 +74,11 @@ public class SelectTrain extends AppCompatActivity {
         trainAdapter = new SelectTrainAdapter(this, list, fromLocation, toLocation, date, noOfPassengers);
         recyclerView.setAdapter(trainAdapter);
 
+        if(trainAdapter.getItemCount() == 0) {
+            tvNoTrainAvailable.setVisibility(TextView.VISIBLE);
+        } else {
+            tvNoTrainAvailable.setVisibility(TextView.GONE);
+        }
 
         // Go back to previous activity
         btnGoBack = findViewById(R.id.trainSelectBackButton);
