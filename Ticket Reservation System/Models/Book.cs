@@ -36,6 +36,16 @@ namespace Ticket_Reservation_System.Models
         [BsonRequired]
         public string Sheduletime { get; set; } = null!;
 
+        [BsonElement("fromStation")]
+        [BsonRepresentation(BsonType.String)]
+        [BsonRequired]
+        public string FromStation { get; set; } = null!;
+
+        [BsonElement("toStation")]
+        [BsonRepresentation(BsonType.String)]
+        [BsonRequired]
+        public string ToStation { get; set; } = null!;
+
         [BsonElement("quentity")]
         [BsonRepresentation(BsonType.String)]
         public string Quentity { get; set; } = null!;
