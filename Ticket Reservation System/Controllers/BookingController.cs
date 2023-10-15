@@ -35,6 +35,8 @@ namespace Ticket_Reservation_System.Controllers
                     Nic = booking.Nic,
                     Sheduledate = booking.Sheduledate,
                     Sheduletime = booking.Sheduletime,
+                    FromStation = booking.FromStation,
+                    ToStation = booking.ToStation,
                     Quentity = booking.Quentity,
                     Price = booking.Price,
                     CreatedDate = DateTime.Now
