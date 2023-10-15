@@ -147,6 +147,25 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //get bookings by nic
+        [HttpGet("my/{nic}")]
+
+        public async Task<ActionResult<Booking>> GetBookingByNic(string nic)
+        {
+            try
+            {
+                var Booking = await _bookingService.GetBookingsByNicAsync(nic);
+                if (Booking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(Booking);
+            } catch (Exception ex)
+            {
+                return StatusCode(500, new {error = ex.Message});
+            }
+        }
+
         //delete the booking by id
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBookingById(string id)
