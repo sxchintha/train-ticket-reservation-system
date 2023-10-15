@@ -8,17 +8,36 @@ namespace Ticket_Reservation_System.Services
     {
         // Mongo collection for storing Ticket reservation details.
         private readonly IMongoCollection<Booking> _bookingsCollection;
+        private readonly IMongoCollection<Train> _trainsCollection;
 
-        public BookingService(IOptions<BookingDatabaseSetting> bookingDatabaseSettings)
+        public BookingService(IOptions<BookingDatabaseSetting> bookingDatabaseSettings, IOptions<TrainDatabaseSetting> trainDatabaseSettings)
         {
             var mongoClient = new MongoClient(bookingDatabaseSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(bookingDatabaseSettings.Value.DatabaseName);
             _bookingsCollection = mongoDatabase.GetCollection<Booking>(bookingDatabaseSettings.Value.BookingCollectionName);
+
+            var trainMongoClient = new MongoClient(trainDatabaseSettings.Value.ConnectionString);
+            var trainMongoDatabase = trainMongoClient.GetDatabase(trainDatabaseSettings.Value.DatabaseName);
+            _trainsCollection = trainMongoDatabase.GetCollection<Train>(trainDatabaseSettings.Value.TrainCollectionName);
         }
+
 
         public async Task<Booking> CreateAsync(Booking newBooking)
         {
+            // Insert the new booking into the bookings collection
             await _bookingsCollection.InsertOneAsync(newBooking);
+
+            // Find the corresponding train document and update its "reservations" array
+            var filter = Builders<Train>.Filter.Eq(train => train.TrainID, newBooking.TrainID);
+            var update = Builders<Train>.Update.Push(train => train.Reservations, newBooking.Id);
+            var updateResult = await _trainsCollection.UpdateOneAsync(filter, update);
+
+            if (updateResult.ModifiedCount == 0)
+            {
+                // Handle the case where the train document was not found or the update failed
+                throw new Exception("Train not found or reservation update failed.");
+            }
+
             return newBooking;
         }
 
