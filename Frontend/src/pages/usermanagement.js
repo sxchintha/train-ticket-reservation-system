@@ -3,6 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import Dashboard from "../component/navBar";
 import {
   createTravelerAccount,
+  deactivateTravelerAccount,
   deleteTravelerAccount,
   editTravelerAccount,
   getAllTravelers,
@@ -10,6 +11,7 @@ import {
 import Swal from "sweetalert2";
 import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
 import DeleteModel from "../component/deleteModel";
+import { useCookies } from "react-cookie";
 
 const Usermanagement = () => {
   const [isModaluseraddOpen, setIsModaluseraddOpen] = useState(false);
@@ -22,6 +24,7 @@ const Usermanagement = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
+  const [cookies] = useCookies(["User"]);
 
   const toggleModaluseradd = () => {
     setIsModaluseraddOpen(!isModaluseraddOpen);
@@ -52,6 +55,7 @@ const Usermanagement = () => {
     });
   };
 
+  // function to create the travelers account
   const createTraveler = async (e) => {
     e.preventDefault();
     const data = {
@@ -96,11 +100,14 @@ const Usermanagement = () => {
     }
   };
 
+  // function to delete the travelers account
   const deleteTraveler = async (e, id) => {
     // e.preventDefault();
+
+    // if (response == 201) {
+
     const response = await deleteTravelerAccount(id);
     console.log("Reess", response);
-    // if (response == 201) {
     if (response == 204) {
       Swal.fire("Account Deleted Successfully");
       getAll();
@@ -111,6 +118,7 @@ const Usermanagement = () => {
     // }
   };
 
+  // function to edit the travelers account
   const editTraveler = async (e) => {
     e.preventDefault();
 
@@ -123,35 +131,57 @@ const Usermanagement = () => {
       password,
     };
 
-    const response = await editTravelerAccount(nic, data);
-
-    console.log("Reess", response);
-    if (response == 200) {
-      getAll();
-      toggleModaluseredit();
+    if (!firstName || !lastName || !phone || !email || !password) {
+      // alert("Please fill in all the fields");
+      Swal.fire("Please fill in all the fields");
+    } else if (!isValidEmail(email)) {
+      Swal.fire("Please enter a valid email");
+    } else if (!isValidPhoneNumber(phone)) {
+      Swal.fire("Please enter a valid phone number");
     } else {
-      Swal.fire("Error Editing Account");
+      const response = await editTravelerAccount(nic, data);
+
+      console.log("Reess", response);
+      if (response == 200) {
+        Swal.fire("Account Updated Successfully");
+        getAll();
+        toggleModaluseredit();
+        // getAll();
+      } else {
+        Swal.fire("Error Editing Account");
+      }
     }
+
+    // console.log("Reess", response);
+    // if (response == 200) {
+
+    // } else {
+    // }
   };
 
-  const deactivateTravelerAccount = async (e, id) => {
+  // function to handle activate and deactivate user account
+  const handleDeactivateTravelerAccount = async (e) => {
     e.preventDefault();
-    const response = await deactivateTravelerAccount(id);
-    console.log("Reess", response);
-    if (response == 201) {
+    const response = await deactivateTravelerAccount(nic);
+    console.log("Reessss", response);
+    if (response == 200) {
       Swal.fire("Account Deactivated Successfully");
       getAll();
+      setNic(null);
+      setIsDeleteModelOpen(false);
     } else {
       Swal.fire("Error Deactivating Account");
+      setNic(null);
+      setIsDeleteModelOpen(false);
     }
   };
-
-  const activateTravelerAccount = async (e, id) => {};
 
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
-        {isDeleteModelOpen ? <DeleteModel /> : null}
+        {isDeleteModelOpen ? (
+          <DeleteModel confirm={handleDeactivateTravelerAccount} />
+        ) : null}
         <div className="w-1/6">
           <Dashboard />
         </div>
@@ -302,8 +332,11 @@ const Usermanagement = () => {
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.phone}</td>
                   <td class="px-6 py-4">
+                    {/* {
+                      
+                    } */}
                     <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div>{" "}
                       Active
                     </div>
                   </td>
@@ -332,21 +365,31 @@ const Usermanagement = () => {
                         <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
                       </svg>
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsDeleteModelOpen(true)}
-                      class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
-                    >
-                      <svg
-                        class="w-3 h-3 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                    {/*
+                      only the backofficer has the access to deactivate or activate the user account, the login cookie is used to validate
+                      the user role
+                      */}
+                    {cookies.User?.userRole === "officer" ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsDeleteModelOpen(true);
+                          setNic(user.nic);
+                        }}
+                        class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                       >
-                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
-                      </svg>
-                    </button>
+                        <svg
+                          class="w-3 h-3 text-gray-800 dark:text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
+                        </svg>
+                      </button>
+                    ) : null}
+
                     <button
                       type="button"
                       onClick={(e) => deleteTraveler(e, user.nic)}

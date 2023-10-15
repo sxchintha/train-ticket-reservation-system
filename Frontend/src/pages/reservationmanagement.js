@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import Dashboard from "../component/navBar";
 import {
   cancelBooking,
+  deleteBooking,
+  editBooking,
   getAllBookings,
 } from "../services/bookingManagementService";
 import "../Assets/Styles/start.css";
@@ -10,24 +12,79 @@ import "../Assets/Styles/start.css";
 const Reservationmanagement = () => {
   const [bookings, setBookings] = useState([]);
   // const [cookies, setCookie] = useCookies(["User"]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [fromStation, setFromStation] = useState("");
+  const [toStation, setToStation] = useState("");
+  const [bookingNic, setBookingNic] = useState("");
+  const [booking, setBooking] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const bookings = getAllBookings().then((res) => {
-      // console.log(res);
-      setBookings(res);
-    });
+    handleGetAllBookings();
     // console.log(bookings.then((res) => console.log(res)));
   }, []);
 
+  const handleGetAllBookings = async () => {
+    await getAllBookings().then((res) => {
+      console.log(res);
+      setBookings(res);
+    });
+  };
+
   const handleCancelBooking = async (id) => {
     const response = await cancelBooking(id);
+    console.log(response);
     if (response.status == 200) {
       alert("Booking Cancelled");
     } else {
       alert("Booking Cancelation Failed");
     }
   };
+
+  const handledeleteBooking = async (id) => {
+    const response = await deleteBooking(id);
+    console.log(response);
+    if (response.status == 204) {
+      alert("Booking Deleted");
+      handleGetAllBookings();
+    } else {
+      alert("Booking Deletion Failed");
+    }
+  };
+
+  const handleBookingEdit = async (e) => {
+    e.preventDefault();
+    const bookingData = {
+      ...booking,
+      nic: bookingNic,
+    };
+    console.log("bookingData", bookingData);
+    const response = await editBooking(booking.id, bookingData);
+    console.log("Edit", response);
+  };
+
+  const handleChangeTrain = async (e) => {
+    e.preventDefault();
+    navigate("/searchtrain", {
+      state: {
+        booking: booking,
+      },
+    });
+  };
+  // {
+  //   createdDate: "2023-10-15T13:55:38.524Z";
+  //   fromStation: "Colombo";
+  //   id: "652bef5a4f2463a2dc378e87";
+  //   nic: "985645123V";
+  //   price: "500";
+  //   quentity: "5";
+  //   sheduledate: "2023-10-25";
+  //   sheduletime: "08:50";
+  //   toStation: "Galle";
+  //   trainID: "T005";
+  //   trainName: "Bangadeniya Express";
+  // }
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -146,12 +203,12 @@ const Reservationmanagement = () => {
                 <th scope="col" className="px-6 py-3">
                   Train ID
                 </th>
-                <th scope="col" className="px-6 py-3">
+                {/* <th scope="col" className="px-6 py-3">
                   First Name
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Last Name
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3">
                   NIC
                 </th>
@@ -174,40 +231,225 @@ const Reservationmanagement = () => {
                   Price
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Action
+                  Status
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
                 </th>
               </tr>
             </thead>
             <br />
             <tbody>
-              {/* {bookings.map((booking) => ( */}
-              <tr className="bg-white border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                >
-                  01
-                </th>
-                <td className="px-6 py-4">8057</td>
-                <td className="px-6 py-4">Akila</td>
-                <td className="px-6 py-4">Kavinda</td>
-                <td className="px-6 py-4">996873512v</td>
-                <td className="px-6 py-4">0779873512</td>
-                <td className="px-6 py-4">04</td>
-                <td className="px-6 py-4">Galle</td>
-                <td className="px-6 py-4">Colombo Fort</td>
-                <td className="px-6 py-4">2023-10-12</td>
-                <td className="px-6 py-4">LKR 600.00</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-              </tr>
-              {/* ))} */}
+              {bookings.map((booking, index) => (
+                <tr className="bg-white border-b">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                  >
+                    {booking.id}
+                  </th>
+                  <td className="px-6 py-4">{booking.trainName}</td>
+                  {/* <td className="px-6 py-4">{booking.firstName}</td>
+                  <td className="px-6 py-4">{booking.lastName}</td> */}
+                  <td className="px-6 py-4">{booking.nic}</td>
+                  <td className="px-6 py-4">{booking.phone}</td>
+                  <td className="px-6 py-4">{booking.quentity}</td>
+                  <td className="px-6 py-4">{booking.fromStation}</td>
+                  <td className="px-6 py-4">{booking.toStation}</td>
+                  <td className="px-6 py-4">{booking.createdDate}</td>
+                  <td className="px-6 py-4">{booking.price}</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      Active
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsEditModalOpen(true);
+                        setFromStation(booking.fromStation);
+                        setToStation(booking.toStation);
+                        setBookingNic(booking.nic);
+                        setBooking(booking);
+                        console.log("booking", booking);
+                      }}
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleCancelBooking(booking.id);
+                      }}
+                      class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handledeleteBooking(booking.id);
+                      }}
+                      class="text-white bg-blue-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 18"
+                      >
+                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          {isEditModalOpen ? (
+            <div className="modal-overlay">
+              <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div className="relative w-full max-w-md mx-auto">
+                  <div className="relative bg-white rounded-lg">
+                    <button
+                      type="button"
+                      className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                      data-modal-hide="authentication-modal"
+                      onClick={() => setIsEditModalOpen(false)}
+                    >
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 14"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                        />
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                    </button>
+                    <div className="px-6 py-6 lg:px-8">
+                      <center>
+                        <h1
+                          className="mb-4 text-xl font-bold text-gray-900 dark:text-dark"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          Edit Reservation
+                        </h1>
+                      </center>
+                      <div className="flex flex-col items-center space-y-1/2">
+                        <div className="flex items-center space-x-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 448 512"
+                          >
+                            <path d="M448 96v256c0 51.815-61.624 96-130.022 96l62.98 49.721C386.905 502.417 383.562 512 376 512H72c-7.578 0-10.892-9.594-4.957-14.279L130.022 448C61.82 448 0 403.954 0 352V96C0 42.981 64 0 128 0h192c65 0 128 42.981 128 96zM200 232V120c0-13.255-10.745-24-24-24H72c-13.255 0-24 10.745-24 24v112c0 13.255 10.745 24 24 24h104c13.255 0 24-10.745 24-24zm200 0V120c0-13.255-10.745-24-24-24H272c-13.255 0-24 10.745-24 24v112c0 13.255 10.745 24 24 24h104c13.255 0 24-10.745 24-24zm-48 56c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm-256 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z" />
+                          </svg>
+                          <p className="font text-0.5 text-gray-500">
+                            Train Info
+                          </p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                          <h1 className="font text-2xl text-gray-700">
+                            {fromStation}
+                          </h1>
+                          <svg
+                            class="w-5 h-5 text-gray-700 dark:text-gray-700"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 8 14"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
+                            />
+                          </svg>
+                          <h1 className="font text-2xl text-gray-700">
+                            {toStation}
+                          </h1>
+                        </div>
+                        <p className="font text-0.5 text-gray-500">
+                          Date - 2023-10-12
+                        </p>
+                        <p className="font text-0.5 text-gray-400">
+                          {/* {selectedTrainId} | {selectedTrainName} */}
+                        </p>
+                      </div>
+                      <br />
+                      <form className="space-y-6" action="#">
+                        <div className="grid grid-cols-2 gap-5">
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              NIC
+                            </label>
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              placeholder="Enter Traveler First Name"
+                              required
+                              value={bookingNic}
+                              onChange={(e) => {
+                                setBookingNic(e.target.value);
+                                // setFirstName(e.target.value);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <button
+                          // type="submit"
+                          onClick={handleBookingEdit}
+                          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                          Confirm Reservation
+                        </button>
+                        <button
+                          // type="submit"
+                          onClick={handleChangeTrain}
+                          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                          Change Train
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
 
           <br />
           <footer class="bg-white rounded-lg dark: m-8">

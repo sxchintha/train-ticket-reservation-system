@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "../component/navBar";
 import { getAllBookings } from "../services/bookingManagementService";
 import "../Assets/Styles/start.css";
-
+import Swal from "sweetalert2";
+import { searchForTrains } from "../services/trainManagementService";
 const Searchtrain = () => {
   const [bookings, setBookings] = useState([]);
   // const [cookies, setCookie] = useCookies(["User"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [startStation, setStartStation] = useState("");
+  const [endStation, setEndStation] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     const setMinMaxDate = () => {
       const today = new Date().toISOString().split("T")[0];
@@ -30,12 +40,13 @@ const Searchtrain = () => {
     // };
   }, []);
 
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("Select a station");
   const options = [
-    { field1: "Select a Station" },
+    // { field1: "Select a Station" },
     { field1: "Galle" },
-    { field1: "Colombo Fort" },
+    { field1: "Colombo" },
     { field1: "Jaffna" },
+    { field1: "Kalutara" },
   ];
 
   const initialFormState = {
@@ -59,19 +70,37 @@ const Searchtrain = () => {
     setFormValues(initialFormState);
   };
 
-  const searchForTrain = async () => {
-    const data = {
-      startStation,
-      endStation,
-      date,
-    };
-
-    const response = await searchForTrain(data);
-    if (response != false) {
-      Swal.fire("Train Found");
+  const handlesearchForTrain = async (e) => {
+    e.preventDefault();
+    if (startStation == "" || endStation == "") {
+      Swal.fire("Please Select Start and End Stations");
+    } else if (startStation == endStation) {
+      Swal.fire("Start and End Stations Cannot be the same");
     } else {
-      Swal.fire("Error Finding Train");
+      const response = await searchForTrains(startStation, endStation);
+      console.log("Response", response);
+      if (response.data.length != 0) {
+        // Swal.fire("Train Found");
+        if (location.state != null) {
+          console.log("Location", location.state);
+          navigate("/trainlisting", {
+            state: {
+              data: response.data,
+              booking: location.state.booking,
+              fromEdit: true,
+            },
+          });
+        } else {
+          navigate("/trainlisting", {
+            state: { data: response.data, fromEdit: false },
+          });
+        }
+      } else {
+        Swal.fire("Error Finding Train");
+      }
     }
+
+    // console.log(location.state);
   };
   return (
     <>
@@ -174,8 +203,11 @@ const Searchtrain = () => {
                 <select
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                   name="fromStation"
+                  onChange={(e) => setStartStation(e.target.value)}
+                  defaultValue={"Select a Station"}
+                  // value={selectedOption}
                 >
-                  <option value="" disabled>
+                  <option value="Select a Station" disabled>
                     Select a Station
                   </option>
                   {options.map((option) => (
@@ -195,8 +227,10 @@ const Searchtrain = () => {
                 <select
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                   name="toStation"
+                  defaultValue={"Select a Station"}
+                  onChange={(e) => setEndStation(e.target.value)}
                 >
-                  <option value="" disabled>
+                  <option value="Select a Station" disabled>
                     Select a Station
                   </option>
                   {options.map((option) => (
@@ -237,14 +271,15 @@ const Searchtrain = () => {
               </div>
             </div>
             <center>
-              <Link to="/trainlisting">
-                <button
-                  type="submit"
-                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >
-                  Search Train
-                </button>
-              </Link>
+              {/* <Link to="/trainlisting"> */}
+              <button
+                // type="submit"
+                onClick={handlesearchForTrain}
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Search Train
+              </button>
+              {/* </Link> */}
               <button
                 type="submit"
                 onClick={resetForm}

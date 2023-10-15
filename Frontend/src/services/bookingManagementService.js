@@ -12,20 +12,46 @@ const getAllBookings = async () => {
 
 const createBooking = async (booking) => {
   try {
-    const response = await API.post("/Booking", booking);
-    return response.data;
+    console.log("booking in booking", booking);
+    const response = await API.post("/Booking/create", booking);
+    console.log("response in boook", response);
+    return response;
   } catch (error) {
-    console.log(error);
+    console.log("Errpr i n booking", error);
   }
 };
 
 const cancelBooking = async (id) => {
   try {
-    const response = await API.post(`/Booking/cancel/${id}`);
+    const response = await API.patch(`/Booking/cancel/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export { getAllBookings, createBooking, cancelBooking };
+const deleteBooking = async (id) => {
+  try {
+    const response = await API.delete(`/Booking/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const editBooking = async (id, booking) => {
+  try {
+    const response = await API.put(`/Booking/${id}`, booking);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getAllBookings,
+  createBooking,
+  cancelBooking,
+  deleteBooking,
+  editBooking,
+};

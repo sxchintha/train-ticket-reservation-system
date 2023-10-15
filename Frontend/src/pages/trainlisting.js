@@ -1,12 +1,49 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import Dashboard from "../component/navBar";
 import "../Assets/Styles/start.css";
 import Swal from "sweetalert2";
+import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
+import {
+  createBooking,
+  editBooking,
+} from "../services/bookingManagementService";
 
 const Trainlisting = () => {
   const [isModalstationsOpen, setIsModalstationsOpen] = useState(false);
   const [isModaltrainselectOpen, setIsModaltrainselectOpen] = useState(false);
+  const [selectedTrainName, setSelectedTrainName] = useState(null);
+  const [selectedTrainId, setSelectedTrainId] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [nic, setNic] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhoneNumber] = useState(null);
+  const [passengerCount, setPassengerCount] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [trainList, setTrainList] = useState([]);
+
+  useEffect(() => {
+    if (location.state) {
+      // console.log("Location", location.state.data);
+      setTrainList(location.state.data);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    console.log("Location==========", location.state);
+    if (location.state.fromEdit != false) {
+      console.log("Location", location.state.booking);
+      setFirstName(location.state.booking.firstName);
+      setLastName(location.state.booking.lastName);
+      setNic(location.state.booking.nic);
+      setEmail(location.state.booking.email);
+      setPhoneNumber(location.state.booking.phone);
+      setPassengerCount(location.state.booking.quentity);
+    }
+  }, [location.state]);
 
   const toggleModalstations = () => {
     setIsModalstationsOpen(!isModalstationsOpen);
@@ -14,6 +51,92 @@ const Trainlisting = () => {
 
   const toggleModaltrainselect = () => {
     setIsModaltrainselectOpen(!isModaltrainselectOpen);
+    setSelectedTrainId(null);
+    setSelectedTrainName(null);
+  };
+
+  const handlecreateBooking = async (e) => {
+    e.preventDefault();
+    if (
+      !firstName ||
+      !lastName ||
+      !nic ||
+      !email ||
+      !phone ||
+      !passengerCount
+    ) {
+      // alert("Please fill in all the fields");
+      Swal.fire("Please fill in all the fields");
+    } else if (!isValidEmail(email)) {
+      Swal.fire("Please enter a valid email");
+    } else if (!isValidPhoneNumber(phone)) {
+      Swal.fire("Please enter a valid phone number");
+    } else {
+      const date = new Date();
+      const data = {
+        id: "",
+        nic,
+        sheduledate: date.toISOString(),
+        sheduletime: date.toISOString(),
+        quentity: passengerCount,
+        trainID: selectedTrainId,
+        trainName: selectedTrainName,
+        fromStation: "Galle",
+        toStation: "Colombo Fort",
+        price: "300",
+        createdDate: "2021-10-12",
+      };
+
+      console.log("Sending", data);
+
+      const response = await createBooking(data);
+
+      if (response.status == 201) {
+        Swal.fire("Booking Created Successfully");
+        navigate("/reservationmanagement");
+      } else {
+        Swal.fire("Error Creating Booking");
+      }
+    }
+  };
+
+  const handleBookingEdit = async (e) => {
+    e.preventDefault();
+    console.log({
+      firstName,
+      lastName,
+      nic,
+      email,
+      phone,
+      passengerCount,
+    });
+
+    const date = new Date();
+    const data = {
+      id: location.state.booking.id,
+      nic,
+      sheduledate: date.toISOString(),
+      sheduletime: date.toISOString(),
+      quentity: passengerCount,
+      trainID: selectedTrainId,
+      trainName: selectedTrainName,
+      fromStation: "Galle",
+      toStation: "Colombo Fort",
+      price: "300",
+      createdDate: "2021-10-12",
+    };
+
+    console.log("Sending", data);
+
+    const response = await editBooking(location.state.booking.id, data);
+    console.log("Response", response);
+
+    if (response.status == 201) {
+      Swal.fire("Booking Created Successfully");
+      navigate("/reservationmanagement");
+    } else {
+      Swal.fire("Error Creating Booking");
+    }
   };
 
   return (
@@ -200,138 +323,79 @@ const Trainlisting = () => {
             </thead>
             <br />
             <tbody>
-              <tr className="bg-white border-b">
-                <th scope="col" className="px-6 py-3">
-                  01
-                </th>
-                <td className="px-6 py-4">8750</td>
-                <td className="px-6 py-4">Ruhunu Kumari</td>
-                <td className="px-6 py-4">250</td>
-                <td className="px-6 py-4">13:23PM</td>
-                <td className="px-6 py-4">18:15PM</td>
-                <td className="px-6 py-4">2023-10-12</td>
-                <td className="px-6 py-4">LKR 300.00</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <button
-                    type="button"
-                    onClick={toggleModalstations}
-                    class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 14"
+              {trainList.map((train, index) => (
+                // console.log("Train", train);
+                <tr className="bg-white border-b">
+                  <th scope="col" className="px-6 py-3">
+                    {index}
+                  </th>
+                  <td className="px-6 py-4">{train.trainID}</td>
+                  <td className="px-6 py-4">{train.trainName}</td>
+                  <td className="px-6 py-4">{train.availableSeats}</td>
+                  <td className="px-6 py-4">{train.schedule.departureTime}</td>
+                  <td className="px-6 py-4">{train.schedule.arrivalTime}</td>
+                  <td className="px-6 py-4">2023-10-12</td>
+                  <td className="px-6 py-4">LKR 300.00</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
+                      Active
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      type="button"
+                      onClick={toggleModalstations}
+                      class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
                     >
-                      <g
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 14"
                       >
-                        <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                        <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
-                      </g>
-                    </svg>
-                  </button>
-                </td>
-                <td className="px-6 py-4 gap-0 flex">
-                  <button
-                    type="button"
-                    onClick={toggleModaltrainselect}
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 16 16"
+                        <g
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                        >
+                          <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                          <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
+                        </g>
+                      </svg>
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 gap-0 flex">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTrainName(train.trainName);
+                        setSelectedTrainId(train.trainID);
+                        setIsModaltrainselectOpen(true);
+                      }}
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr className="bg-white border-b">
-                <th scope="col" className="px-6 py-3">
-                  02
-                </th>
-                <td className="px-6 py-4">8750</td>
-                <td className="px-6 py-4">Ruhunu Kumari</td>
-                <td className="px-6 py-4">250</td>
-                <td className="px-6 py-4">13:23PM</td>
-                <td className="px-6 py-4">18:15PM</td>
-                <td className="px-6 py-4">2023-10-12</td>
-                <td className="px-6 py-4">LKR 300.00</td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                    Active
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <button
-                    type="button"
-                    onClick={toggleModalstations}
-                    class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 14"
-                    >
-                      <g
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 16"
                       >
-                        <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                        <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
-                      </g>
-                    </svg>
-                  </button>
-                </td>
-                <td className="px-6 py-4 gap-0 flex">
-                  <button
-                    type="button"
-                    onClick={toggleModaltrainselect}
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    <svg
-                      class="w-3 h-3 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3"
-                      />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
@@ -498,7 +562,7 @@ const Trainlisting = () => {
                           Date - 2023-10-12
                         </p>
                         <p className="font text-0.5 text-gray-400">
-                          8750 | Ruhunu Kumari
+                          {selectedTrainId} | {selectedTrainName}
                         </p>
                       </div>
                       <br />
@@ -516,6 +580,10 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Traveler First Name"
                               required
+                              value={firstName}
+                              onChange={(e) => {
+                                setFirstName(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -530,6 +598,10 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Traveler Last Name"
                               required
+                              value={lastName}
+                              onChange={(e) => {
+                                setLastName(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -544,6 +616,10 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Traveler NIC"
                               required
+                              value={nic}
+                              onChange={(e) => {
+                                setNic(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -558,6 +634,10 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Traveler Email"
                               required
+                              value={email}
+                              onChange={(e) => {
+                                setEmail(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -572,6 +652,10 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Traveler Phone"
                               required
+                              value={phone}
+                              onChange={(e) => {
+                                setPhoneNumber(e.target.value);
+                              }}
                             />
                           </div>
                           <div>
@@ -587,15 +671,30 @@ const Trainlisting = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter no Passengers"
                               required
+                              value={passengerCount}
+                              onChange={(e) => {
+                                setPassengerCount(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
-                        <button
-                          type="submit"
-                          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                          Confirm Reservation
-                        </button>
+                        {location.state.fromEdit != false ? (
+                          <button
+                            // type="submit"
+                            onClick={handleBookingEdit}
+                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+                            Edit Reservation
+                          </button>
+                        ) : (
+                          <button
+                            // type="submit"
+                            onClick={handlecreateBooking}
+                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+                            Confirm Reservation
+                          </button>
+                        )}
                       </form>
                     </div>
                   </div>

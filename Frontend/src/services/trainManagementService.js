@@ -35,10 +35,25 @@ const editTrainSchedule = async (id) => {
   } catch (error) {}
 };
 
+const searchForTrains = async (fromStation, toStation) => {
+  try {
+    console.log("From", {
+      params: { fromStation, toStation },
+    });
+    const response = await API.get("/Train/search", {
+      params: { fromStation, toStation },
+    });
+    return response;
+  } catch (error) {
+    console.log("Errpr in search", error);
+  }
+};
+
 export {
   getAllTrains,
   createTrainSchedule,
   cancelTrainSchedule,
   publishTrainSchedule,
   editTrainSchedule,
+  searchForTrains,
 };
