@@ -19,9 +19,12 @@ const Trainmanagement = () => {
   const [trainName, settrainName] = useState("");
   const [pricePerKm, setpricePerKm] = useState("");
   const [availableSeats, setAvailableSeats] = useState("");
-  const [departureTime, setDepartureTime] = useState("");
-  const [arrivalTime, setArrivalTime] = useState("");
+  const [departureTimee, setDepartureTime] = useState("");
+  const [arrivalTimee, setArrivalTime] = useState("");
   const [scheduleDate, setScheduleDate] = useState("");
+  const [stations, setStations] = useState([]);
+  const [id, setid] = useState("");
+  const [train, setTrain] = useState({});
 
   const toggleModaltrainadd = () => {
     setIsModaltrainaddOpen(!isModaltrainaddOpen);
@@ -58,10 +61,12 @@ const Trainmanagement = () => {
     setSelectedOption(event.target.value);
   };
 
-  const [sections, setSections] = useState([{ station: "", distance: "" }]);
+  const [sections, setSections] = useState([
+    { station: "", distanceFromStart: "" },
+  ]);
 
   const handleAddSection = () => {
-    setSections([...sections, { station: "", distance: "" }]);
+    setSections([...sections, { station: "", distanceFromStart: "" }]);
   };
 
   const handleRemoveSection = (index) => {
@@ -96,6 +101,11 @@ const Trainmanagement = () => {
 
   const createTrain = async (e) => {
     e.preventDefault();
+    const departureTime = new Date(departureTimee).toISOString().toString();
+    console.log("Departure Time", departureTime);
+    const arrivalTime = new Date(arrivalTimee).toISOString().toString();
+    console.log("Arrival Time", arrivalTime);
+    console.log("Sections", sections);
     const data = {
       id: "string",
       trainID,
@@ -103,7 +113,7 @@ const Trainmanagement = () => {
       availableSeats,
       pricePerKm,
       pricePerTicket: 0,
-      schedules: {
+      schedule: {
         departureTime,
         arrivalTime,
         stationDistances: sections,
@@ -120,7 +130,7 @@ const Trainmanagement = () => {
     setpricePerKm("");
     settrainName("");
     settrainID("");
-    setSections([{ station: "", distance: "" }]);
+    setSections([{ station: "", distanceFromStart: "" }]);
   };
 
   const handleTrainPublish = async (id) => {
@@ -140,8 +150,29 @@ const Trainmanagement = () => {
     }
   };
 
-  const handleTrainScheduleEdit = async (id) => {
-    const response = await editTrainSchedule(id);
+  const handleTrainScheduleEdit = async () => {
+    const departureTime = new Date(departureTimee).toISOString().toString();
+    console.log("Departure Time", departureTime);
+    const arrivalTime = new Date(arrivalTimee).toISOString().toString();
+    console.log("Arrival Time", arrivalTime);
+    const data = {
+      ...train,
+      id: id,
+      trainID,
+      trainName,
+      availableSeats,
+      pricePerKm,
+      pricePerTicket: 0,
+      schedule: {
+        departureTime,
+        arrivalTime,
+        stationDistances: sections,
+      },
+    };
+
+    console.log("Data sending", data);
+    const response = await editTrainSchedule(id, data);
+
     if (response.status === 200) {
       Swal.fire({
         icon: "success",
@@ -326,7 +357,10 @@ const Trainmanagement = () => {
                   <td className="px-6 py-4">
                     <button
                       type="button"
-                      onClick={toggleModalstations}
+                      onClick={() => {
+                        setStations(train.schedule.stationDistances);
+                        setIsModalstationsOpen(true);
+                      }}
                       class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
                     >
                       <svg
@@ -351,7 +385,18 @@ const Trainmanagement = () => {
                   <td className="px-6 py-4 gap-0 flex">
                     <button
                       type="button"
-                      onClick={toggleModaltrainedit}
+                      onClick={() => {
+                        setIsModaltraineditOpen(true);
+                        setSections(train.schedule.stationDistances);
+                        settrainID(train.trainID);
+                        setid(train.id);
+                        setTrain(train);
+                        settrainName(train.trainName);
+                        setAvailableSeats(train.availableSeats);
+                        setpricePerKm(train.pricePerKm);
+                        setDepartureTime(train.schedule.departureTime);
+                        setArrivalTime(train.schedule.arrivalTime);
+                      }}
                       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
                       <svg
@@ -640,7 +685,7 @@ const Trainmanagement = () => {
                                   onChange={(e) =>
                                     handleInputChange(
                                       index,
-                                      "distance",
+                                      "distanceFromStart",
                                       e.target.value
                                     )
                                   }
@@ -777,6 +822,7 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Train ID"
                               required
+                              value={trainID}
                               onChange={(e) => {
                                 settrainID(e.target.value);
                               }}
@@ -794,6 +840,7 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Train Name"
                               required
+                              value={trainName}
                               onChange={(e) => {
                                 settrainName(e.target.value);
                               }}
@@ -812,6 +859,7 @@ const Trainmanagement = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter Available Seats"
                               required
+                              value={availableSeats}
                               onChange={(e) => {
                                 setAvailableSeats(e.target.value);
                               }}
@@ -878,6 +926,7 @@ const Trainmanagement = () => {
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              value={pricePerKm}
                               onChange={(e) => {
                                 setpricePerKm(e.target.value);
                               }}
@@ -901,87 +950,93 @@ const Trainmanagement = () => {
                         </div>
 
                         <div className="w-full">
-                          {sections.map((section, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center bg-white rounded-lg p-4 shadow mb-4 w-full"
-                            >
-                              <div className="flex-1 mr-4">
-                                <label
-                                  htmlFor={`station-${index}`}
-                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                          {sections.map(
+                            (section, index) => (
+                              console.log(section.station),
+                              (
+                                <div
+                                  key={index}
+                                  className="flex items-center bg-white rounded-lg p-4 shadow mb-4 w-full"
                                 >
-                                  Station
-                                </label>
-                                <select
-                                  id={`station-${index}`}
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                                  value={section.station}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "station",
-                                      e.target.value
-                                    )
-                                  }
-                                  required
-                                >
-                                  <option value="" disabled>
-                                    Select a Station
-                                  </option>
-                                  {options.map((option) => (
-                                    <option
-                                      key={option.field1}
-                                      value={option.field1}
+                                  <div className="flex-1 mr-4">
+                                    <label
+                                      htmlFor={`station-${index}`}
+                                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
                                     >
-                                      {option.field1}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                              <div className="flex-1 mr-4">
-                                <label
-                                  htmlFor={`distance-${index}`}
-                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                                >
-                                  Distance
-                                </label>
-                                <input
-                                  type="number"
-                                  min="0"
-                                  step="0.50"
-                                  id={`distance-${index}`}
-                                  placeholder="Enter Distance From Start Station"
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                                  value={section.distance}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "distance",
-                                      e.target.value
-                                    )
-                                  }
-                                  required
-                                />
-                              </div>
+                                      Station
+                                    </label>
+                                    <select
+                                      id={`station-${index}`}
+                                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                                      value={section.station}
+                                      defaultValue={section.station}
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          index,
+                                          "station",
+                                          e.target.value
+                                        )
+                                      }
+                                      required
+                                    >
+                                      <option value={section.station} disabled>
+                                        {section.station}
+                                      </option>
+                                      {options.map((option) => (
+                                        <option
+                                          key={option.field1}
+                                          value={option.field1}
+                                        >
+                                          {option.field1}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="flex-1 mr-4">
+                                    <label
+                                      htmlFor={`distance-${index}`}
+                                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                                    >
+                                      Distance
+                                    </label>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      step="0.50"
+                                      id={`distance-${index}`}
+                                      placeholder="Enter Distance From Start Station"
+                                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                                      value={section.distanceFromStart}
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          index,
+                                          "distanceFromStart",
+                                          e.target.value
+                                        )
+                                      }
+                                      required
+                                    />
+                                  </div>
 
-                              <button
-                                onClick={() => handleRemoveSection(index)}
-                                type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                              >
-                                <svg
-                                  class="w-3 h-3 text-gray-800 dark:text-white"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
+                                  <button
+                                    onClick={() => handleRemoveSection(index)}
+                                    type="button"
+                                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                  >
+                                    <svg
+                                      class="w-3 h-3 text-gray-800 dark:text-white"
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )
+                            )
+                          )}
                           <button
                             type="button"
                             onClick={handleAddSection}
@@ -1027,7 +1082,8 @@ const Trainmanagement = () => {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            createTrain(e);
+                            // createTrain(e);
+                            handleTrainScheduleEdit();
                           }}
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
@@ -1098,26 +1154,20 @@ const Trainmanagement = () => {
                           </thead>
                           <br />
                           <tbody>
-                            <tr className="bg-white border-b">
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                              >
-                                01
-                              </th>
-                              <td className="px-6 py-4">Colombo Fort</td>
-                              <td className="px-6 py-4">0 KM</td>
-                            </tr>
-                            <tr className="bg-white border-b">
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                              >
-                                02
-                              </th>
-                              <td className="px-6 py-4">Kalutara</td>
-                              <td className="px-6 py-4">50 KM</td>
-                            </tr>
+                            {stations.map((station, index) => (
+                              <tr className="bg-white border-b">
+                                <th
+                                  scope="row"
+                                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                                >
+                                  {index}
+                                </th>
+                                <td className="px-6 py-4">{station.station}</td>
+                                <td className="px-6 py-4">
+                                  {station.distanceFromStart}
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
