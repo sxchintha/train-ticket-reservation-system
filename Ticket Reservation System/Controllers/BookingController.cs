@@ -4,6 +4,7 @@ It offers functions such as creating, updating, retrieving, and canceling reserv
 */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Ticket_Reservation_System.Models;
 using Ticket_Reservation_System.Services;
 
@@ -34,12 +35,15 @@ namespace Ticket_Reservation_System.Controllers
 
                 if (bookingCount >= 4)
                 {
-                    var errorResponse = new
+                    var errorResponse = new ObjectResult(new Dictionary<string, string>
+            {
+                { "error", "You have reached the maximum limit of bookings (4) for this NIC." }
+            })
                     {
-                        error = "You have reached the maximum limit of bookings (4) for this NIC."
+                        StatusCode = (int)HttpStatusCode.BadRequest
                     };
 
-                    return BadRequest(errorResponse);
+                    return errorResponse;
                 }
 
                 var createdDate = DateTime.Now;
@@ -71,14 +75,29 @@ namespace Ticket_Reservation_System.Controllers
                     }
                     else
                     {
-                        return BadRequest("Not enough available seats for this booking.");
+                        var errorResponse = new ObjectResult(new Dictionary<string, string>
+                {
+                    { "error", "Not enough available seats for this booking." }
+                })
+                        {
+                            StatusCode = (int)HttpStatusCode.BadRequest
+                        };
+
+                        return errorResponse;
                     }
                 }
                 else
                 {
-                    return BadRequest("Train not found.");
-                }
+                    var errorResponse = new ObjectResult(new Dictionary<string, string>
+            {
+                { "error", "Train not found." }
+            })
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
 
+                    return errorResponse;
+                }
 
                 // Create a new Booking object excluding the "id" property
                 var newBooking = new Booking
@@ -103,8 +122,6 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
-
 
 
         //Update booking by booking id
