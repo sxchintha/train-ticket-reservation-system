@@ -27,6 +27,18 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
+
+                var createdDate = DateTime.Now;
+                var scheduledDate = DateTime.Parse(booking.Sheduledate);
+
+                // Calculate the difference in days between the current date and the scheduled date
+                int daysUntilScheduledDate = (int)(scheduledDate - createdDate).TotalDays;
+
+                if (daysUntilScheduledDate > 30)
+                {
+                    return BadRequest("Scheduled date must be at least 30 days in the future.");
+                }
+
                 // Create a new Booking object excluding the "id" property
                 var newBooking = new Booking
                 {
@@ -50,6 +62,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
 
         //Update booking by booking id
         // PUT: api/Bookings/{id}
@@ -120,13 +133,32 @@ namespace Ticket_Reservation_System.Controllers
             try
             {
                 var Bookings = await _bookingService.GetAllBookingsAsync();
-                return Ok(Bookings);
+
+                // Modify each booking to include the "status" property in the response
+                var modifiedBookings = Bookings.Select(booking => new
+                {
+                    Id = booking.Id,
+                    TrainID = booking.TrainID,
+                    Nic = booking.Nic,
+                    TrainName = booking.TrainName,
+                    Sheduledate = booking.Sheduledate,
+                    Sheduletime = booking.Sheduletime,
+                    FromStation = booking.FromStation,
+                    ToStation = booking.ToStation,
+                    Quentity = booking.Quentity,
+                    Price = booking.Price,
+                    Status = booking.Status, // Include the status here
+                    CreatedDate = booking.CreatedDate
+                });
+
+                return Ok(modifiedBookings);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
 
         //get each booking by booking id
         [HttpGet("{id}")]
