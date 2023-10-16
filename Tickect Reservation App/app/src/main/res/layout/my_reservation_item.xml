@@ -33,31 +33,32 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvTrainTimes"
+                    android:id="@+id/tvTrainIdName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/calibri"
-                    android:text="05:30AM - 13:23PM"
+                    android:text="Train name"
                     android:textColor="#000000"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvTrainIdName"
+                    android:id="@+id/tvBookingFromTo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:fontFamily="@font/calibri"
-                    android:text="4018 Vauniya InterCity"
+                    android:text="Galle - Colombo Fort"
                     android:textColor="#4b4b4b"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvTrainStartEndStations"
+                    android:id="@+id/tvBookingDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/calibri"
-                    android:text="Jaffna - Collombo Fort"
+                    android:text="2023.10.12"
                     android:textColor="#8a8a8a" />
 
             </LinearLayout>
@@ -70,15 +71,16 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvSeatsAvailable"
+                    android:id="@+id/tvBookingPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:fontFamily="@font/calibri"
-                    android:text="66 Seats Available"
+                    android:text="8057 Express Train"
                     android:textAlignment="textEnd"
                     android:textColor="#f5a622"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
