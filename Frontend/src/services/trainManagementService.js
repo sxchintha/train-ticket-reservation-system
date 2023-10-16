@@ -49,6 +49,13 @@ const searchForTrains = async (fromStation, toStation) => {
   }
 };
 
+const deleteTrainSchedule = async (id) => {
+  try {
+    const response = await API.delete(`/Train/${id}`);
+    return response;
+  } catch (error) {}
+};
+
 export {
   getAllTrains,
   createTrainSchedule,
@@ -56,4 +63,5 @@ export {
   publishTrainSchedule,
   editTrainSchedule,
   searchForTrains,
+  deleteTrainSchedule,
 };

@@ -20,9 +20,58 @@ const Searchtrain = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   const [selectedOption, setSelectedOption] = useState("");
-  const options = [...["Alawwa", "Ambalangoda", "Anuradhapura", "Badulla", "Batticaloa", "Beliatta", "Chilaw", "Colombo Fort", "Maradana", "Dandugama", "Dematagoda", "Ella", "Galle", "Gampaha", "Haputale", "Hikkaduwa", "Idalgashinna", "Jaffna", "Kadugannawa", "Kalutara South", "Kandy", "Katugastota", "Kilinochchi", "Kollupitiya", "Kurunegala", "Maharagama", "Matale", "Matara", "Moratuwa", "Mount Lavinia", "Nanu Oya", "Narahenpita", "Negombo", "Nugegoda", "Pannipitiya", "Peradeniya", "Periyaneelavanai", "Polgahawela", "Polonnaruwa", "Puttalam", "Rambukkana", "Ratmalana", "Ratnapura", "Thalaimannar", "Trincomalee", "Valachchenai", "Vavuniya"].map(station => ({ field1: station }) )];
+  const options = [
+    ...[
+      "Alawwa",
+      "Ambalangoda",
+      "Anuradhapura",
+      "Badulla",
+      "Batticaloa",
+      "Beliatta",
+      "Chilaw",
+      "Colombo Fort",
+      "Maradana",
+      "Dandugama",
+      "Dematagoda",
+      "Ella",
+      "Galle",
+      "Gampaha",
+      "Haputale",
+      "Hikkaduwa",
+      "Idalgashinna",
+      "Jaffna",
+      "Kadugannawa",
+      "Kalutara South",
+      "Kandy",
+      "Katugastota",
+      "Kilinochchi",
+      "Kollupitiya",
+      "Kurunegala",
+      "Maharagama",
+      "Matale",
+      "Matara",
+      "Moratuwa",
+      "Mount Lavinia",
+      "Nanu Oya",
+      "Narahenpita",
+      "Negombo",
+      "Nugegoda",
+      "Pannipitiya",
+      "Peradeniya",
+      "Periyaneelavanai",
+      "Polgahawela",
+      "Polonnaruwa",
+      "Puttalam",
+      "Rambukkana",
+      "Ratmalana",
+      "Ratnapura",
+      "Thalaimannar",
+      "Trincomalee",
+      "Valachchenai",
+      "Vavuniya",
+    ].map((station) => ({ field1: station })),
+  ];
 
   const initialFormState = {
     fromStation: "",
@@ -63,11 +112,18 @@ const Searchtrain = () => {
               data: response.data,
               booking: location.state.booking,
               fromEdit: true,
+              fromStation: startStation,
+              toStation: endStation,
             },
           });
         } else {
           navigate("/trainlisting", {
-            state: { data: response.data, fromEdit: false },
+            state: {
+              data: response.data,
+              fromEdit: false,
+              fromStation: startStation,
+              toStation: endStation,
+            },
           });
         }
       } else {
@@ -216,8 +272,8 @@ const Searchtrain = () => {
                   ))}
                 </select>
               </div>
-              
-            </div><br/>
+            </div>
+            <br />
             <center>
               <button
                 onClick={handlesearchForTrain}

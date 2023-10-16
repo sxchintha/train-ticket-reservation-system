@@ -21,10 +21,14 @@ const Trainlisting = () => {
   const [email, setEmail] = useState(null);
   const [phone, setPhoneNumber] = useState(null);
   const [passengerCount, setPassengerCount] = useState(null);
+  const [pricePerTicket, setPricePerTicket] = useState(null);
+  const [price, setPrice] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   const [trainList, setTrainList] = useState([]);
+  const [reservationDate, setReservationDate] = useState(null);
+  const [reservationTime, setReservationTime] = useState(null);
 
   useEffect(() => {
     if (location.state) {
@@ -43,6 +47,8 @@ const Trainlisting = () => {
       setEmail(location.state.booking.email);
       setPhoneNumber(location.state.booking.phone);
       setPassengerCount(location.state.booking.quentity);
+      setReservationDate(location.state.booking.sheduledate);
+      setReservationTime(location.state.booking.sheduletime);
     }
   }, [location.state]);
 
@@ -58,7 +64,7 @@ const Trainlisting = () => {
 
   const handlecreateBooking = async (e) => {
     e.preventDefault();
-    if (!nic || !passengerCount) {
+    if (!nic || !passengerCount || !reservationDate || !reservationTime) {
       // alert("Please fill in all the fields");
       Swal.fire("Please fill in all the fields");
     } else {
@@ -66,14 +72,14 @@ const Trainlisting = () => {
       const data = {
         id: "",
         nic,
-        sheduledate: date.toISOString(),
-        sheduletime: date.toISOString(),
+        sheduledate: reservationDate,
+        sheduletime: reservationTime,
         quentity: passengerCount,
         trainID: selectedTrainId,
         trainName: selectedTrainName,
-        fromStation: "Galle",
-        toStation: "Colombo Fort",
-        price: "300",
+        fromStation: location.state.fromStation,
+        toStation: location.state.toStation,
+        price: price.toString(),
         createdDate: "2021-10-12",
       };
 
@@ -92,27 +98,19 @@ const Trainlisting = () => {
 
   const handleBookingEdit = async (e) => {
     e.preventDefault();
-    console.log({
-      firstName,
-      lastName,
-      nic,
-      email,
-      phone,
-      passengerCount,
-    });
 
     const date = new Date();
     const data = {
       id: location.state.booking.id,
       nic,
-      sheduledate: date.toISOString(),
-      sheduletime: date.toISOString(),
+      sheduledate: reservationDate,
+      sheduletime: reservationTime,
       quentity: passengerCount,
       trainID: selectedTrainId,
       trainName: selectedTrainName,
-      fromStation: "Galle",
-      toStation: "Colombo Fort",
-      price: "300",
+      fromStation: location.state.fromStation,
+      toStation: location.state.toStation,
+      price: price.toString(),
       createdDate: "2021-10-12",
     };
 
@@ -121,13 +119,22 @@ const Trainlisting = () => {
     const response = await editBooking(location.state.booking.id, data);
     console.log("Response", response);
 
-    if (response.status == 201) {
-      Swal.fire("Booking Created Successfully");
+    if (response.status == 200) {
+      Swal.fire("Booking Edited Successfully");
       navigate("/reservationmanagement");
     } else {
       Swal.fire("Error Creating Booking");
     }
   };
+
+  useEffect(() => {
+    if (passengerCount != null && pricePerTicket != null) {
+      setPrice(passengerCount * pricePerTicket);
+      console.log("Train ", trainList);
+    }
+  }, [passengerCount, pricePerTicket]);
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -249,6 +256,7 @@ const Trainlisting = () => {
             <p className="font text-0.5 text-gray-500">Train Info</p>
           </div>
           {trainList.map((train) => (
+            // console.log("Train", train)
             <div class="flex items-center space-x-2">
               <h1 className="font text-3xl text-gray-700">
                 {train.schedule.stationDistances[0].station}
@@ -345,7 +353,7 @@ const Trainlisting = () => {
                   <td className="px-6 py-4">
                     {train.schedule.arrivalTime.slice(0, -13)}
                   </td>
-                  <td className="px-6 py-4">LKR 300.00</td>
+                  <td className="px-6 py-4">LKR {train.pricePerTicket}</td>
                   <td class="px-6 py-4">
                     <div className="flex items-center">
                       <div
@@ -394,6 +402,7 @@ const Trainlisting = () => {
                       onClick={() => {
                         setSelectedTrainName(train.trainName);
                         setSelectedTrainId(train.trainID);
+                        setPricePerTicket(train.pricePerTicket);
                         setIsModaltrainselectOpen(true);
                       }}
                       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -555,6 +564,9 @@ const Trainlisting = () => {
                         <p className="font text-0.5 text-gray-400">
                           {selectedTrainId} | {selectedTrainName}
                         </p>
+                        <p className="font text-0.5 text-red-800">
+                          LKR {price}
+                        </p>
                       </div>
                       <br />
                       <form className="space-y-6" action="#">
@@ -586,13 +598,50 @@ const Trainlisting = () => {
                             </label>
                             <input
                               type="number"
-                              min={1}
+                              // min={1}
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               placeholder="Enter no Passengers"
                               required
                               value={passengerCount}
                               onChange={(e) => {
                                 setPassengerCount(e.target.value);
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Reservation Date
+                            </label>
+                            <input
+                              type="date"
+                              // min={1}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                              defaultValue={reservationDate}
+                              onChange={(e) => {
+                                setReservationDate(e.target.value);
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="email"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
+                            >
+                              Reservation Time
+                            </label>
+                            <input
+                              type="time"
+                              // min={1}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                              required
+                              defaultValue={reservationTime}
+                              // value={passengerCount}
+                              onChange={(e) => {
+                                setReservationTime(e.target.value);
                               }}
                             />
                           </div>

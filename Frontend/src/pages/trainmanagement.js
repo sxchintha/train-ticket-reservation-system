@@ -240,22 +240,39 @@ const Trainmanagement = () => {
     }
   };
 
-  const handleTrainPublish = async (id) => {
-    const response = await publishTrainSchedule(id);
-    console.log("Publish", response);
-    if (response.status === 200) {
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Train Schedule Published Successfully",
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
-    }
+  const handleTrainPublish = async (id, status) => {
+    Swal.fire({
+      title: `Are you sure you want to ${
+        status == "Published" ? "unpublish" : "publish"
+      } ? `,
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await publishTrainSchedule(id);
+        console.log("Publish", response);
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: `Train Schedule Was ${
+              status == "Published" ? "Unpublished" : "Published"
+            } Successfully`,
+          });
+          getTrains();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        }
+      }
+    });
   };
 
   const handleTrainScheduleEdit = async () => {
@@ -518,12 +535,12 @@ const Trainmanagement = () => {
                     <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
-                          train.status === "available"
+                          train.publishStatus === "Published"
                             ? "bg-green-500"
                             : "bg-red-500"
                         } mr-2`}
                       ></div>
-                      {train.status === "available"
+                      {train.publishStatus === "Published"
                         ? "Published"
                         : "Unpublished"}
                     </div>
@@ -594,7 +611,9 @@ const Trainmanagement = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleTrainPublish(train.id)}
+                      onClick={() =>
+                        handleTrainPublish(train.id, train.publishStatus)
+                      }
                       class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                     >
                       <svg

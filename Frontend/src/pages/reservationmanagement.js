@@ -8,6 +8,7 @@ import {
   getAllBookings,
 } from "../services/bookingManagementService";
 import "../Assets/Styles/start.css";
+import Swal from "sweetalert2";
 
 const Reservationmanagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -17,6 +18,19 @@ const Reservationmanagement = () => {
   const [toStation, setToStation] = useState("");
   const [bookingNic, setBookingNic] = useState("");
   const [booking, setBooking] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (searchTerm != "") {
+      setBookings(
+        bookings.filter((booking) => {
+          return booking.nic.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+      );
+    } else {
+      handleGetAllBookings();
+    }
+  }, [searchTerm]);
 
   const navigate = useNavigate();
 
@@ -32,24 +46,86 @@ const Reservationmanagement = () => {
     });
   };
 
-  const handleCancelBooking = async (id) => {
-    const response = await cancelBooking(id);
-    console.log(response);
-    if (response.status == 200) {
-      alert("Booking Cancelled");
+  const handleCancelBooking = async (id, date) => {
+    console.log("Date", date);
+    const currentDate = new Date();
+
+    const givenDate = new Date(date);
+
+    // Calculate 5 days before the current date
+    const fiveDaysAgo = new Date(givenDate);
+    fiveDaysAgo.setDate(givenDate.getDate() - 5);
+    console.log("Given", givenDate);
+    console.log("Five", fiveDaysAgo);
+    // Compare the given date with 5 days ago
+    if (fiveDaysAgo <= currentDate) {
+      // console.log("The given date is at least 5 days before the current date.");
+      Swal.fire("You can only cancel a booking 5 days before the journey");
     } else {
-      alert("Booking Cancelation Failed");
+      // console.log("The given date is not at least 5 days before the current date.");
+
+      Swal.fire({
+        title: "Are you sure you want to cancel?",
+
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await cancelBooking(id);
+          console.log(response);
+          if (response.status == 200) {
+            // alert("Booking Cancelled");
+            Swal.fire("Booking Cancelled");
+            handleGetAllBookings();
+          } else {
+            // alert("Booking Cancelation Failed");
+            Swal.fire("Booking Cancelation Failed");
+          }
+        }
+      });
     }
   };
 
-  const handledeleteBooking = async (id) => {
-    const response = await deleteBooking(id);
-    console.log(response);
-    if (response.status == 204) {
-      alert("Booking Deleted");
-      handleGetAllBookings();
+  const handledeleteBooking = async (id, date) => {
+    const currentDate = new Date();
+
+    const givenDate = new Date(date);
+
+    // Calculate 5 days before the current date
+    const fiveDaysAgo = new Date(givenDate);
+    fiveDaysAgo.setDate(givenDate.getDate() - 5);
+    console.log("Given", givenDate);
+    console.log("Five", fiveDaysAgo);
+    if (fiveDaysAgo <= currentDate) {
+      Swal.fire("You can only delete a booking 5 days before the journey");
     } else {
-      alert("Booking Deletion Failed");
+      Swal.fire({
+        title: "Are you sure you want to delete?",
+
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await deleteBooking(id);
+          console.log(response);
+          if (response.status == 204) {
+            // alert("Booking Deleted");
+            Swal.fire("Booking Deleted");
+            handleGetAllBookings();
+          } else {
+            // alert("Booking Deletion Failed");
+            Swal.fire("Booking Deletion Failed");
+          }
+        }
+      });
     }
   };
 
@@ -171,6 +247,9 @@ const Reservationmanagement = () => {
                 id="table-search"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-50"
                 placeholder="Search reservations"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                }}
               />
             </div>
             <Link to="/searchtrain">
@@ -252,7 +331,7 @@ const Reservationmanagement = () => {
                   </td>
 
                   <td class="px-6 py-4">
-                  <div className="flex items-center">
+                    <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
                           booking.status === "Reserved"
@@ -289,7 +368,7 @@ const Reservationmanagement = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        handleCancelBooking(booking.id);
+                        handleCancelBooking(booking.id, booking.sheduledate);
                       }}
                       class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                     >
@@ -306,7 +385,7 @@ const Reservationmanagement = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        handledeleteBooking(booking.id);
+                        handledeleteBooking(booking.id, booking.sheduledate);
                       }}
                       class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
@@ -331,7 +410,7 @@ const Reservationmanagement = () => {
               ))}
             </tbody>
           </table>
-          
+
           {isEditModalOpen ? (
             <div className="modal-overlay">
               <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">

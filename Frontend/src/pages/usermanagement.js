@@ -24,6 +24,7 @@ const Usermanagement = () => {
   const [phone, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [status, setStatus] = useState(null);
   const [cookies] = useCookies(["User"]);
 
   const toggleModaluseradd = () => {
@@ -184,8 +185,12 @@ const Usermanagement = () => {
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
         {isDeleteModelOpen ? (
-          <DeleteModel confirm={handleDeactivateTravelerAccount} cance={handleCancel} />
-          ) : null}
+          <DeleteModel
+            confirm={handleDeactivateTravelerAccount}
+            cance={handleCancel}
+            status={status}
+          />
+        ) : null}
         <div className="w-1/6">
           <Dashboard />
         </div>
@@ -382,6 +387,7 @@ const Usermanagement = () => {
                         onClick={() => {
                           setIsDeleteModelOpen(true);
                           setNic(user.nic);
+                          setStatus(user.status);
                         }}
                         class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                       >

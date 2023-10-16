@@ -24,7 +24,7 @@ const createBooking = async (booking) => {
 const cancelBooking = async (id) => {
   try {
     const response = await API.patch(`/Booking/cancel/${id}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.log(error);
   }
