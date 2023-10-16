@@ -43,7 +43,7 @@ function Travelagentsignup() {
       console.log("Sending", data);
 
       const response = await createTravelAgentAccount(data);
-
+      console.log("Response", response);
       if (response != false) {
         Swal.fire("Account Created Successfully");
       } else {

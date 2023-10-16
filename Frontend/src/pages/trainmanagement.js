@@ -4,6 +4,7 @@ import Dashboard from "../component/navBar";
 import "../Assets/Styles/start.css";
 import {
   createTrainSchedule,
+  deleteTrainSchedule,
   editTrainSchedule,
   getAllTrains,
   publishTrainSchedule,
@@ -17,7 +18,7 @@ const Trainmanagement = () => {
   const [trains, settrains] = useState([]);
   const [trainID, settrainID] = useState("");
   const [trainName, settrainName] = useState("");
-  const [pricePerKm, setpricePerKm] = useState("");
+  const [pricePerKM, setpricePerKm] = useState("");
   const [availableSeats, setAvailableSeats] = useState("");
   const [departureTimee, setDepartureTime] = useState("");
   const [arrivalTimee, setArrivalTime] = useState("");
@@ -31,6 +32,13 @@ const Trainmanagement = () => {
   };
 
   const toggleModaltrainedit = () => {
+    setArrivalTime("");
+    setDepartureTime("");
+    setAvailableSeats("");
+    setpricePerKm("");
+    settrainName("");
+    settrainID("");
+    setSections([{ station: "", distanceFromStart: "" }]);
     setIsModaltraineditOpen(!isModaltraineditOpen);
   };
 
@@ -101,36 +109,91 @@ const Trainmanagement = () => {
 
   const createTrain = async (e) => {
     e.preventDefault();
-    const departureTime = new Date(departureTimee).toISOString().toString();
-    console.log("Departure Time", departureTime);
-    const arrivalTime = new Date(arrivalTimee).toISOString().toString();
-    console.log("Arrival Time", arrivalTime);
-    console.log("Sections", sections);
-    const data = {
-      id: "string",
-      trainID,
-      trainName,
-      availableSeats,
-      pricePerKm,
-      pricePerTicket: 0,
-      schedule: {
-        departureTime,
-        arrivalTime,
-        stationDistances: sections,
-      },
-      status: "string",
-      reservations: [],
-    };
 
-    console.log("Data", data);
-    const res = await createTrainSchedule(data);
-    setArrivalTime("");
-    setDepartureTime("");
-    setAvailableSeats("");
-    setpricePerKm("");
-    settrainName("");
-    settrainID("");
-    setSections([{ station: "", distanceFromStart: "" }]);
+    // const checkDepartureTime = new Date(departureTimee);
+    // const checkArrivalTime = new Date(arrivalTimee);
+
+    // console.log("Departure Time", checkDepartureTime);
+    // console.log("Arrival Time", departureTimee == arrivalTimee);
+
+    if (
+      trainID === "" ||
+      trainName === "" ||
+      availableSeats === "" ||
+      pricePerKM === "" ||
+      departureTimee === "" ||
+      arrivalTimee === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill all the fields!",
+      });
+    } else if (departureTimee > arrivalTimee) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Arrival time should be greater than Departure time!",
+      });
+    } else if (departureTimee == arrivalTimee) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Arrival time and Departure time cannot be same!",
+      });
+    } else if (sections.length <= 1) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please add stations!",
+      });
+    } else {
+      const departureTime = new Date(departureTimee).toISOString().toString();
+      console.log("Departure Time", departureTime);
+      const arrivalTime = new Date(arrivalTimee).toISOString().toString();
+      console.log("Arrival Time", arrivalTime);
+      console.log("Sections", sections);
+      const data = {
+        id: "string",
+        trainID,
+        trainName,
+        availableSeats,
+        pricePerKM,
+        pricePerTicket: 0,
+        schedule: {
+          departureTime,
+          arrivalTime,
+          stationDistances: sections,
+        },
+        status: "string",
+        reservations: [],
+      };
+      console.log("Data", data);
+      const res = await createTrainSchedule(data);
+      console.log("Response", res);
+      if (res != undefined && res.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Train Schedule Created Successfully",
+        });
+        setArrivalTime("");
+        setDepartureTime("");
+        setAvailableSeats("");
+        setpricePerKm("");
+        settrainName("");
+        settrainID("");
+        setSections([{ station: "", distanceFromStart: "" }]);
+        setIsModaltrainaddOpen(false);
+        getTrains();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      }
+    }
   };
 
   const handleTrainPublish = async (id) => {
@@ -161,7 +224,7 @@ const Trainmanagement = () => {
       trainID,
       trainName,
       availableSeats,
-      pricePerKm,
+      pricePerKM,
       pricePerTicket: 0,
       schedule: {
         departureTime,
@@ -174,11 +237,13 @@ const Trainmanagement = () => {
     const response = await editTrainSchedule(id, data);
 
     if (response.status === 200) {
+      setIsModaltraineditOpen(false);
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Train Schedule Published Successfully",
+        text: "Train Schedule Edited Successfully",
       });
+      getTrains();
     } else {
       Swal.fire({
         icon: "error",
@@ -188,6 +253,56 @@ const Trainmanagement = () => {
     }
   };
 
+  const handleTrainDelete = async (id, reservations) => {
+    if (reservations.length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Train Schedule Cannot be deleted due to reservations",
+      });
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await deleteTrainSchedule(id);
+          console.log("Delete", res);
+          if (res.status === 204) {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Train Schedule Deleted Successfully",
+            });
+            getTrains();
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+          }
+        }
+      });
+    }
+  };
+
+  function formatDate(inputDate) {
+    const originalDate = new Date(inputDate); // Parse the original date string
+    const year = originalDate.getFullYear();
+    const month = (originalDate.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed, so add 1
+    const day = originalDate.getDate().toString().padStart(2, "0");
+    const hours = originalDate.getUTCHours().toString().padStart(2, "0");
+    const minutes = originalDate.getUTCMinutes().toString().padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+    return formattedDate;
+  }
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -345,8 +460,8 @@ const Trainmanagement = () => {
                   <td className="px-6 py-4">{train.trainID}</td>
                   <td className="px-6 py-4">{train.trainName}</td>
                   <td className="px-6 py-4">{train.availableSeats}</td>
-                  <td className="px-6 py-4">13:23PM</td>
-                  <td className="px-6 py-4">18:15PM</td>
+                  <td className="px-6 py-4">{train.schedule.departureTime}</td>
+                  <td className="px-6 py-4">{train.schedule.arrivalTime}</td>
                   <td className="px-6 py-4">2023-10-12</td>
                   <td class="px-6 py-4">
                     <div class="flex items-center">
@@ -386,6 +501,7 @@ const Trainmanagement = () => {
                     <button
                       type="button"
                       onClick={() => {
+                        console.log("Train", train);
                         setIsModaltraineditOpen(true);
                         setSections(train.schedule.stationDistances);
                         settrainID(train.trainID);
@@ -393,9 +509,16 @@ const Trainmanagement = () => {
                         setTrain(train);
                         settrainName(train.trainName);
                         setAvailableSeats(train.availableSeats);
-                        setpricePerKm(train.pricePerKm);
-                        setDepartureTime(train.schedule.departureTime);
-                        setArrivalTime(train.schedule.arrivalTime);
+                        setpricePerKm(train.pricePerKM);
+                        const getDepTime = formatDate(
+                          train.schedule.departureTime
+                        );
+                        setDepartureTime(getDepTime);
+                        const getArrTime = formatDate(
+                          train.schedule.arrivalTime
+                        );
+                        // console.log("Departure", train.schedule.departureTime);
+                        setArrivalTime(getArrTime);
                       }}
                       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
@@ -427,7 +550,10 @@ const Trainmanagement = () => {
                     </button>
                     <button
                       type="button"
-                      // onClick={handleTrainDelete}
+                      onClick={() => {
+                        handleTrainDelete(train.id, train.reservations);
+                        // console.log("Trians", train.reservations);
+                      }}
                       class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
                       <svg
@@ -545,7 +671,7 @@ const Trainmanagement = () => {
                               }}
                             />
                           </div>
-                          <div>
+                          {/* <div>
                             <label
                               htmlFor="email"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
@@ -562,7 +688,7 @@ const Trainmanagement = () => {
                                 setScheduleDate(e.target.value);
                               }}
                             />
-                          </div>
+                          </div> */}
                           <div>
                             <label
                               htmlFor="email"
@@ -677,7 +803,6 @@ const Trainmanagement = () => {
                                 <input
                                   type="number"
                                   min="0"
-                                  step="0.50"
                                   id={`distance-${index}`}
                                   placeholder="Enter Distance From Start Station"
                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
@@ -865,7 +990,7 @@ const Trainmanagement = () => {
                               }}
                             />
                           </div>
-                          <div>
+                          {/* <div>
                             <label
                               htmlFor="email"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
@@ -875,6 +1000,7 @@ const Trainmanagement = () => {
                             <input
                               type="date"
                               id="date-input"
+                              defaultValue={scheduleDate}
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               onFocus={setMinDate}
                               required
@@ -882,7 +1008,7 @@ const Trainmanagement = () => {
                                 setScheduleDate(e.target.value);
                               }}
                             />
-                          </div>
+                          </div> */}
                           <div>
                             <label
                               htmlFor="email"
@@ -894,6 +1020,7 @@ const Trainmanagement = () => {
                               type="datetime-local"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              defaultValue={departureTimee}
                               onChange={(e) => {
                                 setDepartureTime(e.target.value);
                                 console.log(e.target.value);
@@ -911,6 +1038,7 @@ const Trainmanagement = () => {
                               type="datetime-local"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              defaultValue={arrivalTimee}
                               onChange={(e) => {
                                 setArrivalTime(e.target.value);
                               }}
@@ -926,7 +1054,7 @@ const Trainmanagement = () => {
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
-                              value={pricePerKm}
+                              value={pricePerKM}
                               onChange={(e) => {
                                 setpricePerKm(e.target.value);
                               }}
