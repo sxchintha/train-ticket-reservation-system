@@ -35,7 +35,8 @@ namespace Ticket_Reservation_System.Controllers
                         StationDistances = train.Schedule.StationDistances
                     },
                     Status = train.Status,
-                    Reservations = train.Reservations
+                    Reservations = train.Reservations,
+                    PublishStatus = train.PublishStatus,
                 };
 
                 await _trainService.CreateAsync(newTrain);
@@ -97,13 +98,30 @@ namespace Ticket_Reservation_System.Controllers
             try
             {
                 var trains = await _trainService.GetAllTrainsAsync();
-                return Ok(trains);
+
+                // Modify each train to include the "publishStatus" property in the response
+                var modifiedTrains = trains.Select(train => new
+                {
+                    Id = train.Id,
+                    TrainID = train.TrainID,
+                    TrainName = train.TrainName,
+                    PricePerKM = train.PricePerKM,
+                    PricePerTicket = train.PricePerTicket,
+                    AvailableSeats = train.AvailableSeats,
+                    Schedule = train.Schedule,
+                    Status = train.Status,
+                    Reservations = train.Reservations,
+                    PublishStatus = train.PublishStatus // Include the publishStatus here
+                });
+
+                return Ok(modifiedTrains);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Train>> GetTrainById(string id)
