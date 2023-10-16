@@ -14,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -47,8 +48,11 @@ public interface ApiService {
     @GET("booking/my/{nic}")
     Call<List<Reservation>> getReservations(@Path("nic") String nic);
 
-    @GET("booking")
-    Call<List<Reservation>> getAllReservations();
+    @PATCH("booking/cancel/{id}")
+    Call<JsonObject> cancelReservation(@Path("id") String reservationId);
+
+    @PUT("booking/{id}")
+    Call<JsonObject> updateReservation(@Path("id") String reservationId, @Body Reservation reservation);
 }
 
 

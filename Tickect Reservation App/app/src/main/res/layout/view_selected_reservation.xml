@@ -142,7 +142,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:fontFamily="@font/calibri"
-                            android:text="No of passengers"
+                            android:text="No. of passengers"
                             android:textColor="@color/gray" />
 
                         <TextView
@@ -248,6 +248,71 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/vDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
+                    android:textColorHint="@color/textHint"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/et_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_date_range_light_blue_24dp"
+                        android:drawablePadding="16dp"
+                        android:editable="false"
+                        android:fontFamily="@font/calibri"
+                        android:hint="@string/select_date"
+                        android:inputType="date"
+                        android:maxLines="1"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/vNoOfPassengers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textColorHint="@color/textHint"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/et_no_of_passengers"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_person_outline_black_24dp"
+                        android:drawablePadding="16dp"
+                        android:fontFamily="@font/calibri"
+                        android:hint="@string/passengers"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/btnChangeReservation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/buttonshape"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:fontFamily="@font/calibri"
+                    android:text="@string/change"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
                 <Button
                     android:id="@+id/btnUpdateReservation"
                     android:layout_width="match_parent"
@@ -260,11 +325,31 @@
                     android:background="@drawable/buttonshape"
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="@font/calibri"
-                    android:text="@string/change_booking"
+                    android:text="Update"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnConfirmReservation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/buttonshape"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:fontFamily="@font/calibri"
+                    android:text="@string/confirm"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/btnCancelReservation"
@@ -287,5 +372,25 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/blurryScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/blurryBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/white" />
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

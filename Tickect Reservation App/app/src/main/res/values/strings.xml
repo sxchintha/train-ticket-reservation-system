@@ -30,6 +30,7 @@
     <string name="booking_details">Reservation Details</string>
     <string name="change_booking">Update Reservation</string>
     <string name="cancel_booking">Cancel Reservation</string>
+    <string name="change">Change</string>
     <string-array name="stations">
         <item>Alawwa</item>
         <item>Ambalangoda</item>

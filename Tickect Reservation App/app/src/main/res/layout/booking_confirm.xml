@@ -151,7 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:fontFamily="@font/calibri"
-                            android:text="No of passengers"
+                            android:text="No. of passengers"
                             android:textColor="@color/gray" />
 
                         <TextView

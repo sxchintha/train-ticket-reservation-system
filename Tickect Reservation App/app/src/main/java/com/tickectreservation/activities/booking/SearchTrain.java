@@ -123,7 +123,7 @@ public class SearchTrain extends AppCompatActivity {
                 if (dayOfMonth < 10) {
                     dayStr = "0" + dayStr;
                 }
-                if (monthOfYear < 10) {
+                if (monthOfYear < 9) {
                     monthStr = "0" + monthStr;
                 }
 
