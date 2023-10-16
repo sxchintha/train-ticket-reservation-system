@@ -167,7 +167,7 @@ const Trainmanagement = () => {
     };
 
     console.log("Data", data);
-    const res = await createTrainSchedule(data);
+    // const res = await createTrainSchedule(data);
     setArrivalTime("");
     setDepartureTime("");
     setAvailableSeats("");
@@ -402,12 +402,12 @@ const Trainmanagement = () => {
                     <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
-                          train.publishStatus === "Published"
+                          train.status === "available"
                             ? "bg-green-500"
                             : "bg-red-500"
                         } mr-2`}
                       ></div>
-                      {train.publishStatus === "Published"
+                      {train.status === "available"
                         ? "Published"
                         : "Unpublished"}
                     </div>
@@ -1191,7 +1191,7 @@ const Trainmanagement = () => {
                                 </th>
                                 <td className="px-6 py-4">{station.station}</td>
                                 <td className="px-6 py-4">
-                                  {station.distanceFromStart}
+                                  {station.distanceFromStart} KM
                                 </td>
                               </tr>
                             ))}

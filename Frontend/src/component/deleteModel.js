@@ -1,7 +1,6 @@
 import React from "react";
 
-const DeleteModel = ({ confirm, cance, user }) => {
-  const isUserActive = user.status === "active";
+const DeleteModel = ({ confirm, cance }) => {
   return (
     <div
       class="relative z-10"
