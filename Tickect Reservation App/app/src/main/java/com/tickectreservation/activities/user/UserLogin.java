@@ -50,7 +50,7 @@ public class UserLogin extends AppCompatActivity {
             finish();
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         setContentView(R.layout.user_login);
 
         etNic = findViewById(R.id.etNic);

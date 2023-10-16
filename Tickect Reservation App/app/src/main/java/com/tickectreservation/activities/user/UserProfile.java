@@ -3,10 +3,12 @@ package com.tickectreservation.activities.user;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tickectreservation.R;
+import com.tickectreservation.activities.reservation.MyReservations;
 import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.User;
@@ -26,6 +29,7 @@ public class UserProfile extends AppCompatActivity {
 
     TextView tvFirstName, tvLastName, tvNic, tvEmail, tvPhone, btnDeactivateAccount;
     ImageView btnGoBack, btnLogout;
+    Button btnEditProfile, btnViewReservations;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,7 @@ public class UserProfile extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", Context.MODE_PRIVATE);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         setContentView(R.layout.user_profile);
 
         tvFirstName = findViewById(R.id.tvFirstName);
@@ -86,6 +90,14 @@ public class UserProfile extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        });
+
+
+        // view reservations
+        btnViewReservations = findViewById(R.id.btnViewReservations);
+        btnViewReservations.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyReservations.class);
+            startActivity(intent);
         });
 
         // go back

@@ -55,7 +55,7 @@ public class SearchTrain extends AppCompatActivity {
         String userFirstName = sharedPreferences.getString("user_firstName", "");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         setContentView(R.layout.search_train);
 
         tv_user_firstName = findViewById(R.id.tvUserFirstName);
