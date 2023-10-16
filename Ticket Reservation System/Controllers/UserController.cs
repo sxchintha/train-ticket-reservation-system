@@ -37,7 +37,20 @@ namespace Ticket_Reservation_System.Controllers
             try
             {
                 var Users = await _userService.GetAllUsersAsync();
-                return Ok(Users);
+
+                // Modify each user to include the "status" property in the response
+                var modifiedUsers = Users.Select(user => new
+                {
+                    Nic = user.Nic,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Password = user.Password,
+                    Status = user.Status // Include the status here
+                });
+
+                return Ok(modifiedUsers);
             }
             catch (Exception ex)
             {
