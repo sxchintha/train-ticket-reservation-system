@@ -17,6 +17,7 @@ const Trainlisting = () => {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [nic, setNic] = useState(null);
+  const [stations, setStations] = useState([]);
   const [email, setEmail] = useState(null);
   const [phone, setPhoneNumber] = useState(null);
   const [passengerCount, setPassengerCount] = useState(null);
@@ -57,20 +58,9 @@ const Trainlisting = () => {
 
   const handlecreateBooking = async (e) => {
     e.preventDefault();
-    if (
-      !firstName ||
-      !lastName ||
-      !nic ||
-      !email ||
-      !phone ||
-      !passengerCount
-    ) {
+    if (!nic || !passengerCount) {
       // alert("Please fill in all the fields");
       Swal.fire("Please fill in all the fields");
-    } else if (!isValidEmail(email)) {
-      Swal.fire("Please enter a valid email");
-    } else if (!isValidPhoneNumber(phone)) {
-      Swal.fire("Please enter a valid phone number");
     } else {
       const date = new Date();
       const data = {
@@ -360,12 +350,12 @@ const Trainlisting = () => {
                     <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
-                          train.schedule.status === "available"
+                          train.status === "available"
                             ? "bg-green-500"
                             : "bg-red-500"
                         } mr-2`}
                       ></div>
-                      {train.schedule.status === "available"
+                      {train.status === "available"
                         ? "Available"
                         : "Unavailable"}
                     </div>
@@ -373,7 +363,10 @@ const Trainlisting = () => {
                   <td className="px-6 py-4">
                     <button
                       type="button"
-                      onClick={toggleModalstations}
+                      onClick={() => {
+                        setStations(train.schedule.stationDistances);
+                        setIsModalstationsOpen(true);
+                      }}
                       class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
                     >
                       <svg
@@ -484,16 +477,20 @@ const Trainlisting = () => {
                           </thead>
                           <br />
                           <tbody>
-                            <tr className="bg-white border-b">
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                              >
-                                01
-                              </th>
-                              <td className="px-6 py-4">Colombo Fort</td>
-                              <td className="px-6 py-4">0 KM</td>
-                            </tr>
+                            {stations.map((station, index) => (
+                              <tr className="bg-white border-b">
+                                <th
+                                  scope="row"
+                                  className="px-6 py-4 font-medium text-black whitespace-nowrap"
+                                >
+                                  {index + 1}
+                                </th>
+                                <td className="px-6 py-4">{station.station}</td>
+                                <td className="px-6 py-4">
+                                  {station.distanceFromStart} KM
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
@@ -555,30 +552,6 @@ const Trainlisting = () => {
                             Train Info
                           </p>
                         </div>
-                        <div class="flex items-center space-x-2">
-                          <h1 className="font text-2xl text-gray-700">Galle</h1>
-                          <svg
-                            class="w-5 h-5 text-gray-700 dark:text-gray-700"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 8 14"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
-                            />
-                          </svg>
-                          <h1 className="font text-2xl text-gray-700">
-                            Colombo Fort
-                          </h1>
-                        </div>
-                        <p className="font text-0.5 text-gray-500">
-                          Date - 2023-10-12
-                        </p>
                         <p className="font text-0.5 text-gray-400">
                           {selectedTrainId} | {selectedTrainName}
                         </p>
@@ -586,42 +559,6 @@ const Trainlisting = () => {
                       <br />
                       <form className="space-y-6" action="#">
                         <div className="grid grid-cols-2 gap-5">
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
-                              First Name
-                            </label>
-                            <input
-                              type="text"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              placeholder="Enter Traveler First Name"
-                              required
-                              value={firstName}
-                              onChange={(e) => {
-                                setFirstName(e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
-                              Last Name
-                            </label>
-                            <input
-                              type="text"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              placeholder="Enter Traveler Last Name"
-                              required
-                              value={lastName}
-                              onChange={(e) => {
-                                setLastName(e.target.value);
-                              }}
-                            />
-                          </div>
                           <div>
                             <label
                               htmlFor="email"
@@ -637,42 +574,6 @@ const Trainlisting = () => {
                               value={nic}
                               onChange={(e) => {
                                 setNic(e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
-                              Email
-                            </label>
-                            <input
-                              type="email"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              placeholder="Enter Traveler Email"
-                              required
-                              value={email}
-                              onChange={(e) => {
-                                setEmail(e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
-                              Phone
-                            </label>
-                            <input
-                              type="tel"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              placeholder="Enter Traveler Phone"
-                              required
-                              value={phone}
-                              onChange={(e) => {
-                                setPhoneNumber(e.target.value);
                               }}
                             />
                           </div>
