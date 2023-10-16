@@ -27,6 +27,18 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
+                // Check if the user already has 4 or more bookings
+                int bookingCount = await _bookingService.GetBookingCountByNicAsync(booking.Nic);
+
+                if (bookingCount >= 4)
+                {
+                    var errorResponse = new
+                    {
+                        error = "You have reached the maximum limit of bookings (4) for this NIC."
+                    };
+
+                    return BadRequest(errorResponse);
+                }
 
                 var createdDate = DateTime.Now;
                 var scheduledDate = DateTime.Parse(booking.Sheduledate);
@@ -62,6 +74,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
 
 
         //Update booking by booking id
