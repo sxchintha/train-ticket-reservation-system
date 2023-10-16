@@ -203,17 +203,8 @@ const Reservationmanagement = () => {
                 <th scope="col" className="px-6 py-3">
                   Train ID
                 </th>
-                {/* <th scope="col" className="px-6 py-3">
-                  First Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Last Name
-                </th> */}
                 <th scope="col" className="px-6 py-3">
                   NIC
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Phone
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Passengers
@@ -246,22 +237,30 @@ const Reservationmanagement = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-black whitespace-nowrap"
                   >
-                    {booking.id}
+                    {index + 1}
                   </th>
-                  <td className="px-6 py-4">{booking.trainName}</td>
-                  {/* <td className="px-6 py-4">{booking.firstName}</td>
-                  <td className="px-6 py-4">{booking.lastName}</td> */}
+                  <td className="px-6 py-4">{booking.trainID}</td>
                   <td className="px-6 py-4">{booking.nic}</td>
-                  <td className="px-6 py-4">{booking.phone}</td>
                   <td className="px-6 py-4">{booking.quentity}</td>
                   <td className="px-6 py-4">{booking.fromStation}</td>
                   <td className="px-6 py-4">{booking.toStation}</td>
-                  <td className="px-6 py-4">{booking.createdDate}</td>
-                  <td className="px-6 py-4">{booking.price}</td>
+                  <td className="px-6 py-4">
+                    {booking.sheduledate.slice(0, 10)}
+                  </td>
+                  <td className="px-6 py-4">
+                    LKR {parseFloat(booking.price).toFixed(2)}
+                  </td>
+
                   <td class="px-6 py-4">
-                    <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                      Active
+                  <div className="flex items-center">
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full ${
+                          booking.status === "Reserved"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        } mr-2`}
+                      ></div>
+                      {booking.status === "Reserved" ? "Reserved" : "Canceled"}
                     </div>
                   </td>
                   <td class="px-6 py-4">
@@ -282,9 +281,9 @@ const Reservationmanagement = () => {
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
-                        viewBox="0 0 20 18"
+                        viewBox="0 0 20 20"
                       >
-                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 8v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0Zm12 7h-1v1a1 1 0 0 1-2 0v-1H8a1 1 0 0 1 0-2h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 0 1 0 2Z" />
                       </svg>
                     </button>
                     <button
@@ -292,16 +291,16 @@ const Reservationmanagement = () => {
                       onClick={() => {
                         handleCancelBooking(booking.id);
                       }}
-                      class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-blue-800"
+                      class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                     >
                       <svg
                         class="w-3 h-3 text-gray-800 dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
-                        viewBox="0 0 20 18"
+                        viewBox="0 0 20 20"
                       >
-                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
                       </svg>
                     </button>
                     <button
@@ -309,16 +308,22 @@ const Reservationmanagement = () => {
                       onClick={() => {
                         handledeleteBooking(booking.id);
                       }}
-                      class="text-white bg-blue-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     >
                       <svg
                         class="w-3 h-3 text-gray-800 dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 18"
+                        fill="none"
+                        viewBox="0 0 18 20"
                       >
-                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z" />
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                        />
                       </svg>
                     </button>
                   </td>
@@ -326,6 +331,7 @@ const Reservationmanagement = () => {
               ))}
             </tbody>
           </table>
+          
           {isEditModalOpen ? (
             <div className="modal-overlay">
               <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">

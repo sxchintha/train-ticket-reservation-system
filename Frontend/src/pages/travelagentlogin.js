@@ -46,7 +46,7 @@ const Travelagentlogin = (props) => {
         navigate("/selectmanagement");
         // props.history.push("/dashboard");
       } else {
-        Swal.fire("Error Creating Account");
+        Swal.fire("Error Signin Account");
       }
     }
   };
@@ -71,6 +71,7 @@ const Travelagentlogin = (props) => {
               </label>
               <input
                 placeholder="Enter Your Email"
+                type="email"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -79,6 +80,7 @@ const Travelagentlogin = (props) => {
               </label>
               <input
                 placeholder="Enter Your Passeord"
+                type="password"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 onChange={(e) => setPassword(e.target.value)}
               />

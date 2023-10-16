@@ -44,7 +44,7 @@ const BackOfficerLogin = (props) => {
         navigate("/selectmanagement");
         // props.history.push("/dashboard");
       } else {
-        Swal.fire("Error Creating Account");
+        Swal.fire("Error Signin Account");
       }
 
       // All validations passed, call the API
@@ -62,7 +62,6 @@ const BackOfficerLogin = (props) => {
             Office Sign In
           </h1>
           <form
-            onSubmit="#"
             className="text-white  justify-center   items-center"
           >
             <div className="justify-start items-start flex flex-col w-96  ">
@@ -71,6 +70,7 @@ const BackOfficerLogin = (props) => {
               </label>
               <input
                 placeholder="Enter Your Email"
+                type="email"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -79,6 +79,7 @@ const BackOfficerLogin = (props) => {
               </label>
               <input
                 placeholder="Enter Your Passeord"
+                type="password"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 onChange={(e) => setPassword(e.target.value)}
               />
