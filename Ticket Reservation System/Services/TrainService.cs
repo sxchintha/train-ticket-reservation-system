@@ -70,6 +70,9 @@ namespace Ticket_Reservation_System.Services
         public async Task<Train?> GetTrainByIdAsync(string id) =>
             await _trainsCollection.Find(train => train.Id == id).FirstOrDefaultAsync();
 
+        public async Task<Train?> GetTrainByTrainIdAsync(string trainId) =>
+            await _trainsCollection.Find(train => train.TrainID == trainId).FirstOrDefaultAsync();
+
         public async Task DeleteTrainAsync(string id) =>
             await _trainsCollection.DeleteOneAsync(train => train.Id == id);
 
