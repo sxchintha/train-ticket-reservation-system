@@ -16,6 +16,7 @@ import { useCookies } from "react-cookie";
 const Usermanagement = () => {
   const [isModaluseraddOpen, setIsModaluseraddOpen] = useState(false);
   const [isModalusereditOpen, setIsModalusereditOpen] = useState(false);
+  const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [nic, setNic] = useState(null);
   const [firstName, setFirstName] = useState(null);
@@ -23,7 +24,6 @@ const Usermanagement = () => {
   const [phone, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [cookies] = useCookies(["User"]);
 
   const toggleModaluseradd = () => {
@@ -165,7 +165,7 @@ const Usermanagement = () => {
     const response = await deactivateTravelerAccount(nic);
     console.log("Reessss", response);
     if (response == 200) {
-      Swal.fire("Account Deactivated Successfully");
+      Swal.fire("Account Modified Successfully");
       getAll();
       setNic(null);
       setIsDeleteModelOpen(false);
@@ -176,12 +176,16 @@ const Usermanagement = () => {
     }
   };
 
+  const handleCancel = () => {
+    setIsDeleteModelOpen(false);
+  };
+
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
         {isDeleteModelOpen ? (
-          <DeleteModel confirm={handleDeactivateTravelerAccount} />
-        ) : null}
+          <DeleteModel confirm={handleDeactivateTravelerAccount} cance={handleCancel} />
+          ) : null}
         <div className="w-1/6">
           <Dashboard />
         </div>
@@ -264,7 +268,7 @@ const Usermanagement = () => {
                 type="text"
                 id="table-search"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-50"
-                placeholder="Search train schedules"
+                placeholder="Search travelers"
               />
             </div>
             <button
@@ -324,7 +328,7 @@ const Usermanagement = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-black whitespace-nowrap"
                   >
-                    {index}
+                    {index + 1}
                   </th>
                   <td className="px-6 py-4">{user.firstName}</td>
                   <td className="px-6 py-4">{user.lastName}</td>
@@ -332,12 +336,15 @@ const Usermanagement = () => {
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.phone}</td>
                   <td class="px-6 py-4">
-                    {/* {
-                      
-                    } */}
-                    <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div>{" "}
-                      Active
+                    <div className="flex items-center">
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full ${
+                          user.status === "active"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        } mr-2`}
+                      ></div>
+                      {user.status === "active" ? "Active" : "Inactive"}
                     </div>
                   </td>
                   <td className="px-6 py-4 gap-0 flex">
@@ -467,7 +474,7 @@ const Usermanagement = () => {
                           <input
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler First Name"
+                            placeholder="Enter Traveler's First Name"
                             required
                             onChange={(e) => setFirstName(e.target.value)}
                           />
@@ -482,7 +489,7 @@ const Usermanagement = () => {
                           <input
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Last Name"
+                            placeholder="Enter Traveler's Last Name"
                             required
                             onChange={(e) => setLastName(e.target.value)}
                           />
@@ -497,7 +504,7 @@ const Usermanagement = () => {
                           <input
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler NIC"
+                            placeholder="Enter Traveler's NIC"
                             required
                             onChange={(e) => setNic(e.target.value)}
                           />
@@ -512,7 +519,7 @@ const Usermanagement = () => {
                           <input
                             type="email"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Email"
+                            placeholder="Enter Traveler's Email"
                             required
                             onChange={(e) => setEmail(e.target.value)}
                           />
@@ -525,9 +532,9 @@ const Usermanagement = () => {
                             Phone
                           </label>
                           <input
-                            type="text"
+                            type="tel"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Phone"
+                            placeholder="Enter Traveler's Phone"
                             required
                             onChange={(e) => setPhoneNumber(e.target.value)}
                           />
@@ -613,7 +620,7 @@ const Usermanagement = () => {
                           <input
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler First Name"
+                            placeholder="Enter Traveler's First Name"
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -629,7 +636,7 @@ const Usermanagement = () => {
                           <input
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Last Name"
+                            placeholder="Enter Traveler's Last Name"
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
@@ -644,8 +651,8 @@ const Usermanagement = () => {
                           </label>
                           <input
                             type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler NIC"
+                            className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
+                            placeholder="Enter Traveler's NIC"
                             required
                             value={nic}
                             disabled
@@ -661,7 +668,7 @@ const Usermanagement = () => {
                           <input
                             type="email"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Email"
+                            placeholder="Enter Traveler's Email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -677,64 +684,16 @@ const Usermanagement = () => {
                           <input
                             type="tel"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            placeholder="Enter Traveler Phone"
+                            placeholder="Enter Traveler's Phone"
                             required
                             value={phone}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                         </div>
-                        {/* <div>
-                          <label
-                            htmlFor="password"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                          >
-                            Your password
-                          </label>
-                          <input
-                            type="password"
-                            placeholder="Enter Password"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                            required
-                          />
-                        </div> */}
-                        <div className="flex items-center">
-                          {/* <label
-                            htmlFor="toggle"
-                            className="mr-2 text-sm font-medium text-gray-900 dark:text-dark"
-                          >
-                            {isActive ? "Activate" : "Deactivate"}
-                          </label> */}
-                          {/* <div className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggle"
-                              className="sr-only"
-                              onChange={handleToggle}
-                              checked={isActive}
-                            />
-                            <label
-                              htmlFor="toggle"
-                              className={`${
-                                isActive ? "bg-blue-600" : "bg-gray-300"
-                              } relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                isActive
-                                  ? "focus:ring-blue-400"
-                                  : "focus:ring-gray-400"
-                              }`}
-                            >
-                              <span
-                                className={`${
-                                  isActive ? "translate-x-5" : "translate-x-1"
-                                } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
-                              />
-                            </label>
-                          </div> */}
-                        </div>
                         <button
                           type="submit"
                           onClick={(e) => {
                             editTraveler(e);
-                            // toggleModaluseredit()
                           }}
                           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >

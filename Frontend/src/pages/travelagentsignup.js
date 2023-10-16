@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
 import { isValidEmail, isValidPhoneNumber } from "../utils/validations";
-import { createBackOfficerAccount } from "../services/userManagementServices";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { createTravelAgentAccount } from "../services/travelAgentManagementService";
 function Travelagentsignup() {
@@ -10,6 +9,7 @@ function Travelagentsignup() {
   const [phone, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     // check if all the use states are not null
@@ -46,6 +46,7 @@ function Travelagentsignup() {
 
       if (response != false) {
         Swal.fire("Account Created Successfully");
+        navigate("/travelagentlogin");
       } else {
         Swal.fire("Error Creating Account");
       }
@@ -64,6 +65,7 @@ function Travelagentsignup() {
               </label>
               <input
                 placeholder="Enter Your First Name"
+                type="text"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 required
                 onChange={(e) => setFirstName(e.target.value)}
@@ -73,6 +75,7 @@ function Travelagentsignup() {
               </label>
               <input
                 placeholder="Enter Your Last Name"
+                type="text"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 required
                 onChange={(e) => setLastName(e.target.value)}
@@ -82,6 +85,7 @@ function Travelagentsignup() {
               </label>
               <input
                 placeholder="Enter Your Phone"
+                type="tel"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 required
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -91,6 +95,7 @@ function Travelagentsignup() {
               </label>
               <input
                 placeholder="Enter Your Email"
+                type="email"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 required
                 onChange={(e) => setEmail(e.target.value)}
@@ -100,6 +105,7 @@ function Travelagentsignup() {
               </label>
               <input
                 placeholder="Enter Your Password"
+                type="password"
                 className="p-3 rounded-md my-3 outline-none text-black w-full"
                 required
                 onChange={(e) => setPassword(e.target.value)}
@@ -113,7 +119,7 @@ function Travelagentsignup() {
                 Sign Up
               </button>
 
-              <Link to="/backOfficerLogin">
+              <Link to="/travelagentlogin">
                 <p className="pt-6 ">
                   Already have an account?
                   <span className="underline px-2 font-semibold">

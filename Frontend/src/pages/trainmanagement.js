@@ -47,13 +47,7 @@ const Trainmanagement = () => {
   }
 
   const [selectedOption, setSelectedOption] = useState("");
-  const options = [
-    { field1: "Select a Station" },
-    { field1: "Galle" },
-    { field1: "Colombo Fort" },
-    { field1: "Jaffna" },
-  ];
-
+  const options = [...["Alawwa", "Ambalangoda", "Anuradhapura", "Badulla", "Batticaloa", "Beliatta", "Chilaw", "Colombo Fort", "Maradana", "Dandugama", "Dematagoda", "Ella", "Galle", "Gampaha", "Haputale", "Hikkaduwa", "Idalgashinna", "Jaffna", "Kadugannawa", "Kalutara South", "Kandy", "Katugastota", "Kilinochchi", "Kollupitiya", "Kurunegala", "Maharagama", "Matale", "Matara", "Moratuwa", "Mount Lavinia", "Nanu Oya", "Narahenpita", "Negombo", "Nugegoda", "Pannipitiya", "Peradeniya", "Periyaneelavanai", "Polgahawela", "Polonnaruwa", "Puttalam", "Rambukkana", "Ratmalana", "Ratnapura", "Thalaimannar", "Trincomalee", "Valachchenai", "Vavuniya"].map(station => ({ field1: station }) )];
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -309,18 +303,24 @@ const Trainmanagement = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-black whitespace-nowrap"
                   >
-                    {index}
+                    {index + 1}
                   </th>
                   <td className="px-6 py-4">{train.trainID}</td>
                   <td className="px-6 py-4">{train.trainName}</td>
                   <td className="px-6 py-4">{train.availableSeats}</td>
-                  <td className="px-6 py-4">13:23PM</td>
-                  <td className="px-6 py-4">18:15PM</td>
-                  <td className="px-6 py-4">2023-10-12</td>
+                  <td className="px-6 py-4">{train.schedule.departureTime.slice(11, -4)}</td>
+                  <td className="px-6 py-4">{train.schedule.arrivalTime.slice(11, -4)}</td>
+                  <td className="px-6 py-4">{train.schedule.arrivalTime.slice(0, -13)}</td>
                   <td class="px-6 py-4">
-                    <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                      Active
+                  <div className="flex items-center">
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full ${
+                          train.status === "available"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        } mr-2`}
+                      ></div>
+                      {train.status === "available" ? "Active" : "Inactive"}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -505,24 +505,6 @@ const Trainmanagement = () => {
                               htmlFor="email"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
                             >
-                              Schedule Date
-                            </label>
-                            <input
-                              type="date"
-                              id="date-input"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              onFocus={setMinDate}
-                              required
-                              onChange={(e) => {
-                                setScheduleDate(e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
                               Start Time
                             </label>
                             <input
@@ -561,26 +543,13 @@ const Trainmanagement = () => {
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                               required
+                              type="number"
+                              placeholder="Enter Price Per KM"
                               onChange={(e) => {
                                 setpricePerKm(e.target.value);
                               }}
                             />
                           </div>
-                          {/* <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-dark"
-                            >
-                              Price Per Ticket
-                            </label>
-                            <input
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
-                              required
-                              onChange={(e)=>{
-                                setpricePerKm(e.target.value);
-                              }}
-                            />
-                          </div> */}
                         </div>
 
                         <div className="w-full">

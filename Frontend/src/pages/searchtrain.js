@@ -40,14 +40,8 @@ const Searchtrain = () => {
     // };
   }, []);
 
-  const [selectedOption, setSelectedOption] = useState("Select a station");
-  const options = [
-    // { field1: "Select a Station" },
-    { field1: "Galle" },
-    { field1: "Colombo" },
-    { field1: "Jaffna" },
-    { field1: "Kalutara" },
-  ];
+  const [selectedOption, setSelectedOption] = useState("");
+  const options = [...["Alawwa", "Ambalangoda", "Anuradhapura", "Badulla", "Batticaloa", "Beliatta", "Chilaw", "Colombo Fort", "Maradana", "Dandugama", "Dematagoda", "Ella", "Galle", "Gampaha", "Haputale", "Hikkaduwa", "Idalgashinna", "Jaffna", "Kadugannawa", "Kalutara South", "Kandy", "Katugastota", "Kilinochchi", "Kollupitiya", "Kurunegala", "Maharagama", "Matale", "Matara", "Moratuwa", "Mount Lavinia", "Nanu Oya", "Narahenpita", "Negombo", "Nugegoda", "Pannipitiya", "Peradeniya", "Periyaneelavanai", "Polgahawela", "Polonnaruwa", "Puttalam", "Rambukkana", "Ratmalana", "Ratnapura", "Thalaimannar", "Trincomalee", "Valachchenai", "Vavuniya"].map(station => ({ field1: station }) )];
 
   const initialFormState = {
     fromStation: "",
@@ -229,6 +223,7 @@ const Searchtrain = () => {
                   name="toStation"
                   defaultValue={"Select a Station"}
                   onChange={(e) => setEndStation(e.target.value)}
+                  required
                 >
                   <option value="Select a Station" disabled>
                     Select a Station
@@ -250,6 +245,7 @@ const Searchtrain = () => {
                 <input
                   type="date"
                   name="date"
+                  required
                   id="date-input"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                 />
@@ -265,6 +261,7 @@ const Searchtrain = () => {
                   type="number"
                   name="numberOfPassengers"
                   min={1}
+                  required
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-dark"
                   placeholder="Enter No of Passengers"
                 />

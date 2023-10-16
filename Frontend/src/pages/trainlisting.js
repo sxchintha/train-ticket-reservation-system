@@ -258,26 +258,40 @@ const Trainlisting = () => {
             </svg>
             <p className="font text-0.5 text-gray-500">Train Info</p>
           </div>
-          <div class="flex items-center space-x-2">
-            <h1 className="font text-3xl text-gray-700">Galle</h1>
-            <svg
-              class="w-6 h-6 text-gray-700 dark:text-gray-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 8 14"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
-              />
-            </svg>
-            <h1 className="font text-3xl text-gray-700">Colombo Fort</h1>
-          </div>
-          <p className="font text-0.5 text-gray-500">Date - 2023-10-12</p>
+          {trainList.map((train) => (
+            <div class="flex items-center space-x-2">
+              <h1 className="font text-3xl text-gray-700">
+                {train.schedule.stationDistances[0].station}
+              </h1>
+              <svg
+                class="w-6 h-6 text-gray-700 dark:text-gray-700"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 8 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
+                />
+              </svg>
+              <h1 className="font text-3xl text-gray-700">
+                {
+                  train.schedule.stationDistances[
+                    train.schedule.stationDistances.length - 1
+                  ].station
+                }
+              </h1>
+            </div>
+          ))}
+          {trainList.map((train) => (
+            <p className="font text-0.5 text-gray-500">
+              Date - {train.schedule.arrivalTime.slice(0, -13)}
+            </p>
+          ))}
           <p className="font text-0.5 text-gray-400">
             Select a train and proceed
           </p>
@@ -327,19 +341,33 @@ const Trainlisting = () => {
                 // console.log("Train", train);
                 <tr className="bg-white border-b">
                   <th scope="col" className="px-6 py-3">
-                    {index}
+                    {index + 1}
                   </th>
                   <td className="px-6 py-4">{train.trainID}</td>
                   <td className="px-6 py-4">{train.trainName}</td>
                   <td className="px-6 py-4">{train.availableSeats}</td>
-                  <td className="px-6 py-4">{train.schedule.departureTime}</td>
-                  <td className="px-6 py-4">{train.schedule.arrivalTime}</td>
-                  <td className="px-6 py-4">2023-10-12</td>
+                  <td className="px-6 py-4">
+                    {train.schedule.departureTime.slice(11, -4)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {train.schedule.arrivalTime.slice(11, -4)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {train.schedule.arrivalTime.slice(0, -13)}
+                  </td>
                   <td className="px-6 py-4">LKR 300.00</td>
                   <td class="px-6 py-4">
-                    <div class="flex items-center">
-                      <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                      Active
+                    <div className="flex items-center">
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full ${
+                          train.schedule.status === "available"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        } mr-2`}
+                      ></div>
+                      {train.schedule.status === "available"
+                        ? "Available"
+                        : "Unavailable"}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -465,16 +493,6 @@ const Trainlisting = () => {
                               </th>
                               <td className="px-6 py-4">Colombo Fort</td>
                               <td className="px-6 py-4">0 KM</td>
-                            </tr>
-                            <tr className="bg-white border-b">
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium text-black whitespace-nowrap"
-                              >
-                                02
-                              </th>
-                              <td className="px-6 py-4">Kalutara</td>
-                              <td className="px-6 py-4">50 KM</td>
                             </tr>
                           </tbody>
                         </table>
