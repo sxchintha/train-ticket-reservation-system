@@ -91,8 +91,8 @@ namespace Ticket_Reservation_System.Services
 
         public async Task<Booking?> GetBookingByIdAsync(string id) =>
             await _bookingsCollection.Find(Booking => Booking.Id == id).FirstOrDefaultAsync();
-        public async Task<Booking?> GetBookingsByNicAsync(string nic) =>
-            await _bookingsCollection.Find(Booking => Booking.Nic == nic).FirstOrDefaultAsync();
+        public async Task<IEnumerable<Booking>> GetBookingsByNicAsync(string nic) =>
+            await _bookingsCollection.Find(Booking => Booking.Nic == nic).ToListAsync();
 
         public async Task DeleteBookingAsync(string id) =>
             await _bookingsCollection.DeleteOneAsync(Booking => Booking.Id == id);
