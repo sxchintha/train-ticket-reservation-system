@@ -28,9 +28,9 @@ const publishTrainSchedule = async (id) => {
   } catch (error) {}
 };
 
-const editTrainSchedule = async (id) => {
+const editTrainSchedule = async (id, data) => {
   try {
-    const response = await API.put(`/Train/${id}`);
+    const response = await API.put(`/Train/${id}`, data);
     return response;
   } catch (error) {}
 };
