@@ -2,6 +2,7 @@ package com.tickectreservation.activities.booking;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tickectreservation.R;
+import com.tickectreservation.activities.reservation.MyReservations;
 import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.Reservation;
@@ -117,7 +119,9 @@ public class BookingConfirm extends AppCompatActivity {
                                     if (response.isSuccessful()) {
                                         System.out.println("Reservation created successfully");
                                         Toast.makeText(getApplicationContext(), "Reservation created successfully", Toast.LENGTH_SHORT).show();
-                                        finish();
+                                        Intent intent = new Intent(getApplicationContext(), SearchTrain.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
                                     } else {
                                         System.out.println("Error in creating reservation: " + response);
                                     }

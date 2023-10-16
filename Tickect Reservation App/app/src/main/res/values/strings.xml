@@ -26,6 +26,7 @@
     <string name="password">Password</string>
     <string name="no_trains_available">No Trains Available</string>
     <string name="update_profile">Update Profile</string>
+    <string name="no_reservations_available">No reservations available!</string>
     <string-array name="stations">
         <item>Ahangama</item>
         <item>Ahungalla</item>
