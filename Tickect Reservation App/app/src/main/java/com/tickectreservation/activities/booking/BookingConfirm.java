@@ -1,5 +1,7 @@
 package com.tickectreservation.activities.booking;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
@@ -19,6 +21,7 @@ import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.Reservation;
 import com.tickectreservation.data.models.Train;
+import com.tickectreservation.data.models.User;
 
 import java.lang.reflect.Type;
 
@@ -36,7 +39,7 @@ public class BookingConfirm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         setContentView(R.layout.booking_confirm);
 
         String serializedTrain = getIntent().getStringExtra("train");
@@ -87,32 +90,50 @@ public class BookingConfirm extends AppCompatActivity {
         // Confirm booking
         btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
         btnConfirmBooking.setOnClickListener(v -> {
-            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-            SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", MODE_PRIVATE);
-            String nic = sharedPreferences.getString("nic", "");
-            String currentDateTime = java.time.LocalDateTime.now().toString();
+            // show alert box to confirm or cancel
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirm Booking")
+                    .setMessage("Are you sure you want to confirm this booking?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                            SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", MODE_PRIVATE);
+                            String nic = sharedPreferences.getString("user_nic", "");
 
-            Reservation reservation = new Reservation(String.valueOf(train.getTrainId()), nic, train.getTrainName(), date, departureTime, fromLocation, toLocation, noOfPassengers, String.valueOf(totalPrice), currentDateTime);
-            Call<Void> call = apiService.createReservation(reservation);
+                            // default
+                            String currentDateTime = "2023-10-16T07:35:23.145Z";
+                            String id = "id";
 
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    System.out.println("Response: " + response);
-                    if (response.isSuccessful()) {
-                        System.out.println("Reservation created successfully");
-                        finish();
-                    } else {
-                        System.out.println("Error in creating reservation: " + response);
-                    }
-                }
+                            // get only the hours and minutes
+                            String time = departureTime.substring(11, 16);
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    System.out.println("Error in creating reservation: " + t);
-                    Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
-                }
-            });
+                            Reservation reservation = new Reservation(String.valueOf(train.getTrainId()), nic, train.getTrainName(), date, time, fromLocation, toLocation, noOfPassengers, String.valueOf(totalPrice), currentDateTime, id);
+                            Call<Void> call = apiService.createReservation(reservation);
+
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    System.out.println("Response: " + response);
+                                    if (response.isSuccessful()) {
+                                        System.out.println("Reservation created successfully");
+                                        Toast.makeText(getApplicationContext(), "Reservation created successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        System.out.println("Error in creating reservation: " + response);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    System.out.println("onFailure creating reservation: " + t);
+                                    Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.checkbox_on_background)
+                    .show();
         });
 
         // Cancel booking

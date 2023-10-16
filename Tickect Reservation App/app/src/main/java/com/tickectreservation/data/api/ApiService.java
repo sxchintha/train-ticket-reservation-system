@@ -43,6 +43,12 @@ public interface ApiService {
     // Reservation related APIs
     @POST("booking/create")
     Call<Void> createReservation(@Body Reservation reservation);
+
+    @GET("booking/my/{nic}")
+    Call<List<Reservation>> getReservations(@Path("nic") String nic);
+
+    @GET("booking")
+    Call<List<Reservation>> getAllReservations();
 }
 
 

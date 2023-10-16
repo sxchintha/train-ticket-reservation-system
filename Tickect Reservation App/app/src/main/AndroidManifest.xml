@@ -15,10 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".activities.user.EditUserProfile"
-            android:exported="false" />
-        <activity
-            android:name=".MyReservations"
+            android:name=".activities.reservation.ViewSelectedReservation"
             android:exported="false" />
         <activity
             android:name=".activities.user.UserLogin"
@@ -58,6 +55,18 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activities.user.UserProfile"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activities.user.EditUserProfile"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activities.reservation.MyReservations"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
