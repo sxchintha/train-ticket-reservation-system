@@ -4,6 +4,7 @@ It offers functions such as creating, updating, retrieving, and canceling reserv
 */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Ticket_Reservation_System.Models;
 using Ticket_Reservation_System.Services;
 
@@ -14,10 +15,12 @@ namespace Ticket_Reservation_System.Controllers
     public class BookingController : ControllerBase
     {
         private readonly BookingService _bookingService;
+        private readonly TrainService _trainService;
 
-        public BookingController(BookingService bookingService)
+        public BookingController(BookingService bookingService, TrainService trainService)
         {
             _bookingService = bookingService;
+            _trainService = trainService;
         }
 
         //create a booking
@@ -27,6 +30,21 @@ namespace Ticket_Reservation_System.Controllers
         {
             try
             {
+                // Check if the user already has 4 or more bookings
+                int bookingCount = await _bookingService.GetBookingCountByNicAsync(booking.Nic);
+
+                if (bookingCount >= 4)
+                {
+                    var errorResponse = new ObjectResult(new Dictionary<string, string>
+            {
+                { "error", "You have reached the maximum limit of bookings (4) for this NIC." }
+            })
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
+
+                    return errorResponse;
+                }
 
                 var createdDate = DateTime.Now;
                 var scheduledDate = DateTime.Parse(booking.Sheduledate);
@@ -37,6 +55,48 @@ namespace Ticket_Reservation_System.Controllers
                 if (daysUntilScheduledDate > 30)
                 {
                     return BadRequest("Scheduled date must be at least 30 days in the future.");
+                }
+
+                // Find the corresponding train document
+                var train = await _trainService.GetTrainByTrainIdAsync(booking.TrainID);
+
+                if (train != null)
+                {
+                    // Calculate the new available seats after booking
+                    int newAvailableSeats = train.AvailableSeats - int.Parse(booking.Quentity);
+
+                    if (newAvailableSeats >= 0)
+                    {
+                        // Update the train's available seats
+                        train.AvailableSeats = newAvailableSeats;
+
+                        // Update the train in the database
+                        await _trainService.UpdateAsync(train.Id, train);
+                    }
+                    else
+                    {
+                        var errorResponse = new ObjectResult(new Dictionary<string, string>
+                {
+                    { "error", "Not enough available seats for this booking." }
+                })
+                        {
+                            StatusCode = (int)HttpStatusCode.BadRequest
+                        };
+
+                        return errorResponse;
+                    }
+                }
+                else
+                {
+                    var errorResponse = new ObjectResult(new Dictionary<string, string>
+            {
+                { "error", "Train not found." }
+            })
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
+
+                    return errorResponse;
                 }
 
                 // Create a new Booking object excluding the "id" property
