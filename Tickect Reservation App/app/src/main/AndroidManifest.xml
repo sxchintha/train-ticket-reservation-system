@@ -15,9 +15,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".activities.reservation.ViewSelectedReservation"
-            android:exported="false" />
-        <activity
             android:name=".activities.user.UserLogin"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
@@ -67,6 +64,12 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activities.reservation.MyReservations"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activities.reservation.ViewSelectedReservation"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"

@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.tickectreservation.R;
+import com.tickectreservation.activities.reservation.MyReservations;
 import com.tickectreservation.activities.user.UserProfile;
 import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
@@ -41,7 +42,7 @@ public class SearchTrain extends AppCompatActivity {
     EditText et_no_of_passengers, et_date;
     AutoCompleteTextView et_from_location, et_to_location;
     DatePicker datePicker;
-    Button btn_search_trains;
+    Button btn_search_trains, btnViewReservations;
     RelativeLayout blurryScreen;
     ImageView btnViewProfile;
     TextView tv_user_firstName;
@@ -77,7 +78,8 @@ public class SearchTrain extends AppCompatActivity {
         et_date.setInputType(View.AUTOFILL_TYPE_NONE);
 
         // set default date to today
-        String date = new java.text.SimpleDateFormat("yyyy-MMM-dd, EEEE").format(new java.util.Date());
+//        String date = new java.text.SimpleDateFormat("yyyy-MMM-dd, EEEE").format(new java.util.Date());
+        String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
         et_date.setText(date);
 
         // set min date to today
@@ -115,19 +117,25 @@ public class SearchTrain extends AppCompatActivity {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 String yearStr = String.valueOf(year);
+                String monthStr = String.valueOf(monthOfYear + 1);
                 String dayStr = String.valueOf(dayOfMonth);
 
                 if (dayOfMonth < 10) {
                     dayStr = "0" + dayStr;
                 }
+                if (monthOfYear < 10) {
+                    monthStr = "0" + monthStr;
+                }
 
                 // format the date
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, monthOfYear, dayOfMonth);
-                String monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
-                String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.set(year, monthOfYear, dayOfMonth);
+//                String monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
+//                String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+//
+//                String dateStr = String.format("%s-%s-%s, %s", dayStr, monthName, yearStr, dayOfWeek);
 
-                String dateStr = String.format("%s-%s-%s, %s", dayStr, monthName, yearStr, dayOfWeek);
+                String dateStr = String.format("%s-%s-%s", yearStr, monthStr, dayStr);
 
                 et_date.setText(dateStr);
                 blurryScreen.setVisibility(View.GONE);
@@ -161,9 +169,6 @@ public class SearchTrain extends AppCompatActivity {
                     }
                     if (TextUtils.isEmpty(noOfPassengers)) {
                         et_no_of_passengers.setError("No of passengers is required");
-                        isValid = false;
-                    } else if (Integer.parseInt(noOfPassengers) > 4) {
-                        et_no_of_passengers.setError("Maximum 4 passengers");
                         isValid = false;
                     } else if (Integer.parseInt(noOfPassengers) < 1) {
                         et_no_of_passengers.setError("Minimum 1 passenger");
@@ -221,6 +226,14 @@ public class SearchTrain extends AppCompatActivity {
                     Toast.makeText(SearchTrain.this, "Error in searching...", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
+
+
+        // View reservations
+        btnViewReservations = findViewById(R.id.btnViewReservations);
+        btnViewReservations.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyReservations.class);
+            startActivity(intent);
         });
 
         // Navigate to Profile activity

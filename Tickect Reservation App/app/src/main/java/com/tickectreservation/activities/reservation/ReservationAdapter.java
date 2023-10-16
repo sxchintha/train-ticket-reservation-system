@@ -1,6 +1,7 @@
 package com.tickectreservation.activities.reservation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.tickectreservation.R;
 import com.tickectreservation.data.models.Reservation;
 
@@ -44,6 +46,18 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         holder.bookingFromTo.setText(bookingFromTo);
         holder.bookingDate.setText(bookingDate);
         holder.bookingPrice.setText(bookingPrice);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Gson gson = new Gson();
+                String reservationJson = gson.toJson(reservation);
+
+                Intent intent = new Intent(context, ViewSelectedReservation.class);
+                intent.putExtra("reservation", reservationJson);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

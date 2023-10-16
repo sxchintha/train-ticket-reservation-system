@@ -49,9 +49,9 @@ public class BookingConfirm extends AppCompatActivity {
         }.getType();
         Train train = new Gson().fromJson(serializedTrain, type);
 
-        String prettyPrintedTrain = new GsonBuilder().setPrettyPrinting().create().toJson(train);
-        System.out.println(prettyPrintedTrain);
-        System.out.println(train.getTrainId());
+//        String prettyPrintedTrain = new GsonBuilder().setPrettyPrinting().create().toJson(train);
+//        System.out.println(prettyPrintedTrain);
+//        System.out.println(train.getTrainId());
 
         String fromLocation = getIntent().getStringExtra("fromLocation");
         String toLocation = getIntent().getStringExtra("toLocation");

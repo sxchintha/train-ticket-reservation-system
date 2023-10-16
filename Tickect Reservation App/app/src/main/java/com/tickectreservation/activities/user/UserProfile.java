@@ -94,11 +94,11 @@ public class UserProfile extends AppCompatActivity {
 
 
         // view reservations
-        btnViewReservations = findViewById(R.id.btnViewReservations);
-        btnViewReservations.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MyReservations.class);
-            startActivity(intent);
-        });
+//        btnViewReservations = findViewById(R.id.btnViewReservations);
+//        btnViewReservations.setOnClickListener(v -> {
+//            Intent intent = new Intent(this, MyReservations.class);
+//            startActivity(intent);
+//        });
 
         // go back
         btnGoBack = findViewById(R.id.userProfileGoBack);
