@@ -97,5 +97,12 @@ namespace Ticket_Reservation_System.Services
         public async Task DeleteBookingAsync(string id) =>
             await _bookingsCollection.DeleteOneAsync(Booking => Booking.Id == id);
 
+        public async Task<int> GetBookingCountByNicAsync(string nic)
+        {
+            var filter = Builders<Booking>.Filter.Eq(booking => booking.Nic, nic);
+            var count = await _bookingsCollection.CountDocumentsAsync(filter);
+            return (int)count;
+        }
+
     }
 }
