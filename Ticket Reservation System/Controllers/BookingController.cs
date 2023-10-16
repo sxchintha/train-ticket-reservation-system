@@ -14,10 +14,12 @@ namespace Ticket_Reservation_System.Controllers
     public class BookingController : ControllerBase
     {
         private readonly BookingService _bookingService;
+        private readonly TrainService _trainService;
 
-        public BookingController(BookingService bookingService)
+        public BookingController(BookingService bookingService, TrainService trainService)
         {
             _bookingService = bookingService;
+            _trainService = trainService;
         }
 
         //create a booking
@@ -51,6 +53,33 @@ namespace Ticket_Reservation_System.Controllers
                     return BadRequest("Scheduled date must be at least 30 days in the future.");
                 }
 
+                // Find the corresponding train document
+                var train = await _trainService.GetTrainByTrainIdAsync(booking.TrainID);
+
+                if (train != null)
+                {
+                    // Calculate the new available seats after booking
+                    int newAvailableSeats = train.AvailableSeats - int.Parse(booking.Quentity);
+
+                    if (newAvailableSeats >= 0)
+                    {
+                        // Update the train's available seats
+                        train.AvailableSeats = newAvailableSeats;
+
+                        // Update the train in the database
+                        await _trainService.UpdateAsync(train.Id, train);
+                    }
+                    else
+                    {
+                        return BadRequest("Not enough available seats for this booking.");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Train not found.");
+                }
+
+
                 // Create a new Booking object excluding the "id" property
                 var newBooking = new Booking
                 {
@@ -74,6 +103,7 @@ namespace Ticket_Reservation_System.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
 
 
 
