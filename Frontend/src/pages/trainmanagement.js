@@ -242,6 +242,7 @@ const Trainmanagement = () => {
 
   const handleTrainPublish = async (id) => {
     const response = await publishTrainSchedule(id);
+    console.log("Publish", response);
     if (response.status === 200) {
       Swal.fire({
         icon: "success",
@@ -593,7 +594,7 @@ const Trainmanagement = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={handleTrainPublish}
+                      onClick={() => handleTrainPublish(train.id)}
                       class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
                     >
                       <svg
