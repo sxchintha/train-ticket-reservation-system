@@ -198,6 +198,28 @@ namespace Ticket_Reservation_System.Controllers
             }
         }
 
+        //delete the train shedule by id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTrainById(string id)
+        {
+            try
+            {
+                var Train = await _trainService.GetTrainByIdAsync(id);
+                if (Train == null)
+                {
+                    return NotFound();
+                }
+
+                await _trainService.DeleteTrainAsync(id);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
 
 
     }
