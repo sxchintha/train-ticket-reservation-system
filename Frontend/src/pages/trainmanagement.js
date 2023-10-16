@@ -50,7 +50,57 @@ const Trainmanagement = () => {
   }
 
   const [selectedOption, setSelectedOption] = useState("");
-  const options = [...["Alawwa", "Ambalangoda", "Anuradhapura", "Badulla", "Batticaloa", "Beliatta", "Chilaw", "Colombo Fort", "Maradana", "Dandugama", "Dematagoda", "Ella", "Galle", "Gampaha", "Haputale", "Hikkaduwa", "Idalgashinna", "Jaffna", "Kadugannawa", "Kalutara South", "Kandy", "Katugastota", "Kilinochchi", "Kollupitiya", "Kurunegala", "Maharagama", "Matale", "Matara", "Moratuwa", "Mount Lavinia", "Nanu Oya", "Narahenpita", "Negombo", "Nugegoda", "Pannipitiya", "Peradeniya", "Periyaneelavanai", "Polgahawela", "Polonnaruwa", "Puttalam", "Rambukkana", "Ratmalana", "Ratnapura", "Thalaimannar", "Trincomalee", "Valachchenai", "Vavuniya"].map(station => ({ field1: station }) )];
+  const options = [
+    ...[
+      "Alawwa",
+      "Ambalangoda",
+      "Anuradhapura",
+      "Badulla",
+      "Batticaloa",
+      "Beliatta",
+      "Chilaw",
+      "Colombo Fort",
+      "Maradana",
+      "Dandugama",
+      "Dematagoda",
+      "Ella",
+      "Galle",
+      "Gampaha",
+      "Haputale",
+      "Hikkaduwa",
+      "Idalgashinna",
+      "Jaffna",
+      "Kadugannawa",
+      "Kalutara South",
+      "Kandy",
+      "Katugastota",
+      "Kilinochchi",
+      "Kollupitiya",
+      "Kurunegala",
+      "Maharagama",
+      "Matale",
+      "Matara",
+      "Moratuwa",
+      "Mount Lavinia",
+      "Nanu Oya",
+      "Narahenpita",
+      "Negombo",
+      "Nugegoda",
+      "Pannipitiya",
+      "Peradeniya",
+      "Periyaneelavanai",
+      "Polgahawela",
+      "Polonnaruwa",
+      "Puttalam",
+      "Rambukkana",
+      "Ratmalana",
+      "Ratnapura",
+      "Thalaimannar",
+      "Trincomalee",
+      "Valachchenai",
+      "Vavuniya",
+    ].map((station) => ({ field1: station })),
+  ];
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -339,19 +389,27 @@ const Trainmanagement = () => {
                   <td className="px-6 py-4">{train.trainID}</td>
                   <td className="px-6 py-4">{train.trainName}</td>
                   <td className="px-6 py-4">{train.availableSeats}</td>
-                  <td className="px-6 py-4">{train.schedule.departureTime.slice(11, -4)}</td>
-                  <td className="px-6 py-4">{train.schedule.arrivalTime.slice(11, -4)}</td>
-                  <td className="px-6 py-4">{train.schedule.arrivalTime.slice(0, -13)}</td>
+                  <td className="px-6 py-4">
+                    {train.schedule.departureTime.slice(11, -4)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {train.schedule.arrivalTime.slice(11, -4)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {train.schedule.arrivalTime.slice(0, -13)}
+                  </td>
                   <td class="px-6 py-4">
-                  <div className="flex items-center">
+                    <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
-                          train.status === "available"
+                          train.publishStatus === "Published"
                             ? "bg-green-500"
                             : "bg-red-500"
                         } mr-2`}
                       ></div>
-                      {train.status === "available" ? "Active" : "Inactive"}
+                      {train.publishStatus === "Published"
+                        ? "Published"
+                        : "Unpublished"}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -1129,7 +1187,7 @@ const Trainmanagement = () => {
                                   scope="row"
                                   className="px-6 py-4 font-medium text-black whitespace-nowrap"
                                 >
-                                  {index}
+                                  {index + 1}
                                 </th>
                                 <td className="px-6 py-4">{station.station}</td>
                                 <td className="px-6 py-4">
