@@ -366,7 +366,19 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tvInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="You can only change or cancel a booking 5 days before the departure date."
+                    android:textColor="@color/gray"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

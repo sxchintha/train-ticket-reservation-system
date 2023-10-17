@@ -32,6 +32,10 @@ public interface ApiService {
     @PATCH("user/deactivate/{nic}")
     Call<User> deactivateAccount(@Path("nic") String nic);
 
+    @PUT("user/{nic}")
+    Call<User> updateUser(@Path("nic") String nic, @Body User user);
+
+
 
     // Train related APIs
     @GET("train")
@@ -39,6 +43,7 @@ public interface ApiService {
 
     @GET("train/search")
     Call<List<Train>> searchTrains(@Query("fromStation") String fromLocation, @Query("toStation") String toLocation);
+
 
 
     // Reservation related APIs

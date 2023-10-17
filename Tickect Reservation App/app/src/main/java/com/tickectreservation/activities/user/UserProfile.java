@@ -54,6 +54,13 @@ public class UserProfile extends AppCompatActivity {
         tvPhone.setText(sharedPreferences.getString("user_phone", ""));
 
 
+        // edit profile
+        btnEditProfile = findViewById(R.id.btnEditProfile);
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditUserProfile.class);
+            startActivity(intent);
+        });
+
         // deactivate account
         btnDeactivateAccount = findViewById(R.id.btnDeactivateAccount);
         btnDeactivateAccount.setOnClickListener(v -> {
@@ -109,13 +116,23 @@ public class UserProfile extends AppCompatActivity {
         // logout
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-            Toast.makeText(getApplicationContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(this)
+                    .setTitle("Logout")
+                    .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.clear();
+                            editor.apply();
+                            Toast.makeText(getApplicationContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
 
-            // clear all activities
-            finishAffinity();
+                            // clear all activities
+                            finishAffinity();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         });
     }
 }

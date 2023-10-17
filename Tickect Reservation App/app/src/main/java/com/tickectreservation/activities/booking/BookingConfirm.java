@@ -16,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tickectreservation.R;
 import com.tickectreservation.activities.reservation.MyReservations;
+import com.tickectreservation.activities.reservation.ViewSelectedReservation;
 import com.tickectreservation.data.api.ApiService;
 import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.Reservation;
@@ -116,14 +118,24 @@ public class BookingConfirm extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     System.out.println("Response: " + response);
-                                    if (response.isSuccessful()) {
-                                        System.out.println("Reservation created successfully");
-                                        Toast.makeText(getApplicationContext(), "Reservation created successfully", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), SearchTrain.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                    } else {
-                                        System.out.println("Error in creating reservation: " + response);
+                                    try {
+                                        if (response.isSuccessful()) {
+                                            System.out.println("Reservation created successfully");
+                                            Toast.makeText(getApplicationContext(), "Reservation created successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), SearchTrain.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                        } else {
+                                            Gson gson = new Gson();
+                                            JsonObject jsonObject = gson.fromJson(response.errorBody().string(), JsonObject.class);
+                                            String error = jsonObject.get("error").getAsString();
+
+                                            Toast.makeText(BookingConfirm.this, error, Toast.LENGTH_LONG).show();
+                                            System.out.println("Error in creating reservation: " + response);
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Exception: " + e);
+                                        Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 

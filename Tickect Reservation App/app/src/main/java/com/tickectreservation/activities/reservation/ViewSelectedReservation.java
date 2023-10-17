@@ -27,6 +27,7 @@ import com.tickectreservation.data.api.RetrofitClient;
 import com.tickectreservation.data.models.Reservation;
 
 import java.lang.reflect.Type;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,12 +83,44 @@ public class ViewSelectedReservation extends AppCompatActivity {
         btnChangeReservation = findViewById(R.id.btnChangeReservation);
         btnUpdateReservation = findViewById(R.id.btnUpdateReservation);
         btnConfirmReservation = findViewById(R.id.btnConfirmReservation);
+        btnCancelReservation = findViewById(R.id.btnCancelReservation);
         etNoOfPassengers = findViewById(R.id.et_no_of_passengers);
         etDate = findViewById(R.id.et_date);
         vNoOfPassengers = findViewById(R.id.vNoOfPassengers);
         vDate = findViewById(R.id.vDate);
         datePicker = findViewById(R.id.datePicker);
         blurryScreen = findViewById(R.id.blurryScreen);
+
+        // check if the departureDate is within 5 days.
+        String departureDateStr = reservation.getSheduledate();
+        String[] departureDateArr = departureDateStr.split("-");
+        int year = Integer.parseInt(departureDateArr[0]);
+        int month = Integer.parseInt(departureDateArr[1]);
+        int day = Integer.parseInt(departureDateArr[2]);
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(year, month - 1, day);
+        long departureDateMillis = calendar1.getTimeInMillis();
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.add(Calendar.DAY_OF_MONTH, 5);
+        long fiveDaysFromTodayMillis = calendar2.getTimeInMillis();
+
+        if (departureDateMillis < fiveDaysFromTodayMillis) {
+            btnChangeReservation.setVisibility(Button.GONE);
+            btnCancelReservation.setVisibility(Button.GONE);
+
+            TextView tvInfo = findViewById(R.id.tvInfo);
+            tvInfo.setVisibility(TextView.VISIBLE);
+        }
+
+        // set min date to today
+        datePicker.setMinDate(System.currentTimeMillis());
+
+        // set max date to 30 days from today
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 30);
+        datePicker.setMaxDate(calendar.getTimeInMillis());
 
         btnChangeReservation.setOnClickListener(v -> {
             btnChangeReservation.setVisibility(Button.GONE);
@@ -176,9 +209,18 @@ public class ViewSelectedReservation extends AppCompatActivity {
                     try {
                         if (response.isSuccessful()) {
                             Toast.makeText(ViewSelectedReservation.this, "Reservation updated successfully", Toast.LENGTH_SHORT).show();
-                            Intent intent = getIntent();
+
+                            Gson gson = new Gson();
+                            String reservationJson = gson.toJson(reservation);
+
+                            Intent intent = new Intent(ViewSelectedReservation.this, MyReservations.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
+
+                            Intent intent2 = getIntent();
+                            intent2.putExtra("reservation", reservationJson);
+                            intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent2);
                             finish();
                         } else {
                             Gson gson = new Gson();
@@ -221,7 +263,8 @@ public class ViewSelectedReservation extends AppCompatActivity {
                             try {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(ViewSelectedReservation.this, "Reservation cancelled successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = getIntent();
+
+                                    Intent intent = new Intent(ViewSelectedReservation.this, MyReservations.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
@@ -235,6 +278,7 @@ public class ViewSelectedReservation extends AppCompatActivity {
                                     System.out.println("Error login: " + error);
                                 }
                             } catch (Exception e) {
+                                Toast.makeText(ViewSelectedReservation.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                 System.out.println("Error onResponse: " + e);
                             }
                         }
