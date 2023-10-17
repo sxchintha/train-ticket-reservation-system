@@ -160,19 +160,19 @@ namespace Ticket_Reservation_System.Controllers
                 // Check if the booking is an error response
                 if (booking is Booking && ((Booking)booking).Status == "canceled")
                 {
-                    return Ok(new
-                    {
-                        Message = "Booking canceled successfully",
-                        Booking = booking
-                    });
+                    return Ok(new { error = "Booking canceled successfully" });
+                   // {
+                        //Message = "Booking canceled successfully",
+                      //  Booking = booking
+                   // });
                 }
                 else
                 {
-                    return BadRequest(new
-                    {
-                        Message = "Booking cannot be canceled.",
-                        Reason = "The scheduled date is less than 5 days from the current date."
-                    });
+                    return BadRequest(new { error = "Booking cannot be canceled" });
+                   // {
+                       // Message = "Booking cannot be canceled.",
+                        //Reason = "The scheduled date is less than 5 days from the current date."
+                   // });
                 }
             }
             catch (InvalidOperationException ex)
