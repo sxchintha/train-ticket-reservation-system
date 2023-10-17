@@ -3,7 +3,7 @@ package com.tickectreservation.data.models;
 import java.util.List;
 
 public class Train {
-    private int trainId;
+    private String trainID;
     private String trainName;
     private double pricePerKM;
     private double pricePerTicket;
@@ -12,8 +12,8 @@ public class Train {
     private String status;
     private List<String> reservations;
 
-    public Train(int trainId, String trainName, double pricePerKM, double pricePerTicket, int availableSeats, Schedule schedule, String status, List<String> reservations) {
-        this.trainId = trainId;
+    public Train(String trainID, String trainName, double pricePerKM, double pricePerTicket, int availableSeats, Schedule schedule, String status, List<String> reservations) {
+        this.trainID = trainID;
         this.trainName = trainName;
         this.pricePerKM = pricePerKM;
         this.pricePerTicket = pricePerTicket;
@@ -23,12 +23,12 @@ public class Train {
         this.reservations = reservations;
     }
 
-    public int getTrainId() {
-        return trainId;
+    public String getTrainId() {
+        return trainID;
     }
 
-    public void setTrainId(int trainId) {
-        this.trainId = trainId;
+    public void setTrainId(String trainID) {
+        this.trainID = trainID;
     }
 
     public String getTrainName() {

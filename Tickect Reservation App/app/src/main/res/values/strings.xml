@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Train Ticket Reservation App</string>
+    <string name="app_name">TRACLIN</string>
     <string name="no_of_passengers">No of Passengers</string>
     <string name="select_date">Select Date</string>
     <string name="from">From</string>
@@ -9,7 +9,7 @@
     <string name="email">Email</string>
     <string name="nic">NIC No</string>
     <string name="phone">Phone Number</string>
-    <string name="passengers">No of Passengers (Max. 4)</string>
+    <string name="passengers">No of Passengers</string>
     <string name="signup">Sign Up</string>
     <string name="signin">Sign In</string>
     <string name="loginEmail">Enter your email</string>
@@ -24,4 +24,60 @@
     <string name="confirm_reservation">Confirm Reservation</string>
     <string name="my_reservations">My Reservations</string>
     <string name="password">Password</string>
+    <string name="no_trains_available">No Trains Available</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="no_reservations_available">No reservations available!</string>
+    <string name="booking_details">Reservation Details</string>
+    <string name="change_booking">Update Reservation</string>
+    <string name="cancel_booking">Cancel Reservation</string>
+    <string name="change">Change</string>
+    <string-array name="stations">
+        <item>Alawwa</item>
+        <item>Ambalangoda</item>
+        <item>Anuradhapura</item>
+        <item>Badulla</item>
+        <item>Batticaloa</item>
+        <item>Beliatta</item>
+        <item>Chilaw</item>
+        <item>Colombo Fort</item>
+        <item>Maradana</item>
+        <item>Dandugama</item>
+        <item>Dematagoda</item>
+        <item>Ella</item>
+        <item>Galle</item>
+        <item>Gampaha</item>
+        <item>Haputale</item>
+        <item>Hikkaduwa</item>
+        <item>Idalgashinna</item>
+        <item>Jaffna</item>
+        <item>Kadugannawa</item>
+        <item>Kalutara South</item>
+        <item>Kandy</item>
+        <item>Katugastota</item>
+        <item>Kilinochchi</item>
+        <item>Kollupitiya</item>
+        <item>Kurunegala</item>
+        <item>Maharagama</item>
+        <item>Matale</item>
+        <item>Matara</item>
+        <item>Moratuwa</item>
+        <item>Mount Lavinia</item>
+        <item>Nanu Oya</item>
+        <item>Narahenpita</item>
+        <item>Negombo</item>
+        <item>Nugegoda</item>
+        <item>Pannipitiya</item>
+        <item>Peradeniya</item>
+        <item>Periyaneelavanai</item>
+        <item>Polgahawela</item>
+        <item>Polonnaruwa</item>
+        <item>Puttalam</item>
+        <item>Rambukkana</item>
+        <item>Ratmalana</item>
+        <item>Ratnapura</item>
+        <item>Thalaimannar</item>
+        <item>Trincomalee</item>
+        <item>Valachchenai</item>
+        <item>Vavuniya</item>
+    </string-array>
 </resources>

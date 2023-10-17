@@ -1,21 +1,37 @@
 package com.tickectreservation.activities.booking;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tickectreservation.R;
+import com.tickectreservation.activities.reservation.MyReservations;
+import com.tickectreservation.activities.reservation.ViewSelectedReservation;
+import com.tickectreservation.data.api.ApiService;
+import com.tickectreservation.data.api.RetrofitClient;
+import com.tickectreservation.data.models.Reservation;
 import com.tickectreservation.data.models.Train;
+import com.tickectreservation.data.models.User;
 
 import java.lang.reflect.Type;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BookingConfirm extends AppCompatActivity {
 
@@ -27,7 +43,7 @@ public class BookingConfirm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         setContentView(R.layout.booking_confirm);
 
         String serializedTrain = getIntent().getStringExtra("train");
@@ -35,9 +51,9 @@ public class BookingConfirm extends AppCompatActivity {
         }.getType();
         Train train = new Gson().fromJson(serializedTrain, type);
 
-        String prettyPrintedTrain = new GsonBuilder().setPrettyPrinting().create().toJson(train);
-        System.out.println(prettyPrintedTrain);
-        System.out.println(train.getTrainId());
+//        String prettyPrintedTrain = new GsonBuilder().setPrettyPrinting().create().toJson(train);
+//        System.out.println(prettyPrintedTrain);
+//        System.out.println(train.getTrainId());
 
         String fromLocation = getIntent().getStringExtra("fromLocation");
         String toLocation = getIntent().getStringExtra("toLocation");
@@ -59,10 +75,11 @@ public class BookingConfirm extends AppCompatActivity {
         // get time start->end
         String arrivalTime = train.getSchedule().getArrivalTime();
         String departureTime = train.getSchedule().getDepartureTime();
-        String startEnd = arrivalTime.substring(11, 16) + " - " + departureTime.substring(11, 16);
+        // String startEnd = arrivalTime.substring(11, 16) + " - " + departureTime.substring(11, 16);
+        String startEnd = arrivalTime.substring(11, 16);
 
         // calculate total price
-        double pricePerPerson = 600.00;
+        double pricePerPerson = train.getPricePerTicket();
         double totalPrice = pricePerPerson * Integer.parseInt(noOfPassengers);
 
         tvTrainId.setText(trainIdName);
@@ -73,6 +90,67 @@ public class BookingConfirm extends AppCompatActivity {
         tvNoOfPassengers.setText(noOfPassengers);
         tvPricePerPerson.setText(String.format("LKR %.2f", pricePerPerson));
         tvTotal.setText(String.format("LKR %.2f", totalPrice));
+
+        // Confirm booking
+        btnConfirmBooking = findViewById(R.id.btnConfirmBooking);
+        btnConfirmBooking.setOnClickListener(v -> {
+            // show alert box to confirm or cancel
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirm Booking")
+                    .setMessage("Are you sure you want to confirm this booking?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                            SharedPreferences sharedPreferences = getSharedPreferences("ticket_reservation", MODE_PRIVATE);
+                            String nic = sharedPreferences.getString("user_nic", "");
+
+                            // default
+                            String currentDateTime = "2023-10-16T07:35:23.145Z";
+                            String id = "id";
+
+                            // get only the hours and minutes
+                            String time = departureTime.substring(11, 16);
+
+                            Reservation reservation = new Reservation(String.valueOf(train.getTrainId()), nic, train.getTrainName(), date, time, fromLocation, toLocation, noOfPassengers, String.valueOf(totalPrice), currentDateTime, id);
+                            Call<Void> call = apiService.createReservation(reservation);
+
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    System.out.println("Response: " + response);
+                                    try {
+                                        if (response.isSuccessful()) {
+                                            System.out.println("Reservation created successfully");
+                                            Toast.makeText(getApplicationContext(), "Reservation created successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), SearchTrain.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                        } else {
+                                            Gson gson = new Gson();
+                                            JsonObject jsonObject = gson.fromJson(response.errorBody().string(), JsonObject.class);
+                                            String error = jsonObject.get("error").getAsString();
+
+                                            Toast.makeText(BookingConfirm.this, error, Toast.LENGTH_LONG).show();
+                                            System.out.println("Error in creating reservation: " + response);
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Exception: " + e);
+                                        Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    System.out.println("onFailure creating reservation: " + t);
+                                    Toast.makeText(getApplicationContext(), "Error in creating reservation", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.checkbox_on_background)
+                    .show();
+        });
 
         // Cancel booking
         btnCancelBooking = findViewById(R.id.btnCancelBooking);
