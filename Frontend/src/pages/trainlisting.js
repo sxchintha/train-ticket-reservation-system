@@ -32,7 +32,7 @@ const Trainlisting = () => {
 
   useEffect(() => {
     if (location.state) {
-      // console.log("Location", location.state.data);
+      console.log("Location", location.state.data);
       setTrainList(location.state.data);
     }
   }, [location.state]);
@@ -86,12 +86,12 @@ const Trainlisting = () => {
       console.log("Sending", data);
 
       const response = await createBooking(data);
-
+      console.log("Response", response.response?.data);
       if (response.status == 201) {
         Swal.fire("Booking Created Successfully");
         navigate("/reservationmanagement");
       } else {
-        Swal.fire("Error Creating Booking");
+        Swal.fire("Error Creating Booking", response.response?.data);
       }
     }
   };
@@ -255,41 +255,31 @@ const Trainlisting = () => {
             </svg>
             <p className="font text-0.5 text-gray-500">Train Info</p>
           </div>
-          {trainList.map((train) => (
-            // console.log("Train", train)
-            <div class="flex items-center space-x-2">
-              <h1 className="font text-3xl text-gray-700">
-                {train.schedule.stationDistances[0].station}
-              </h1>
-              <svg
-                class="w-6 h-6 text-gray-700 dark:text-gray-700"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 8 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
-                />
-              </svg>
-              <h1 className="font text-3xl text-gray-700">
-                {
-                  train.schedule.stationDistances[
-                    train.schedule.stationDistances.length - 1
-                  ].station
-                }
-              </h1>
-            </div>
-          ))}
-          {trainList.map((train) => (
-            <p className="font text-0.5 text-gray-500">
-              Date - {train.schedule.arrivalTime.slice(0, -13)}
-            </p>
-          ))}
+
+          <div class="flex items-center space-x-2">
+            <h1 className="font text-3xl text-gray-700">
+              {location.state.fromStation}
+            </h1>
+            <svg
+              class="w-6 h-6 text-gray-700 dark:text-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 8 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
+              />
+            </svg>
+            <h1 className="font text-3xl text-gray-700">
+              {location.state.toStation}
+            </h1>
+          </div>
+
           <p className="font text-0.5 text-gray-400">
             Select a train and proceed
           </p>
@@ -358,12 +348,12 @@ const Trainlisting = () => {
                     <div className="flex items-center">
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${
-                          train.status === "available"
+                          train.publishStatus === "Published"
                             ? "bg-green-500"
                             : "bg-red-500"
                         } mr-2`}
                       ></div>
-                      {train.status === "available"
+                      {train.publishStatus === "Published"
                         ? "Available"
                         : "Unavailable"}
                     </div>

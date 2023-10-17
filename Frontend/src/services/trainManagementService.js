@@ -18,7 +18,9 @@ const cancelTrainSchedule = async (id) => {
   try {
     const response = await API.patch(`/Train/cancel/${id}`);
     return response;
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 };
 
 const publishTrainSchedule = async (id) => {

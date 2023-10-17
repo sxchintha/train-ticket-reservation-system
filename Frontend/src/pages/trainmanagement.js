@@ -3,6 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import Dashboard from "../component/navBar";
 import "../Assets/Styles/start.css";
 import {
+  cancelTrainSchedule,
   createTrainSchedule,
   deleteTrainSchedule,
   editTrainSchedule,
@@ -365,6 +366,53 @@ const Trainmanagement = () => {
     const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
     return formattedDate;
   }
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (searchTerm != "") {
+      settrains(
+        trains.filter((train) => {
+          return train.trainName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        })
+      );
+    } else {
+      getTrains();
+    }
+  }, [searchTerm]);
+
+  const handleTrainCancel = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await cancelTrainSchedule(id);
+        console.log("Cancel", response);
+        if (response.status == 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Train Schedule Cancelled Successfully",
+          });
+          getTrains();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.response.data.error,
+          });
+        }
+      }
+    });
+  };
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -451,6 +499,9 @@ const Trainmanagement = () => {
                 id="table-search"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-50"
                 placeholder="Search reservations"
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                }}
               />
             </div>
             <button
@@ -648,6 +699,23 @@ const Trainmanagement = () => {
                           stroke-width="2"
                           d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
                         />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleTrainCancel(train.id, train.reservations)
+                      }
+                      class="focus:outline-none text-white bg-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-yellow-500 dark:hover:bg-yellow-400 dark:focus:ring-red-900"
+                    >
+                      <svg
+                        class="w-3 h-3 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
                       </svg>
                     </button>
                   </td>

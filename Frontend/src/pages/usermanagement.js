@@ -181,6 +181,20 @@ const Usermanagement = () => {
     setIsDeleteModelOpen(false);
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (searchTerm != "") {
+      setUsers(
+        users.filter((user) => {
+          return user.nic.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+      );
+    } else {
+      getAll();
+    }
+  }, [searchTerm]);
+
   return (
     <>
       <div className="w-screen gap-4 h-screen bg-white  flex  ">
@@ -274,6 +288,7 @@ const Usermanagement = () => {
                 id="table-search"
                 class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-50"
                 placeholder="Search travelers"
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <button

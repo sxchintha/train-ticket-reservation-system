@@ -83,7 +83,7 @@ const Reservationmanagement = () => {
             handleGetAllBookings();
           } else {
             // alert("Booking Cancelation Failed");
-            Swal.fire("Booking Cancelation Failed");
+            Swal.fire("Booking Cancelation Failed", response.data.message);
           }
         }
       });

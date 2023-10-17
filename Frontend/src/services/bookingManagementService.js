@@ -18,6 +18,7 @@ const createBooking = async (booking) => {
     return response;
   } catch (error) {
     console.log("Errpr i n booking", error);
+    return error;
   }
 };
 
